@@ -1,9 +1,9 @@
-import Main from "@/Index";
+import Index from "@/pages/Index";
 
 function Apps() {
   return (
     <>
-      <Main />
+      <Index />
     </>
   );
 }
