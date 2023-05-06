@@ -11,7 +11,8 @@ const globalTheme: DefaultTheme = {
   pallete: {
     primary: "#1DC078",
     secondary: "#3298dc",
-    warning: "#ff5b16",
+    warning: "#f00",
+    focus: "#e3bc1c",
     grey1: "#20232a",
     grey2: "#333333",
     grey3: "#828282",
@@ -21,6 +22,7 @@ const globalTheme: DefaultTheme = {
     black: "#010101",
     white: "#FFFFFF",
     normalBg: "#ffffff",
+    normalBtn: "#f2f2f2",
     normalFont: "#010101",
   },
   typography: {
@@ -32,7 +34,8 @@ const lightMode: DefaultTheme = {
   pallete: {
     primary: "#1DC078",
     secondary: "#3298dc",
-    warning: "#ff5b16",
+    warning: "#f00",
+    focus: "#e3bc1c",
     grey1: "#20232a",
     grey2: "#333333",
     grey3: "#828282",
@@ -42,6 +45,7 @@ const lightMode: DefaultTheme = {
     black: "#010101",
     white: "#FFFFFF",
     normalBg: "#ffffff",
+    normalBtn: "#f2f2f2",
     normalFont: "#010101",
   },
   typography: {
@@ -51,7 +55,7 @@ const lightMode: DefaultTheme = {
 
 const darkMode: DefaultTheme = {
   pallete: {
-    primary: "#272727",
+    primary: "#1DC078",
     secondary: "#3298dc",
     warning: "#f00",
     focus: "#e3bc1c",
@@ -63,7 +67,8 @@ const darkMode: DefaultTheme = {
     grey6: "#F5F5F7",
     black: "#010101",
     white: "#FFFFFF",
-    normalBg: "#282c34",
+    normalBtn: "#272727",
+    normalBg: " #0f0f0f",
     normalFont: "#FFFFFF",
   },
   typography: { ...typographyContent },
