@@ -1,6 +1,6 @@
-import "styled-components";
+import 'styled-components';
 
-declare module "styled-components" {
+declare module 'styled-components' {
   export interface DefaultTheme {
     pallete: {
       primary: string;
@@ -21,7 +21,7 @@ declare module "styled-components" {
     };
 
     typography: {
-      Black: font;
+      Title: font;
       Bold: font;
       Regular: font;
       Light: font;
@@ -31,6 +31,7 @@ declare module "styled-components" {
 }
 
 type font = {
-  size: string;
-  weight: number;
+  fontSize: string;
+  fontWeight: number;
+  lineHeight?: string;
 };
