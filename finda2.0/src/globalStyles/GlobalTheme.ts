@@ -68,7 +68,7 @@ const darkMode: DefaultTheme = {
     black: '#010101',
     white: '#FFFFFF',
     normalBtn: '#272727',
-    normalBg: ' #0f0f0f',
+    normalBg: ' #20232a',
     normalFont: '#FFFFFF',
   },
   typography: { ...typographyContent },
