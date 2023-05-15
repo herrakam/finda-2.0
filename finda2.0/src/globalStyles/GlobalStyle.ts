@@ -1,13 +1,44 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
+type sortProperty =
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly'
+  | ''
+  | 'stretch'
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'baseline';
+
+type flexDirectionType = 'row' | 'row-reverse' | 'column' | 'column-reverse';
+
+type flexboxType = {
+  dir?: flexDirectionType;
+  horizontal?: sortProperty;
+  vertical?: sortProperty;
+};
+
+const flexbox = ({
+  dir = 'row',
+  horizontal = '',
+  vertical = '',
+}: flexboxType) => `
+display: flex;
+flex-direction: ${dir};
+justify-content: ${horizontal};
+align-items: ${vertical};
+`;
+
+const checkLayout = () => `border:1px solid black`;
+
 export const mixin = {
-  flexbox: ({ dir = 'row', horizontal = '', vertical = '' }) => `
-	  display: flex;
-	  flex-direction: ${dir};
-	  justify-content: ${horizontal};
-	  align-items: ${vertical};
-	  `,
+  flexbox,
+  checkLayout,
 };
 
 export const GlobalStyle = createGlobalStyle`
