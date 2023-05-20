@@ -6,11 +6,13 @@ module.exports = {
   extends: ['airbnb', 'plugin:react/recommended', 'standard-with-typescript'],
   overrides: [],
   parserOptions: {
+    project: './tsconfig.json',
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
   plugins: ['react'],
   rules: {
+    'linebreak-style': ['error', 'windows'],
     'import/no-unresolved': 'error',
     'react/jsx-filename-extension': [
       2,
@@ -22,7 +24,7 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
-    'comma-dangle': ['always'],
+    'comma-dangle': [2],
     'import/order': [
       'error',
       {
@@ -51,3 +53,4 @@ module.exports = {
     ],
   },
 };
+
