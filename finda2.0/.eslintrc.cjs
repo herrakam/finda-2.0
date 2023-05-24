@@ -1,16 +1,88 @@
 module.exports = {
   env: {
     browser: true,
-    es2020: true
+
+    es2021: true,
   },
-  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "plugin:storybook/recommended"],
-  parser: '@typescript-eslint/parser',
+
+  extends: ['airbnb', 'plugin:react/recommended', 'standard-with-typescript'],
+
+  overrides: [],
+
   parserOptions: {
+    project: './tsconfig.json',
+
     ecmaVersion: 'latest',
-    sourceType: 'module'
+
+    sourceType: 'module',
   },
-  plugins: ['react-refresh'],
+
+  plugins: ['react'],
+
   rules: {
-    'react-refresh/only-export-components': 'warn'
-  }
+    'import/no-unresolved': 'error',
+
+    'react/jsx-filename-extension': [
+      2,
+
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
+    ],
+
+    'prettier/prettier': [
+      'error',
+
+      {
+        endOfLine: 'auto',
+      },
+    ],
+
+    'comma-dangle': [
+      'error',
+      {
+        array: 'ignore',
+        object: 'always',
+      },
+    ],
+
+    'import/order': [
+      'error',
+
+      {
+        groups: [
+          'builtin',
+
+          'external',
+
+          'internal',
+
+          'sibling',
+
+          'parent',
+
+          'index',
+        ],
+
+        pathGroups: [
+          {
+            pattern: '@',
+
+            group: 'internal',
+
+            position: 'before',
+          },
+        ],
+
+        pathGroupsExcludedImportTypes: ['internal'],
+
+        alphabetize: {
+          order: 'asc',
+
+          caseInsensitive: true,
+        },
+
+        'newlines-between': 'always',
+      },
+    ],
+  },
 };
+
