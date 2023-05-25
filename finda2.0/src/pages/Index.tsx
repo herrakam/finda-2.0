@@ -1,3 +1,4 @@
+import Footer from '@components/Footer/Index';
 import Header from '@components/Header/Index';
 
 type IndexType = {
@@ -9,6 +10,7 @@ function Index({ children }: IndexType) {
     <div>
       <Header />
       {children}
+      <Footer />
     </div>
   );
 }
