@@ -25,8 +25,8 @@ type flexboxType = {
 
 const flexbox = ({
   dir = 'row',
-  horizontal = '',
-  vertical = '',
+  horizontal = 'flex-start',
+  vertical = 'stretch',
 }: flexboxType) => `
 display: flex;
 flex-direction: ${dir};
