@@ -1,19 +1,8 @@
-import { darkMode } from '@/globalStyles/GlobalTheme';
-import Index from '@/pages/Index';
-import Main from '@/pages/Main';
-import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import reactRouterObject from '@/pages/Router';
+import { RouterProvider } from 'react-router-dom';
 
 function Apps() {
-  return (
-    <ThemeProvider theme={darkMode}>
-      <BrowserRouter>
-        <Index>
-          <Main />
-        </Index>
-      </BrowserRouter>
-    </ThemeProvider>
-  );
+  return <RouterProvider router={reactRouterObject} />;
 }
 
 export default Apps;

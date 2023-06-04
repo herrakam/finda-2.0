@@ -5,7 +5,7 @@ type IndexType = {
   children: React.ReactNode;
 };
 
-function Index({ children }: IndexType) {
+function Layout({ children }: IndexType) {
   return (
     <div>
       <Header />
@@ -15,4 +15,4 @@ function Index({ children }: IndexType) {
   );
 }
 
-export default Index;
+export default Layout;
