@@ -17,7 +17,7 @@ function Footer() {
   ];
 
   const tabs = tabInfo.map(info => {
-    return <FooterTab url={info.url} icon={info.icon} />;
+    return <FooterTab key={info.url} url={info.url} icon={info.icon} />;
   });
   return (
     <S.FooterWrap>
