@@ -1,7 +1,8 @@
 import { mixin } from '@/globalStyles/GlobalStyle';
+import { ShowPanelBtn } from '@components/Panel/Index.style';
 import styled from 'styled-components';
 
-export const CircleBtnWrap = styled.button<{ order: number }>`
+export const CircleBtnWrap = styled(ShowPanelBtn)<{ order: number }>`
   ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })}
   text-decoration: none;
   border: none;
@@ -12,5 +13,5 @@ export const CircleBtnWrap = styled.button<{ order: number }>`
   transition: 0.5s;
   background: ${({ theme }) => theme.pallete.normalBtn};
   ${({ theme }) => theme.typography.Bold};
-  z-index: 20 + order * 5;
+  z-index: ${({ order }) => 5 + order};
 `;
