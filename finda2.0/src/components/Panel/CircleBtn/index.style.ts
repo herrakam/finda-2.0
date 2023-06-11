@@ -1,8 +1,7 @@
 import { mixin } from '@/globalStyles/GlobalStyle';
-import { ShowPanelBtn } from '@components/Panel/Index.style';
 import styled from 'styled-components';
 
-export const CircleBtnWrap = styled(ShowPanelBtn)<{
+export const CircleBtnWrap = styled.button<{
   order: number;
   isClicked: boolean;
 }>`
