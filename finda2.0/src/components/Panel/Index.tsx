@@ -1,6 +1,9 @@
 import CircleBtn, { infoType } from '@components/Panel/CircleBtn';
 import * as S from '@components/Panel/Index.style';
 import { MouseEvent, useState } from 'react';
+import { useAtom } from 'jotai';
+import { darkAtom } from '@/atoms/dark';
+import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 export type CircleBtnInfoType = {
   label: string;
@@ -11,11 +14,13 @@ export type CircleBtnInfoType = {
 function goTop() {
   window.scrollTo(0, 0);
 }
+
 function Panel() {
   const [isClicked, setIsClicked] = useState({
     isClicked: false,
     text: '펼치기',
   });
+  const [isDarkMode, setIsDarkMode] = useAtom(darkAtom);
 
   function showHiddenBtn(e: MouseEvent) {
     e.stopPropagation();
@@ -24,7 +29,9 @@ function Panel() {
       text: '접기',
     });
   }
-
+  function changeTheme() {
+    setIsDarkMode(!isDarkMode);
+  }
   function toggleBtn() {
     setIsClicked({
       isClicked: !isClicked,
@@ -43,9 +50,9 @@ function Panel() {
       text: '위로',
     },
     {
-      label: 'mock1',
-      clickEvent: () => {},
-      text: '더미',
+      label: '테마변경',
+      clickEvent: changeTheme,
+      icon: isDarkMode ? <MdDarkMode /> : <MdLightMode />,
     },
   ];
   const CircleBtns = CircleBtnsInfo.map((info, idx) => {
