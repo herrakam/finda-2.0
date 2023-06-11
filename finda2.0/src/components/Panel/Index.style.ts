@@ -22,6 +22,7 @@ export const ShowPanelBtn = styled.button`
   height: 60px;
   border-radius: 999px;
   background: ${({ theme }) => theme.pallete.normalBtn};
-  ${({ theme }) => theme.typography.Bold};
+  ${({ theme }) => theme.typography.Regular};
   z-index: 40;
+  color: ${({ theme }) => theme.pallete.normalFont};
 `;
