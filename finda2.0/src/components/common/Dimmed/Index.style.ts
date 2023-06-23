@@ -1,10 +1,11 @@
+import { DimSizeType } from '@components/common/Dimmed/type';
 import styled from 'styled-components';
 
 export const DimmedWrap = styled.section<{
-  size: 'full' | 'poster';
+  size: DimSizeType;
   isHover: boolean;
 }>`
-  width: ${({ size }) => (size === 'full' ? `100vw` : `200px`)};
-  height: ${({ size }) => (size === `full` ? `100vh` : `300px`)};
+  width: ${({ size }) => size.width};
+  height: ${({ size }) => size.height};
   background: ${({ isHover }) => (isHover ? 'rgba(0, 0, 0, 0.5)' : 'none')};
 `;

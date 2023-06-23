@@ -1,14 +1,12 @@
 import * as S from '@components/common/Dimmed/Index.style';
-
-type DimmedType = {
-  size: 'full' | 'poster';
-  isHover: boolean;
-  children: React.ReactNode;
-};
+import { DimSizeType, DimmedType } from '@components/common/Dimmed/type';
 
 function Dimmed({ size, isHover, children }: DimmedType) {
+  const dimSize: DimSizeType = size
+    ? { width: `100vw`, height: `100vh` }
+    : { width: `200px`, height: `300px` };
   return (
-    <S.DimmedWrap size={size} isHover={isHover}>
+    <S.DimmedWrap size={dimSize} isHover={isHover}>
       {children}
     </S.DimmedWrap>
   );
