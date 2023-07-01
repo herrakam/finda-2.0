@@ -3,7 +3,14 @@ export type DimSizeType = {
   height: '100vh' | '300px';
 };
 export type DimmedType = {
-  size?: 'full' | 'poster';
   isHover: boolean;
+  size?: 'full' | 'poster';
+  optional?: {
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
+  };
+};
+
+export type DimmedWithChildrenType = DimmedType & {
   children: React.ReactNode;
 };
