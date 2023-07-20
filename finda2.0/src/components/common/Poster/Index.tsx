@@ -22,10 +22,10 @@ function Poster({ title, src }: posterType) {
   };
   return (
     <S.PosterWrap>
+      <S.Posterimage src={src} />
       <Dimmed {...dimmedProps}>
         <S.PosterTitle isHover={isHover}>{title}</S.PosterTitle>
       </Dimmed>
-      <S.Posterimage src={src} />
     </S.PosterWrap>
   );
 }

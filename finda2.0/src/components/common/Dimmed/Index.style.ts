@@ -9,5 +9,4 @@ export const DimmedWrap = styled.section<{
   height: ${({ size }) => size.height};
   background: ${({ isHover }) => (isHover ? 'rgba(0, 0, 0, 0.5)' : 'none')};
   position: absolute;
-  z-index: 1;
 `;
