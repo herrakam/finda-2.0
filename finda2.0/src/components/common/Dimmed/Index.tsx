@@ -10,6 +10,7 @@ function Dimmed({ size = 'full', children, ...props }: DimmedWithChildrenType) {
     size === 'poster'
       ? { width: `200px`, height: `300px` }
       : { width: `100vw`, height: `100vh` };
+
   return props.optional?.onMouseEnter && props.optional.onMouseLeave ? (
     <S.DimmedWrap
       size={dimSize}
