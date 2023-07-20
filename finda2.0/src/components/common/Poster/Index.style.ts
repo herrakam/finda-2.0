@@ -21,7 +21,6 @@ export const PosterTitle = styled.div<{ isHover: boolean }>`
   display: ${({ isHover }) => (isHover ? 'flex' : 'none')};
   ${({ theme }) => theme.typography.Bold};
   color: ${({ theme }) => theme.pallete.white};
-  z-index: 2;
   position: absolute;
   bottom: 0;
 `;
