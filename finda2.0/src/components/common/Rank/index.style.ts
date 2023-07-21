@@ -8,8 +8,7 @@ export const RankWrap = styled.div`
     dir: 'column',
   })}
   padding: 10px;
-  width: 100%;
-  margin: 15px;
+  width: 80%;
   gap: 30px;
 `;
 
