@@ -21,7 +21,6 @@ export const RankContents = styled.div`
   display: grid;
   place-content: center start;
   grid-template-columns: repeat(auto-fit, 200px);
-  grid-gap: 15px;
-  background: blue;
+  grid-gap: 40px;
   width: 100%;
 `;
