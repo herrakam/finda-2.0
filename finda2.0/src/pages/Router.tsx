@@ -1,5 +1,6 @@
 import Layout from '@/pages/Layout';
 import Main from '@/pages/Main';
+import Result from '@/pages/Result';
 import { createBrowserRouter } from 'react-router-dom';
 
 type RouterInfoType = {
@@ -12,6 +13,11 @@ const RouterInfo: RouterInfoType[] = [
   {
     path: '/',
     element: <Main />,
+    withAuthorization: false,
+  },
+  {
+    path: '/result',
+    element: <Result />,
     withAuthorization: false,
   },
 ];
