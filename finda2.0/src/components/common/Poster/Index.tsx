@@ -3,6 +3,7 @@ import { DimmedType } from '@components/common/Dimmed/type';
 import * as S from '@components/common/Poster/Index.style';
 import { posterType } from '@components/common/Poster/type';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Poster({ title, src }: posterType) {
   const [isHover, setHover] = useState(false);
@@ -20,12 +21,16 @@ function Poster({ title, src }: posterType) {
     size: 'poster',
     optional: dimmedEvent,
   };
+
+  const detailPageLink = `detail/:${title}`;
   return (
     <S.PosterWrap>
-      <S.Posterimage src={src} />
-      <Dimmed {...dimmedProps}>
-        <S.PosterTitle isHover={isHover}>{title}</S.PosterTitle>
-      </Dimmed>
+      <Link to={detailPageLink}>
+        <S.Posterimage src={src} />
+        <Dimmed {...dimmedProps}>
+          <S.PosterTitle isHover={isHover}>{title}</S.PosterTitle>
+        </Dimmed>
+      </Link>
     </S.PosterWrap>
   );
 }
