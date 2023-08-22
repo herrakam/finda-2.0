@@ -1,3 +1,4 @@
+import Detail from '@/pages/Detail';
 import Layout from '@/pages/Layout';
 import Main from '@/pages/Main';
 import Result from '@/pages/Result';
@@ -19,6 +20,11 @@ const RouterInfo: RouterInfoType[] = [
     path: '/result',
     element: <Result />,
     withAuthorization: false,
+  },
+  {
+    path: '/detail/:contentTitle',
+    element: <Detail />,
+    withAuthorization: true,
   },
 ];
 
