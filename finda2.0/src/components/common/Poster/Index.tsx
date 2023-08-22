@@ -22,7 +22,7 @@ function Poster({ title, src }: posterType) {
     optional: dimmedEvent,
   };
 
-  const detailPageLink = `detail/:${title}`;
+  const detailPageLink = `/detail/:${title}`;
   return (
     <S.PosterWrap>
       <Link to={detailPageLink}>
