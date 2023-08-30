@@ -1,5 +1,8 @@
+import { db } from '@/Firebase';
 import * as S from '@components/Result/SearchResult/Index.style';
 import Poster from '@components/common/Poster/Index';
+import { doc, getDoc } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 function SearchResult() {
   const resultMockData = {
@@ -83,14 +86,22 @@ function SearchResult() {
       },
     ],
   };
+  async function getData() {
+    const docRef = doc(db, 'result', 'gQHtYLSBK5uTUQfyVlOR');
+    const docSnap = (await getDoc(docRef)).data();
+    return docSnap;
+  }
 
-  const [title, result] = [resultMockData.subject, resultMockData.resultInfo];
-  const Contents = result.map(content => (
+  useEffect(() => {
+    getData();
+  }, []);
+  const { subject, resultInfo } = resultMockData;
+  const Contents = resultInfo.map(content => (
     <Poster key={content.title} title={content.title} src={content.imgSrc} />
   ));
   return (
     <S.ResultContatiner>
-      <S.ResultTitle>{title}</S.ResultTitle>
+      <S.ResultTitle>{subject}</S.ResultTitle>
       <S.ConentsContainer>{Contents}</S.ConentsContainer>
     </S.ResultContatiner>
   );
