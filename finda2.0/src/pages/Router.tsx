@@ -3,6 +3,7 @@ import Layout from '@/pages/Layout';
 import Main from '@/pages/Main';
 import Result from '@/pages/Result';
 import { createBrowserRouter } from 'react-router-dom';
+import Scrap from './Scrap';
 
 type RouterInfoType = {
   path: string;
@@ -25,6 +26,11 @@ const RouterInfo: RouterInfoType[] = [
     path: '/detail/:contentTitle',
     element: <Detail />,
     withAuthorization: true,
+  },
+  {
+    path: '/scrap',
+    element: <Scrap />,
+    withAuthorization: false,
   },
 ];
 

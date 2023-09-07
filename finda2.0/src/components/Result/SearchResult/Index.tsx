@@ -5,19 +5,19 @@ import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
 import { ResultDataType } from '@components/Result/SearchResult/type';
 
-async function getResultInfo() {
+async function getResultData() {
   const snap = (await getDoc(doc(db, 'result', 'gQHtYLSBK5uTUQfyVlOR'))).data();
   return snap;
 }
 
-function getResultData() {
-  const { data, isSuccess } = useQuery(['resultQueryKey'], getResultInfo);
+function getResultInfo() {
+  const { data, isSuccess } = useQuery(['resultQueryKey'], getResultData);
 
   if (isSuccess) return data as ResultDataType;
 }
 
 function SearchResult() {
-  const { subject, resultInfo } = getResultData()!;
+  const { subject, resultInfo } = getResultInfo()!;
   const Contents = resultInfo.map(content => (
     <Poster key={content.title} title={content.title} src={content.imgSrc} />
   ));
