@@ -3,27 +3,35 @@ import * as S from '@components/Result/SearchResult/Index.style';
 import Poster from '@components/common/Poster/Index';
 import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
-import { ResultDataType } from '@components/Result/SearchResult/type';
+import { ResultInfoContentType } from '@components/Result/SearchResult/type';
+import NoResult from '@components/NoResult/Index';
 
 async function getResultData() {
-  const snap = (await getDoc(doc(db, 'result', 'gQHtYLSBK5uTUQfyVlOR'))).data();
-  return snap;
+  const resultpath = import.meta.env.VITE_RESULT_ID;
+  const snap = await getDoc(doc(db, 'result', resultpath));
+  return snap?.data();
 }
 
 function getResultInfo() {
-  const { data, isSuccess } = useQuery(['resultQueryKey'], getResultData);
-
-  if (isSuccess) return data as ResultDataType;
+  return useQuery(['getResultQueryKey'], getResultData);
 }
 
 function SearchResult() {
-  const { subject, resultInfo } = getResultInfo()!;
-  const Contents = resultInfo.map(content => (
+  const { data } = getResultInfo();
+
+  if (!data?.resultInfo.length)
+    return (
+      <S.ResultContatiner>
+        <NoResult />
+      </S.ResultContatiner>
+    );
+  const Contents = data?.resultInfo.map((content: ResultInfoContentType) => (
     <Poster key={content.title} title={content.title} src={content.imgSrc} />
   ));
+
   return (
     <S.ResultContatiner>
-      <S.ResultTitle>{subject} 검색 결과</S.ResultTitle>
+      <S.ResultTitle>{data?.subject} 검색 결과</S.ResultTitle>
       <S.ConentsContainer>{Contents}</S.ConentsContainer>
     </S.ResultContatiner>
   );
