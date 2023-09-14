@@ -1,9 +1,9 @@
-interface ResultInfoContent {
+export interface ResultInfoContentType {
   title: string;
   imgSrc: string;
 }
 
 export interface ResultDataType {
   subject: string;
-  resultInfo: ResultInfoContent[];
+  resultInfo: ResultInfoContentType[];
 }
