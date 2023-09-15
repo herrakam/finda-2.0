@@ -2,7 +2,7 @@ import { PLATFORMINFO } from '@/assets/static';
 import { mixin } from '@/globalStyles/GlobalStyle';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 interface ResultDataType {
@@ -179,25 +179,10 @@ function Scrap() {
   };
 
   const getContentInfo = () => {
-    const { data, status } = useQuery(
-      ['posterQueryKey', pageNum],
-      getContentData,
-      {
-        enabled: isClicked,
-        retry: false,
-        onSuccess: data => {
-          const normalizedData: NormalizedResultDataType[] =
-            getNomalizedResultData(data);
-          setIsclicked(false);
-          updatePosterData(normalizedData);
-        },
-      },
-    );
-    if (status === 'success') {
-      setIsclicked(false);
-      updatePosterData(data);
-    }
-    return data as ResultDataType[];
+    return useQuery(['posterQueryKey', pageNum], getContentData, {
+      enabled: isClicked,
+      retry: false,
+    });
   };
 
   const getDetailInfo = () => {
@@ -220,12 +205,21 @@ function Scrap() {
     return data;
   };
 
-  const data = getContentInfo();
+  const { data } = getContentInfo();
   getDetailInfo();
+
+  useEffect(() => {
+    if (data) {
+      const normalizedData: NormalizedResultDataType[] =
+        getNomalizedResultData(data);
+      setIsclicked(false);
+      updatePosterData(normalizedData);
+    }
+  }, [data]);
 
   const showDetail = posterData.map(
     (detail: NormalizedResultDataType, idx: number) => (
-      <div>{`${idx} ${detail.title}`}</div>
+      <div key={detail.title}>{`${idx} ${detail.title}`}</div>
     ),
   );
 
