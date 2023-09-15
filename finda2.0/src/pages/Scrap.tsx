@@ -5,18 +5,18 @@ import axios from 'axios';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-interface ItemType {
+interface ResultDataType {
   jw_entity_id: string;
   id: number;
   title: string;
   poster: string;
   object_type: string;
 }
-interface NormalizedItemType {
+interface NormalizedResultDataType {
   id: number;
   title: string;
   poster: string;
-  object_type: string;
+  objectType: string;
 }
 interface CreditType {
   role: string;
@@ -109,31 +109,38 @@ const getNormalizedOffer = (offers: OfferType[]) => {
   return normalizedOffer;
 };
 
+const getNomalizedResultData = (
+  resultData: ResultDataType[],
+): NormalizedResultDataType[] => {
+  const normalizedResultData: NormalizedResultDataType[] = resultData.map(
+    (info: ResultDataType) => {
+      return {
+        id: info.id,
+        title: info.title,
+        poster: `https://images.justwatch.com/poster/${info.id}/s332/`,
+        objectType: info.object_type,
+      };
+    },
+  );
+  return normalizedResultData;
+};
+
+// const getNormalizedDetailData = () => {};
+
 function Scrap() {
   const [pageNum, setPageNum] = useState(0);
   const [isClicked, setIsclicked] = useState(false);
   const [isDetailClicked, setIsDetailClicked] = useState(false);
   const [idArr, setIdArr] = useState<number[]>([]);
-  const [posterData, setPosterData] = useState<NormalizedItemType[]>([]);
+  const [posterData, setPosterData] = useState<NormalizedResultDataType[]>([]);
   const [detailData, setDetailData] = useState<NormalizedDetailType[]>([]);
   const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/popular?body=%7B%22fields%22:[%22id%22,%22title%22,%22poster%22,%22object_type%22],%22content_types%22:[%22movie%22],%22monetization_types%22:[%22ads%22,%22buy%22,%22flatrate%22,%22rent%22,%22free%22],%22page%22:${pageNum},%22page_size%22:40,%22matching_offers_only%22:false%7D`;
 
-  async function getContentData() {
+  const getContentData = async () => {
     const posterData = (await axios.get(POSTERTITLEURL)).data.items;
-    const normalizedPosterData: NormalizedItemType[] = posterData.map(
-      (info: ItemType) => {
-        return {
-          id: info.id,
-          title: info.title,
-          poster: `https://images.justwatch.com/poster/${info.id}/s332/`,
-          objectType: info.object_type,
-        };
-      },
-    );
-    return normalizedPosterData;
-  }
-
-  async function getDetailData(id: number) {
+    return posterData;
+  };
+  const getDetailData = async (id: number) => {
     const DETAILURL = `https://apis.justwatch.com/content/titles/movie/${id}/locale/ko_KR?language=ko`;
     const data = (await axios.get(DETAILURL)).data;
     const normalizedData: NormalizedDetailType = {
@@ -154,8 +161,8 @@ function Scrap() {
       disc: data.short_discription,
     };
     return normalizedData;
-  }
-  const updatePosterData = (data: NormalizedItemType[]) => {
+  };
+  const updatePosterData = (data: NormalizedResultDataType[]) => {
     setPosterData([...posterData, ...data]);
   };
 
@@ -166,8 +173,8 @@ function Scrap() {
   const increasePage = () => {
     setPageNum(pageNum + 1);
   };
-  const getIdInfoArr = (data: ItemType[]) => {
-    const idArrInfo = data.map((item: ItemType) => item.id);
+  const getIdInfoArr = (data: ResultDataType[]) => {
+    const idArrInfo = data.map((item: ResultDataType) => item.id);
     setIdArr(idArrInfo);
   };
 
@@ -178,13 +185,19 @@ function Scrap() {
       {
         enabled: isClicked,
         retry: false,
+        onSuccess: data => {
+          const normalizedData: NormalizedResultDataType[] =
+            getNomalizedResultData(data);
+          setIsclicked(false);
+          updatePosterData(normalizedData);
+        },
       },
     );
     if (status === 'success') {
       setIsclicked(false);
       updatePosterData(data);
     }
-    return data as ItemType[];
+    return data as ResultDataType[];
   };
 
   const getDetailInfo = () => {
@@ -211,7 +224,7 @@ function Scrap() {
   getDetailInfo();
 
   const showDetail = posterData.map(
-    (detail: NormalizedItemType, idx: number) => (
+    (detail: NormalizedResultDataType, idx: number) => (
       <div>{`${idx} ${detail.title}`}</div>
     ),
   );
