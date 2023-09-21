@@ -125,7 +125,30 @@ const getNomalizedResultData = (
   return normalizedResultData;
 };
 
-// const getNormalizedDetailData = () => {};
+const getNormalizedDetailData = (data: any) => {
+  const normalizedDetailData: NormalizedDetailType[] = data.map(
+    (detailData: any) => {
+      return {
+        backdropImgUrl: `https://images.justwatch.com/backdrop/${detailData.id}/s1440`,
+        title: detailData.title,
+        originTitle: detailData.original_title,
+        releasedYear: detailData.original_release_year,
+        genreArr: detailData.genre_ids,
+        runtime: detailData.runtime,
+        director: detailData.credits.filter(
+          (credit: CreditType) => credit.role === 'DIRECTOR',
+        ).name,
+        actors: detailData.credits.filter(
+          (credit: CreditType, idx: number) =>
+            credit.role === 'ACTOR' && idx > 10,
+        ).name,
+        offerArr: getNormalizedOffer(detailData.offers),
+        disc: detailData.short_discription,
+      };
+    },
+  );
+  return normalizedDetailData;
+};
 
 function Scrap() {
   const [pageNum, setPageNum] = useState(0);
@@ -137,31 +160,15 @@ function Scrap() {
   const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/popular?body=%7B%22fields%22:[%22id%22,%22title%22,%22poster%22,%22object_type%22],%22content_types%22:[%22movie%22],%22monetization_types%22:[%22ads%22,%22buy%22,%22flatrate%22,%22rent%22,%22free%22],%22page%22:${pageNum},%22page_size%22:40,%22matching_offers_only%22:false%7D`;
 
   const getContentData = async () => {
-    const posterData = (await axios.get(POSTERTITLEURL)).data.items;
-    return posterData;
+    const data = (await axios.get(POSTERTITLEURL)).data.items;
+    return data;
   };
   const getDetailData = async (id: number) => {
     const DETAILURL = `https://apis.justwatch.com/content/titles/movie/${id}/locale/ko_KR?language=ko`;
     const data = (await axios.get(DETAILURL)).data;
-    const normalizedData: NormalizedDetailType = {
-      backdropImgUrl: `https://images.justwatch.com/backdrop/${id}/s1440`,
-      title: data.title,
-      originTitle: data.original_title,
-      releasedYear: data.original_release_year,
-      genreArr: data.genre_ids,
-      runtime: data.runtime,
-      director: data.credits.filter(
-        (credit: CreditType) => credit.role === 'DIRECTOR',
-      ).name,
-      actors: data.credits.filter(
-        (credit: CreditType, idx: number) =>
-          credit.role === 'ACTOR' && idx > 10,
-      ).name,
-      offerArr: getNormalizedOffer(data.offers),
-      disc: data.short_discription,
-    };
-    return normalizedData;
+    return data;
   };
+
   const updatePosterData = (data: NormalizedResultDataType[]) => {
     setPosterData([...posterData, ...data]);
   };
@@ -175,7 +182,7 @@ function Scrap() {
   };
   const getIdInfoArr = (data: ResultDataType[]) => {
     const idArrInfo = data.map((item: ResultDataType) => item.id);
-    setIdArr(idArrInfo);
+    setIdArr([...idArrInfo]);
   };
 
   const getContentInfo = () => {
@@ -186,8 +193,8 @@ function Scrap() {
   };
 
   const getDetailInfo = () => {
-    const { data, isSuccess } = useQuery(
-      ['detailQuerykey'],
+    return useQuery(
+      ['detailQuerykey', idArr],
       () => {
         const resultArr = idArr.map((id: number) => getDetailData(id));
         return Promise.all(resultArr);
@@ -197,29 +204,39 @@ function Scrap() {
         retry: false,
       },
     );
-    if (isSuccess) {
-      setIsDetailClicked(false);
-      updateDetailData(data);
-      // return data;
-    }
-    return data;
   };
 
-  const { data } = getContentInfo();
-  getDetailInfo();
-
+  const resultInfo = getContentInfo().data;
+  const detailInfo = getDetailInfo().data;
   useEffect(() => {
-    if (data) {
+    if (resultInfo) {
       const normalizedData: NormalizedResultDataType[] =
-        getNomalizedResultData(data);
-      setIsclicked(false);
+        getNomalizedResultData(resultInfo);
+      getIdInfoArr(resultInfo);
       updatePosterData(normalizedData);
+      setIsDetailClicked(true);
     }
-  }, [data]);
+  }, [resultInfo]);
+  useEffect(() => {
+    if (detailInfo) {
+      const normalizedDetailData = getNormalizedDetailData(detailInfo);
+      updateDetailData(normalizedDetailData);
+      setIsclicked(false);
+      setIsDetailClicked(false);
+      window.alert('데이터 패치 완료');
+    }
+  }, [detailInfo, idArr]);
+  useEffect(() => {}, []);
 
-  const showDetail = posterData.map(
+  const showResultData = posterData.map(
     (detail: NormalizedResultDataType, idx: number) => (
       <div key={detail.title}>{`${idx} ${detail.title}`}</div>
+    ),
+  );
+
+  const showDetailData = detailData.map(
+    (detail: NormalizedDetailType, idx: number) => (
+      <div key={detail.title}>{`${idx} ${detail.title} ${detail.runtime}`}</div>
     ),
   );
 
@@ -232,19 +249,14 @@ function Scrap() {
             increasePage();
           }}
         >
-          포스터,제목데이터 가져오기
+          데이터 가져오기
         </GetDataBtn>
-        <GetDetailBtn
-          onClick={() => {
-            setIsDetailClicked(true);
-            getIdInfoArr(data);
-          }}
-        >
-          디테일 데이터 가져오기
-        </GetDetailBtn>
         <PostDataBtn>데이터 보내기</PostDataBtn>
       </Wrap>
-      <ShowResult>{showDetail}</ShowResult>
+      <ShowDataContainer>
+        <ShowResult>{showResultData}</ShowResult>
+        <ShowResult>{showDetailData}</ShowResult>
+      </ShowDataContainer>
     </>
   );
 }
@@ -261,5 +273,7 @@ const GetDataBtn = styled.button`
   width: 100px;
   height: 50px;
 `;
-const GetDetailBtn = styled(GetDataBtn)``;
 const PostDataBtn = styled(GetDataBtn)``;
+const ShowDataContainer = styled.div`
+  ${mixin.flexbox({ horizontal: 'space-evenly' })}
+`;
