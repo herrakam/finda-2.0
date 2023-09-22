@@ -58,8 +58,8 @@ interface NormalizedDetailType {
   releasedYear: string;
   genreArr: number[];
   runtime: number;
-  director: string;
-  actors: CreditType[];
+  director?: string;
+  actors?: CreditType[];
   offerArr: NormalizedOfferType[];
   disc: string;
 }
@@ -135,10 +135,10 @@ const getNormalizedDetailData = (data: any) => {
         releasedYear: detailData.original_release_year,
         genreArr: detailData.genre_ids,
         runtime: detailData.runtime,
-        director: detailData.credits.filter(
+        director: detailData.credits?.filter(
           (credit: CreditType) => credit.role === 'DIRECTOR',
         ).name,
-        actors: detailData.credits.filter(
+        actors: detailData?.credits?.filter(
           (credit: CreditType, idx: number) =>
             credit.role === 'ACTOR' && idx > 10,
         ).name,
