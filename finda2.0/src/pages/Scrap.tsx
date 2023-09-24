@@ -1,18 +1,20 @@
+import { db } from '@/Firebase';
 import { PLATFORMINFO } from '@/assets/static';
 import { mixin } from '@/globalStyles/GlobalStyle';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { doc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-interface ResultDataType {
+interface PosterDataType {
   jw_entity_id: string;
   id: number;
   title: string;
   poster: string;
   object_type: string;
 }
-interface NormalizedResultDataType {
+interface NormalizedPosterDataType {
   id: number;
   title: string;
   poster: string;
@@ -21,6 +23,7 @@ interface NormalizedResultDataType {
 interface CreditType {
   role: string;
   person_id: number;
+  charactor_name?: string;
   name: string;
 }
 interface OfferType {
@@ -58,8 +61,8 @@ interface NormalizedDetailType {
   releasedYear: string;
   genreArr: number[];
   runtime: number;
-  director?: string;
-  actors?: CreditType[];
+  director: CreditType;
+  actors: string[] | '출연진 정보 없음';
   offerArr: NormalizedOfferType[];
   disc: string;
 }
@@ -92,7 +95,7 @@ const getOfferPlatformInfo = (offer: OfferType) => {
   const info = PLATFORMINFO.find(
     platformInfo => offer.provider_id === platformInfo.id,
   );
-  return { provider: info?.name!, iconSrc: info?.icon_url! };
+  return { provider: info?.name!, iconSrc: info?.iconURL! };
 };
 
 const getNormalizedOffer = (offers: OfferType[]) => {
@@ -109,11 +112,11 @@ const getNormalizedOffer = (offers: OfferType[]) => {
   return normalizedOffer;
 };
 
-const getNomalizedResultData = (
-  resultData: ResultDataType[],
-): NormalizedResultDataType[] => {
-  const normalizedResultData: NormalizedResultDataType[] = resultData.map(
-    (info: ResultDataType) => {
+const getNomalizedposterData = (
+  posterData: PosterDataType[],
+): NormalizedPosterDataType[] => {
+  const normalizedposterData: NormalizedPosterDataType[] = posterData.map(
+    (info: PosterDataType) => {
       return {
         id: info.id,
         title: info.title,
@@ -122,31 +125,33 @@ const getNomalizedResultData = (
       };
     },
   );
-  return normalizedResultData;
+  return normalizedposterData;
 };
-
+const getDirectorName = (credit: CreditType) => credit.role === 'DIRECTOR';
 const getNormalizedDetailData = (data: any) => {
   const normalizedDetailData: NormalizedDetailType[] = data.map(
     (detailData: any) => {
-      return {
+      const normalizedData: NormalizedDetailType = {
         backdropImgUrl: `https://images.justwatch.com/backdrop/${detailData.id}/s1440`,
         title: detailData.title,
         originTitle: detailData.original_title,
         releasedYear: detailData.original_release_year,
         genreArr: detailData.genre_ids,
         runtime: detailData.runtime,
-        director: detailData.credits?.filter(
-          (credit: CreditType) => credit.role === 'DIRECTOR',
-        ).name,
-        actors: detailData?.credits?.filter(
-          (credit: CreditType, idx: number) =>
-            credit.role === 'ACTOR' && idx > 10,
-        ).name,
+        director: detailData.credits?.find(getDirectorName),
+        actors: detailData.credits
+          ?.filter(
+            (credit: CreditType, idx: number) =>
+              credit.role === 'ACTOR' && idx < 10,
+          )
+          .map((credit: CreditType) => credit.name),
         offerArr: getNormalizedOffer(detailData.offers),
-        disc: detailData.short_discription,
+        disc: detailData.short_description,
       };
+      return normalizedData;
     },
   );
+  console.log(normalizedDetailData);
   return normalizedDetailData;
 };
 
@@ -155,9 +160,34 @@ function Scrap() {
   const [isClicked, setIsclicked] = useState(false);
   const [isDetailClicked, setIsDetailClicked] = useState(false);
   const [idArr, setIdArr] = useState<number[]>([]);
-  const [posterData, setPosterData] = useState<NormalizedResultDataType[]>([]);
+  const [posterData, setposterData] = useState<NormalizedPosterDataType[]>([]);
   const [detailData, setDetailData] = useState<NormalizedDetailType[]>([]);
   const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/popular?body=%7B%22fields%22:[%22id%22,%22title%22,%22poster%22,%22object_type%22],%22content_types%22:[%22movie%22],%22monetization_types%22:[%22ads%22,%22buy%22,%22flatrate%22,%22rent%22,%22free%22],%22page%22:${pageNum},%22page_size%22:40,%22matching_offers_only%22:false%7D`;
+
+  const postposterData = async (posterData: NormalizedPosterDataType) => {
+    await setDoc(doc(db, 'result', posterData.title), posterData);
+  };
+
+  const postDetailData = async (detailData: NormalizedDetailType) => {
+    await setDoc(doc(db, 'movies', detailData.title), detailData);
+  };
+
+  const postDBData = async () => {
+    Promise.all(
+      posterData.map((result: NormalizedPosterDataType) => {
+        postposterData(result);
+      }),
+    );
+    Promise.all(
+      detailData.map((detail: NormalizedDetailType) => {
+        postDetailData(detail);
+      }),
+    );
+  };
+  const resetData = () => {
+    setDetailData([]);
+    setposterData([]);
+  };
 
   const getContentData = async () => {
     const data = (await axios.get(POSTERTITLEURL)).data.items;
@@ -169,8 +199,8 @@ function Scrap() {
     return data;
   };
 
-  const updatePosterData = (data: NormalizedResultDataType[]) => {
-    setPosterData([...posterData, ...data]);
+  const updateposterData = (data: NormalizedPosterDataType[]) => {
+    setposterData([...posterData, ...data]);
   };
 
   const updateDetailData = (data: NormalizedDetailType[]) => {
@@ -180,8 +210,8 @@ function Scrap() {
   const increasePage = () => {
     setPageNum(pageNum + 1);
   };
-  const getIdInfoArr = (data: ResultDataType[]) => {
-    const idArrInfo = data.map((item: ResultDataType) => item.id);
+  const getIdInfoArr = (data: PosterDataType[]) => {
+    const idArrInfo = data.map((item: PosterDataType) => item.id);
     setIdArr([...idArrInfo]);
   };
 
@@ -210,10 +240,10 @@ function Scrap() {
   const detailInfo = getDetailInfo().data;
   useEffect(() => {
     if (resultInfo) {
-      const normalizedData: NormalizedResultDataType[] =
-        getNomalizedResultData(resultInfo);
+      const normalizedData: NormalizedPosterDataType[] =
+        getNomalizedposterData(resultInfo);
       getIdInfoArr(resultInfo);
-      updatePosterData(normalizedData);
+      updateposterData(normalizedData);
       setIsDetailClicked(true);
     }
   }, [resultInfo]);
@@ -226,10 +256,9 @@ function Scrap() {
       window.alert('데이터 패치 완료');
     }
   }, [detailInfo, idArr]);
-  useEffect(() => {}, []);
 
-  const showResultData = posterData.map(
-    (detail: NormalizedResultDataType, idx: number) => (
+  const showposterData = posterData.map(
+    (detail: NormalizedPosterDataType, idx: number) => (
       <div key={detail.title}>{`${idx} ${detail.title}`}</div>
     ),
   );
@@ -251,10 +280,16 @@ function Scrap() {
         >
           데이터 가져오기
         </GetDataBtn>
-        <PostDataBtn>데이터 보내기</PostDataBtn>
+        <PostDataBtn
+          onClick={() => {
+            postDBData().then(resetData);
+          }}
+        >
+          데이터 보내기
+        </PostDataBtn>
       </Wrap>
       <ShowDataContainer>
-        <ShowResult>{showResultData}</ShowResult>
+        <ShowResult>{showposterData}</ShowResult>
         <ShowResult>{showDetailData}</ShowResult>
       </ShowDataContainer>
     </>
