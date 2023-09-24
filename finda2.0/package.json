@@ -34,6 +34,7 @@
     "@storybook/react": "^7.0.6",
     "@storybook/react-vite": "^7.0.6",
     "@storybook/testing-library": "^0.0.14-next.2",
+    "@tanstack/react-query-devtools": "^4.35.3",
     "@types/jest": "^29.5.1",
     "@types/json-server": "^0.14.4",
     "@types/node": "^18.16.1",

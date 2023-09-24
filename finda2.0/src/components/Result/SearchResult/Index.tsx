@@ -1,96 +1,37 @@
+import { db } from '@/Firebase';
 import * as S from '@components/Result/SearchResult/Index.style';
 import Poster from '@components/common/Poster/Index';
+import { useQuery } from '@tanstack/react-query';
+import { doc, getDoc } from 'firebase/firestore';
+import { ResultInfoContentType } from '@components/Result/SearchResult/type';
+import NoResult from '@components/NoResult/Index';
+
+async function getResultData() {
+  const resultpath = import.meta.env.VITE_RESULT_ID;
+  const snap = await getDoc(doc(db, 'result', resultpath));
+  return snap?.data();
+}
+
+function getResultInfo() {
+  return useQuery(['getResultQueryKey'], getResultData);
+}
 
 function SearchResult() {
-  const resultMockData = {
-    subject: '검색 결과',
-    resultInfo: [
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
+  const { data } = getResultInfo();
 
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-      {
-        title: 'sample',
-        imgSrc:
-          'https://i.namu.wiki/i/_33_6GMFJ2tl_JF2as-w_tL9VnmcrHPMFN5IIz88yFIhLOJVEXfTQNltUZT6CHoc8rGIMOFy7bZmsWPIdq5uFQ.webp',
-      },
-    ],
-  };
-
-  const [title, result] = [resultMockData.subject, resultMockData.resultInfo];
-  const Contents = result.map(content => (
+  if (!data?.resultInfo.length)
+    return (
+      <S.ResultContatiner>
+        <NoResult />
+      </S.ResultContatiner>
+    );
+  const Contents = data?.resultInfo.map((content: ResultInfoContentType) => (
     <Poster key={content.title} title={content.title} src={content.imgSrc} />
   ));
+
   return (
     <S.ResultContatiner>
-      <S.ResultTitle>{title}</S.ResultTitle>
+      <S.ResultTitle>{data?.subject} 검색 결과</S.ResultTitle>
       <S.ConentsContainer>{Contents}</S.ConentsContainer>
     </S.ResultContatiner>
   );
