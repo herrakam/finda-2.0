@@ -6,8 +6,8 @@ export const Containter = styled.section`
   min-width: 100%;
   ${mixin.flexbox({
     dir: 'column',
-    vertical: 'flex-start',
-    horizontal: 'center',
+    vertical: 'center',
+    horizontal: 'flex-start',
   })}
   background-color:${({ theme }) => theme.pallete.normalBg};
 `;
