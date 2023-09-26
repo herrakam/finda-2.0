@@ -1,9 +1,9 @@
-import Detail from '@/pages/Detail';
 import Layout from '@/pages/Layout';
 import Main from '@/pages/Main';
 import Result from '@/pages/Result';
 import { createBrowserRouter } from 'react-router-dom';
 import Scrap from './Scrap';
+import Movie from '@/pages/Movie';
 
 type RouterInfoType = {
   path: string;
@@ -23,8 +23,8 @@ const RouterInfo: RouterInfoType[] = [
     withAuthorization: false,
   },
   {
-    path: '/detail/:contentTitle',
-    element: <Detail />,
+    path: '/movie/:contentTitle',
+    element: <Movie />,
     withAuthorization: true,
   },
   {
