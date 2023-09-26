@@ -1,7 +1,7 @@
 import ContentInfo from '@components/ContentInfo/Index';
 import { useParams } from 'react-router-dom';
 
-function Detail() {
+function Movie() {
   const { params } = useParams();
   return (
     <>
@@ -10,4 +10,4 @@ function Detail() {
   );
 }
 
-export default Detail;
+export default Movie;
