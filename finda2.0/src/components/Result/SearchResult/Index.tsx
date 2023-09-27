@@ -6,15 +6,15 @@ import { doc, getDoc } from 'firebase/firestore';
 import { ResultInfoContentType } from '@components/Result/SearchResult/type';
 import NoResult from '@components/NoResult/Index';
 
-async function getResultData() {
+const getResultData = async () => {
   const resultpath = import.meta.env.VITE_RESULT_ID;
   const snap = await getDoc(doc(db, 'result', resultpath));
   return snap?.data();
-}
+};
 
-function getResultInfo() {
+const getResultInfo = () => {
   return useQuery(['getResultQueryKey'], getResultData);
-}
+};
 
 function SearchResult() {
   const { data } = getResultInfo();
