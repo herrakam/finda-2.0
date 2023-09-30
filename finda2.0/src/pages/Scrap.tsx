@@ -111,9 +111,17 @@ const getDirectorName = (credit: CreditType) => credit.role === 'DIRECTOR';
 const getNormalizedDetailData = (data: any) => {
   const normalizedDetailData: NormalizedDetailType[] = data.map(
     (detailData: any) => {
-      const backDropId = getImgId(detailData.backdrops[0].backdrop_url);
       const normalizedData: NormalizedDetailType = {
-        backdropImgUrl: `https://images.justwatch.com/backdrop/${backDropId}/s1440`,
+        poster: `https://images.justwatch.com/poster/${getImgId(
+          detailData.poster,
+        )}/s332/`,
+        backdropImgUrl: detailData.backdrops
+          ? `https://images.justwatch.com/backdrop/${getImgId(
+              detailData.backdrops[0].backdrop_url,
+            )}/s1440`
+          : `https://images.justwatch.com/poster/${getImgId(
+              detailData.poster,
+            )}/s332/`,
         title: detailData.title,
         originTitle: detailData.original_title,
         releasedYear: detailData.original_release_year,
@@ -146,7 +154,7 @@ function Scrap() {
   const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/popular?body=%7B%22fields%22:[%22id%22,%22title%22,%22poster%22,%22object_type%22],%22content_types%22:[%22movie%22],%22monetization_types%22:[%22ads%22,%22buy%22,%22flatrate%22,%22rent%22,%22free%22],%22page%22:${pageNum},%22page_size%22:40,%22matching_offers_only%22:false%7D`;
 
   const postposterData = async (posterData: NormalizedPosterDataType) => {
-    await setDoc(doc(db, 'result', posterData.title), posterData);
+    await setDoc(doc(db, 'poster', posterData.title), posterData);
   };
 
   const postDetailData = async (detailData: NormalizedDetailType) => {
