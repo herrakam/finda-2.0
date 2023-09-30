@@ -1,6 +1,12 @@
 import { db } from '@/Firebase';
 import { PLATFORMINFO } from '@/assets/static';
 import { mixin } from '@/globalStyles/GlobalStyle';
+import {
+  CreditType,
+  NormalizedDetailType,
+  NormalizedOfferType,
+  NormalizedPosterDataType,
+} from '@/utils/type';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { doc, setDoc } from 'firebase/firestore';
@@ -14,18 +20,7 @@ interface PosterDataType {
   poster: string;
   object_type: string;
 }
-interface NormalizedPosterDataType {
-  id: number;
-  title: string;
-  poster: string;
-  objectType: string;
-}
-interface CreditType {
-  role: string;
-  person_id: number;
-  charactor_name?: string;
-  name: string;
-}
+
 interface OfferType {
   jw_entity_id: string;
   monetization_type: 'buy' | 'rent' | 'flatrate';
@@ -46,25 +41,6 @@ interface OfferType {
   available_to: string;
   presentation_type: string;
   country: string;
-}
-interface NormalizedOfferType {
-  url: string;
-  type: 'buy' | 'rent' | 'flatrate';
-  price?: number;
-  provider: string;
-  iconSrc: string;
-}
-interface NormalizedDetailType {
-  backdropImgUrl: string;
-  title: string;
-  originTitle: string;
-  releasedYear: string;
-  genreArr: number[];
-  runtime: number;
-  director: CreditType;
-  actors: string[] | '출연진 정보 없음';
-  offerArr: NormalizedOfferType[];
-  disc: string;
 }
 
 const getPriceAndType = (offer: OfferType) => {
@@ -112,15 +88,19 @@ const getNormalizedOffer = (offers: OfferType[]) => {
   return normalizedOffer;
 };
 
+const getImgId = (src: string) => {
+  return src.split('/')[2];
+};
 const getNomalizedposterData = (
   posterData: PosterDataType[],
 ): NormalizedPosterDataType[] => {
   const normalizedposterData: NormalizedPosterDataType[] = posterData.map(
     (info: PosterDataType) => {
+      const posterId = getImgId(info.poster);
       return {
         id: info.id,
         title: info.title,
-        poster: `https://images.justwatch.com/poster/${info.id}/s332/`,
+        poster: `https://images.justwatch.com/poster/${posterId}/s332/`,
         objectType: info.object_type,
       };
     },
@@ -131,8 +111,9 @@ const getDirectorName = (credit: CreditType) => credit.role === 'DIRECTOR';
 const getNormalizedDetailData = (data: any) => {
   const normalizedDetailData: NormalizedDetailType[] = data.map(
     (detailData: any) => {
+      const backDropId = getImgId(detailData.backdrops[0].backdrop_url);
       const normalizedData: NormalizedDetailType = {
-        backdropImgUrl: `https://images.justwatch.com/backdrop/${detailData.id}/s1440`,
+        backdropImgUrl: `https://images.justwatch.com/backdrop/${backDropId}/s1440`,
         title: detailData.title,
         originTitle: detailData.original_title,
         releasedYear: detailData.original_release_year,
@@ -238,6 +219,7 @@ function Scrap() {
 
   const resultInfo = getContentInfo().data;
   const detailInfo = getDetailInfo().data;
+
   useEffect(() => {
     if (resultInfo) {
       const normalizedData: NormalizedPosterDataType[] =
@@ -259,13 +241,15 @@ function Scrap() {
 
   const showposterData = posterData.map(
     (detail: NormalizedPosterDataType, idx: number) => (
-      <div key={detail.title}>{`${idx} ${detail.title}`}</div>
+      <div key={detail.title}>{`${idx} ${detail.title} `}</div>
     ),
   );
 
   const showDetailData = detailData.map(
     (detail: NormalizedDetailType, idx: number) => (
-      <div key={detail.title}>{`${idx} ${detail.title} ${detail.runtime}`}</div>
+      <div
+        key={detail.title}
+      >{`${idx} ${detail.title} ${detail.runtime} ${detail.backdropImgUrl}`}</div>
     ),
   );
 
