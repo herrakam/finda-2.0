@@ -5,6 +5,7 @@ export interface NormalizedPosterDataType {
   objectType: string;
 }
 export interface NormalizedDetailType {
+  poster: string;
   backdropImgUrl: string;
   title: string;
   originTitle: string;
