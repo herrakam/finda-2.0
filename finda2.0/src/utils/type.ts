@@ -4,6 +4,14 @@ export interface NormalizedPosterDataType {
   poster: string;
   objectType: string;
 }
+
+export interface GenreType {
+  id: number;
+  short_name: string;
+  technical_name: string;
+  translation: string;
+  slug: string;
+}
 export interface NormalizedDetailType {
   poster: string;
   backdropImgUrl: string;
