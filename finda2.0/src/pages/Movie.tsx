@@ -1,4 +1,5 @@
 import { db } from '@/Firebase';
+import { NormalizedDetailType } from '@/utils/type';
 import ContentInfo from '@components/ContentInfo/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import { useQuery } from '@tanstack/react-query';
@@ -16,15 +17,11 @@ function Movie() {
   const getMovieInfo = () => {
     return useQuery(['getMovieInfoQueryKey'], getMovieData);
   };
-  const { data } = getMovieInfo();
-  if (data) {
-    console.log(data);
-  }
 
+  const { data } = getMovieInfo();
+  const detailData = data as NormalizedDetailType;
   return (
-    <PageContainer>
-      <ContentInfo />
-    </PageContainer>
+    <PageContainer>{data && <ContentInfo {...detailData} />}</PageContainer>
   );
 }
 
