@@ -1,6 +1,7 @@
 import { GENREINFO } from '@/assets/static';
 import * as S from '@/components/ContentInfo/Index.style';
 import { GenreType, NormalizedDetailType } from '@/utils/type';
+import Offer from '@components/Offer/Index';
 
 function ContentInfo({
   backdropImgUrl,
@@ -49,6 +50,8 @@ function ContentInfo({
           <S.ItemContent>{director.name}</S.ItemContent>
           <S.ItemTitle>actors</S.ItemTitle>
           <S.ActorsContainer>{actorsContent}</S.ActorsContainer>
+          <S.OfferTitle>이곳에서 서비스하고 있어요!</S.OfferTitle>
+          <Offer offer={offerArr} />
         </S.InfoRight>
       </S.InfoContainer>
       <S.DiscContatiner>

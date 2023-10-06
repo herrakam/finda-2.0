@@ -71,12 +71,17 @@ export const ReleasedYear = styled(Title)`
 `;
 export const RealTitle = styled.div`
   color: ${({ theme }) => theme.pallete.grey4};
-  margin-bottom: 5px;
+  margin-bottom: 25px;
 `;
 
 export const ItemTitle = styled.div`
   ${({ theme }) => theme.typography.Bold};
   color: ${({ theme }) => theme.pallete.normalFont};
+`;
+
+export const OfferTitle = styled(ItemTitle)`
+  margin-top: 50px;
+  ${({ theme }) => theme.typography.Title}
 `;
 
 export const ItemContent = styled.div`
@@ -91,7 +96,8 @@ export const ItemConentInline = styled.span`
 `;
 
 export const DiscContatiner = styled.div`
-  ${mixin.flexbox({ dir: 'column' })}
+  ${mixin.flexbox({ dir: 'column' })};
+  padding: 20px;
   gap: 20px;
 `;
 export const DiscContent = styled(ItemContent)`
