@@ -25,9 +25,11 @@ export interface NormalizedDetailType {
   offerArr: NormalizedOfferType[];
   disc: string;
 }
+
+export type OfferType = 'rent' | 'flatrate' | 'buy';
 export interface NormalizedOfferType {
   url: string;
-  type: 'buy' | 'rent' | 'flatrate';
+  type: OfferType;
   price?: number;
   provider: string;
   iconSrc: string;
