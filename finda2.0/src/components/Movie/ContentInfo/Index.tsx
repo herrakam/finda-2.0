@@ -1,5 +1,5 @@
 import { GENREINFO } from '@/assets/static';
-import * as S from '@/components/ContentInfo/Index.style';
+import * as S from '@components/Movie/ContentInfo/Index.style';
 import { GenreType, NormalizedDetailType } from '@/utils/type';
 import Offer from '@components/Offer/Index';
 

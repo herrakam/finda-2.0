@@ -81,7 +81,7 @@ export const ItemTitle = styled.div`
 
 export const OfferTitle = styled(ItemTitle)`
   margin-top: 50px;
-  ${({ theme }) => theme.typography.Title}
+  ${({ theme }) => theme.typography.SemiTitle};
 `;
 
 export const ItemContent = styled.div`
