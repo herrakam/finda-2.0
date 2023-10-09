@@ -9,5 +9,6 @@ export const Containter = styled.section`
     vertical: 'center',
     horizontal: 'flex-start',
   })}
-  background-color:${({ theme }) => theme.pallete.normalBg};
+  gap: 30px;
+  background-color: ${({ theme }) => theme.pallete.normalBg};
 `;
