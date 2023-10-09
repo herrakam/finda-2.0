@@ -22,6 +22,7 @@ declare module 'styled-components' {
 
     typography: {
       Title: font;
+      SemiTitle: font;
       Bold: font;
       Regular: font;
       Light: font;
