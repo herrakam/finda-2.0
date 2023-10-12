@@ -27,10 +27,12 @@ export const CommentId = styled.span`
   ${({ theme }) => theme.typography.Regular};
   color: ${({ theme }) => theme.pallete.normalFont};
   margin-right: 30px;
+  width: 50px;
 `;
 
-export const CommentContent = styled(CommentId)`
+export const CommentContent = styled.span`
   ${({ theme }) => theme.typography.Light};
+  color: ${({ theme }) => theme.pallete.normalFont};
   line-height: 2rem;
   border-bottom: 2px dotted ${({ theme }) => theme.pallete.normalFont};
 `;

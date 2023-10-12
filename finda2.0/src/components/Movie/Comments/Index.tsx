@@ -17,7 +17,7 @@ function Comments() {
   });
   return (
     <S.Container>
-      <S.CommentTitle>한줄 평</S.CommentTitle>
+      <S.CommentTitle>한줄리뷰</S.CommentTitle>
       <S.Content>{commentContent}</S.Content>
     </S.Container>
   );
