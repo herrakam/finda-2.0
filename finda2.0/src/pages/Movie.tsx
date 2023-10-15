@@ -73,8 +73,9 @@ function Movie() {
     if (detailData) {
       setGenreArr([...detailData.genreArr]);
       setIsSuccess(true);
+      console.log(1);
     }
-  }, [detailData, similarData]);
+  }, [detailData]);
 
   useEffect(() => {
     if (similarData) {
@@ -87,6 +88,7 @@ function Movie() {
         },
       );
       updateSimilarInfo(normalizedSimilarData);
+      console.log(2);
     }
   }, [similarData]);
 
