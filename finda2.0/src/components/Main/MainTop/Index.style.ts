@@ -4,6 +4,7 @@ import styled from 'styled-components';
 export const MaintopWrap = styled.div`
   ${mixin.flexbox({ dir: 'column', horizontal: 'center', vertical: 'center' })}
   height: 100vh;
+  width: 100%;
   gap: 100px;
   background: ${({ theme }) => theme.pallete.normalBg};
 `;

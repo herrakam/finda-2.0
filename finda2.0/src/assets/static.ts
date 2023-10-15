@@ -1,4 +1,6 @@
-const GENREINFO = [
+import { GenreType } from '@/utils/type';
+
+export const GENREINFO: GenreType[] = [
   {
     id: 1,
     short_name: 'act',

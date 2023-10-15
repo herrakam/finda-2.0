@@ -2,6 +2,10 @@ import { DefaultTheme } from 'styled-components';
 
 const typographyContent = {
   Title: { fontWeight: 900, fontSize: '40px' },
+  SemiTitle: {
+    fontWeight: 800,
+    fontSize: '30px',
+  },
   Bold: { fontWeight: 700, fontSize: '20px' },
   Regular: { fontWeight: 500, fontSize: '16px' },
   Light: { fontWeight: 300, fontSize: '13px' },

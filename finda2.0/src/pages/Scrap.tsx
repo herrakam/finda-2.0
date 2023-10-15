@@ -1,6 +1,12 @@
 import { db } from '@/Firebase';
 import { PLATFORMINFO } from '@/assets/static';
 import { mixin } from '@/globalStyles/GlobalStyle';
+import {
+  CreditType,
+  NormalizedDetailType,
+  NormalizedOfferType,
+  NormalizedPosterDataType,
+} from '@/utils/type';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { doc, setDoc } from 'firebase/firestore';
@@ -14,18 +20,7 @@ interface PosterDataType {
   poster: string;
   object_type: string;
 }
-interface NormalizedPosterDataType {
-  id: number;
-  title: string;
-  poster: string;
-  objectType: string;
-}
-interface CreditType {
-  role: string;
-  person_id: number;
-  charactor_name?: string;
-  name: string;
-}
+
 interface OfferType {
   jw_entity_id: string;
   monetization_type: 'buy' | 'rent' | 'flatrate';
@@ -46,25 +41,6 @@ interface OfferType {
   available_to: string;
   presentation_type: string;
   country: string;
-}
-interface NormalizedOfferType {
-  url: string;
-  type: 'buy' | 'rent' | 'flatrate';
-  price?: number;
-  provider: string;
-  iconSrc: string;
-}
-interface NormalizedDetailType {
-  backdropImgUrl: string;
-  title: string;
-  originTitle: string;
-  releasedYear: string;
-  genreArr: number[];
-  runtime: number;
-  director: CreditType;
-  actors: string[] | '출연진 정보 없음';
-  offerArr: NormalizedOfferType[];
-  disc: string;
 }
 
 const getPriceAndType = (offer: OfferType) => {
@@ -112,15 +88,19 @@ const getNormalizedOffer = (offers: OfferType[]) => {
   return normalizedOffer;
 };
 
+const getImgId = (src: string) => {
+  return src.split('/')[2];
+};
 const getNomalizedposterData = (
   posterData: PosterDataType[],
 ): NormalizedPosterDataType[] => {
   const normalizedposterData: NormalizedPosterDataType[] = posterData.map(
     (info: PosterDataType) => {
+      const posterId = getImgId(info.poster);
       return {
         id: info.id,
         title: info.title,
-        poster: `https://images.justwatch.com/poster/${info.id}/s332/`,
+        poster: `https://images.justwatch.com/poster/${posterId}/s332/`,
         objectType: info.object_type,
       };
     },
@@ -132,7 +112,16 @@ const getNormalizedDetailData = (data: any) => {
   const normalizedDetailData: NormalizedDetailType[] = data.map(
     (detailData: any) => {
       const normalizedData: NormalizedDetailType = {
-        backdropImgUrl: `https://images.justwatch.com/backdrop/${detailData.id}/s1440`,
+        poster: `https://images.justwatch.com/poster/${getImgId(
+          detailData.poster,
+        )}/s332/`,
+        backdropImgUrl: detailData.backdrops
+          ? `https://images.justwatch.com/backdrop/${getImgId(
+              detailData.backdrops[0].backdrop_url,
+            )}/s1440`
+          : `https://images.justwatch.com/poster/${getImgId(
+              detailData.poster,
+            )}/s332/`,
         title: detailData.title,
         originTitle: detailData.original_title,
         releasedYear: detailData.original_release_year,
@@ -165,7 +154,7 @@ function Scrap() {
   const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/popular?body=%7B%22fields%22:[%22id%22,%22title%22,%22poster%22,%22object_type%22],%22content_types%22:[%22movie%22],%22monetization_types%22:[%22ads%22,%22buy%22,%22flatrate%22,%22rent%22,%22free%22],%22page%22:${pageNum},%22page_size%22:40,%22matching_offers_only%22:false%7D`;
 
   const postposterData = async (posterData: NormalizedPosterDataType) => {
-    await setDoc(doc(db, 'result', posterData.title), posterData);
+    await setDoc(doc(db, 'poster', posterData.title), posterData);
   };
 
   const postDetailData = async (detailData: NormalizedDetailType) => {
@@ -238,6 +227,7 @@ function Scrap() {
 
   const resultInfo = getContentInfo().data;
   const detailInfo = getDetailInfo().data;
+
   useEffect(() => {
     if (resultInfo) {
       const normalizedData: NormalizedPosterDataType[] =
@@ -259,13 +249,15 @@ function Scrap() {
 
   const showposterData = posterData.map(
     (detail: NormalizedPosterDataType, idx: number) => (
-      <div key={detail.title}>{`${idx} ${detail.title}`}</div>
+      <div key={detail.title}>{`${idx} ${detail.title} `}</div>
     ),
   );
 
   const showDetailData = detailData.map(
     (detail: NormalizedDetailType, idx: number) => (
-      <div key={detail.title}>{`${idx} ${detail.title} ${detail.runtime}`}</div>
+      <div
+        key={detail.title}
+      >{`${idx} ${detail.title} ${detail.runtime} ${detail.backdropImgUrl}`}</div>
     ),
   );
 
