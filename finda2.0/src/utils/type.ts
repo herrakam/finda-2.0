@@ -40,3 +40,8 @@ export interface CreditType {
   charactor_name?: string;
   name: string;
 }
+
+export interface RankInfoType {
+  title: string;
+  imgSrc: string;
+}

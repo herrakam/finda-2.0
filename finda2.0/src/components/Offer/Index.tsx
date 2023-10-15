@@ -21,7 +21,7 @@ function Offer({ offer }: OfferInfoType) {
 
     const platfroms = offerInfo.map((info: NormalizedOfferType) =>
       info.type === 'flatrate' ? (
-        <S.Platform>
+        <S.Platform key={info.provider}>
           <S.PlatromfIcon
             src={info.iconSrc}
             onClick={() => {
@@ -31,7 +31,7 @@ function Offer({ offer }: OfferInfoType) {
           <S.Price>스트리밍</S.Price>
         </S.Platform>
       ) : (
-        <S.Platform>
+        <S.Platform key={info.provider}>
           <S.PlatromfIcon
             src={info.iconSrc}
             onClick={() => {
