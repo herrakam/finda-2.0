@@ -74,7 +74,7 @@ function Movie() {
       setGenreArr([...detailData.genreArr]);
       setIsSuccess(true);
     }
-  }, [detailData]);
+  }, [detailData, contentTitle]);
 
   useEffect(() => {
     if (similarData) {
