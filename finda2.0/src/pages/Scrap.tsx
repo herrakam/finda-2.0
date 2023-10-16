@@ -6,20 +6,13 @@ import {
   NormalizedDetailType,
   NormalizedOfferType,
   NormalizedPosterDataType,
+  PosterDataType,
 } from '@/utils/type';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { doc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-interface PosterDataType {
-  jw_entity_id: string;
-  id: number;
-  title: string;
-  poster: string;
-  object_type: string;
-}
 
 interface OfferType {
   jw_entity_id: string;
