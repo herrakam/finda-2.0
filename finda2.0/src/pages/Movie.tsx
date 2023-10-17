@@ -20,7 +20,7 @@ import Comments from '@components/Movie/Comments/Index';
 import { useEffect, useState } from 'react';
 
 function Movie() {
-  const { contentTitle } = useParams() as { contentTitle: string };
+  const contentTitle = useParams().contentTitle as string;
   const [isSuccess, setIsSuccess] = useState(false);
   const [genreArr, setGenreArr] = useState<number[]>([]);
   const [similarInfo, setSimilarInfo] = useState<RankInfoType[]>([]);

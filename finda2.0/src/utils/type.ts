@@ -45,3 +45,11 @@ export interface RankInfoType {
   title: string;
   imgSrc: string;
 }
+
+export interface PosterDataType {
+  jw_entity_id: string;
+  id: number;
+  title: string;
+  poster: string;
+  object_type: string;
+}

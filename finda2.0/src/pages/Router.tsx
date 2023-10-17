@@ -23,6 +23,11 @@ const RouterInfo: RouterInfoType[] = [
     withAuthorization: false,
   },
   {
+    path: '/result/:searchParam',
+    element: <Result />,
+    withAuthorization: false,
+  },
+  {
     path: '/movie/:contentTitle',
     element: <Movie />,
     withAuthorization: true,
