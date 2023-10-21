@@ -7,28 +7,35 @@ import {
   collection,
   getDocs,
   limit,
+  orderBy,
   query,
+  startAfter,
   where,
 } from 'firebase/firestore';
 import NoResult from '@components/NoResult/Index';
 import { useParams } from 'react-router-dom';
 import { PosterDataType } from '@/utils/type';
+import { useEffect, useState } from 'react';
 
 function SearchResult() {
   const param = useParams().searchParam;
   const searchInfo = param ? param : '';
+  const [startPoint, setStartPoint] = useState<string>();
+  const [isAbled, setIsAbled] = useState<boolean>(false);
+  const [showedData, setShowedData] = useState<PosterDataType[]>([]);
 
-  const getResultData = async () => {
+  const getFirstResultData = async () => {
     const resultsRef = collection(db, 'poster');
     const snap =
       searchInfo === ''
-        ? await getDocs(resultsRef)
+        ? await getDocs(query(resultsRef, orderBy('title'), limit(30)))
         : await getDocs(
             query(
               resultsRef,
               where('title', '>=', searchInfo),
               where('title', '<=', searchInfo + '\uf8ff'),
-              limit(100),
+              orderBy('title'),
+              limit(30),
             ),
           );
     const resultData: PosterDataType[] = [];
@@ -36,18 +43,81 @@ function SearchResult() {
     return resultData;
   };
 
-  const getResultInfo = () => {
-    return useQuery(['getResultQueryKey', searchInfo], getResultData);
+  const getNextResultData = async (lastContent: string) => {
+    const resultsRef = collection(db, 'poster');
+    const snap =
+      searchInfo === ''
+        ? await getDocs(
+            query(
+              resultsRef,
+              orderBy('title'),
+              startAfter(lastContent),
+              limit(30),
+            ),
+          )
+        : await getDocs(
+            query(
+              resultsRef,
+              where('title', '>=', searchInfo),
+              where('title', '<=', searchInfo + '\uf8ff'),
+              orderBy('title'),
+              startAfter(lastContent),
+              limit(30),
+            ),
+          );
+    const nextResultData: PosterDataType[] = [];
+    snap?.forEach((data: DocumentData) => nextResultData.push(data.data()));
+    return nextResultData;
   };
-  const { data } = getResultInfo();
 
-  if (!data?.length)
+  const getResultInfo = () => {
+    return useQuery(['getResultQueryKey', searchInfo], getFirstResultData);
+  };
+
+  const getNextResultInfo = () => {
+    return useQuery(
+      ['getNextResultQueryKey', startPoint],
+      () => {
+        return getNextResultData(startPoint!);
+      },
+      {
+        enabled: isAbled,
+      },
+    );
+  };
+  const firstData = getResultInfo().data;
+  const nextData = getNextResultInfo().data;
+
+  const getNextData = () => {
+    setStartPoint(startPoint);
+    setIsAbled(true);
+  };
+
+  useEffect(() => {
+    if (firstData) {
+      const firstEndPoint = firstData.at(-1)!.title as string;
+      setStartPoint(firstEndPoint);
+      setShowedData([...firstData]);
+      setIsAbled(true);
+    }
+  }, [firstData]);
+  useEffect(() => {
+    if (nextData) {
+      const nextEndPoint = nextData.at(-1)!.title as string;
+      console.log(nextData);
+      setShowedData([...showedData, ...nextData]);
+      setStartPoint(nextEndPoint);
+      setIsAbled(false);
+    }
+  }, [nextData, startPoint]);
+
+  if (!firstData?.length)
     return (
       <S.ResultContatiner>
         <NoResult />
       </S.ResultContatiner>
     );
-  const Contents = data?.map((content: PosterDataType) => (
+  const Contents = showedData.map((content: PosterDataType) => (
     <Poster key={content.title} title={content.title} src={content.poster} />
   ));
   const resultTitleText: string = searchInfo
@@ -55,6 +125,7 @@ function SearchResult() {
     : 'FINDA에서 제공하는 영화들';
   return (
     <S.ResultContatiner>
+      <button onClick={getNextData}>클릭</button>
       <S.ResultTitle>{resultTitleText}</S.ResultTitle>
       <S.ConentsContainer>{Contents}</S.ConentsContainer>
     </S.ResultContatiner>
