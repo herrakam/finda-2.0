@@ -15,7 +15,7 @@ import {
 import NoResult from '@components/NoResult/Index';
 import { useParams } from 'react-router-dom';
 import { PosterDataType } from '@/utils/type';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function SearchResult() {
   const param = useParams().searchParam;
@@ -23,7 +23,7 @@ function SearchResult() {
   const [startPoint, setStartPoint] = useState<string>();
   const [isAbled, setIsAbled] = useState<boolean>(false);
   const [showedData, setShowedData] = useState<PosterDataType[]>([]);
-
+  const pageEndRef = useRef<HTMLDivElement>(null);
   const getFirstResultData = async () => {
     const resultsRef = collection(db, 'poster');
     const snap =
@@ -85,13 +85,14 @@ function SearchResult() {
       },
     );
   };
-  const firstData = getResultInfo().data;
-  const nextData = getNextResultInfo().data;
 
   const getNextData = () => {
     setStartPoint(startPoint);
     setIsAbled(true);
   };
+
+  const firstData = getResultInfo().data;
+  const nextData = getNextResultInfo().data;
 
   useEffect(() => {
     if (firstData) {
@@ -101,15 +102,36 @@ function SearchResult() {
       setIsAbled(true);
     }
   }, [firstData]);
+
   useEffect(() => {
     if (nextData) {
       const nextEndPoint = nextData.at(-1)!.title as string;
-      console.log(nextData);
       setShowedData([...showedData, ...nextData]);
       setStartPoint(nextEndPoint);
       setIsAbled(false);
     }
   }, [nextData, startPoint]);
+
+  useEffect(() => {
+    if (!pageEndRef.current) return;
+    const io = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        if (entries[0].isIntersecting) {
+          console.log('돌았음');
+          getNextData();
+        }
+      },
+      { threshold: 1 },
+    );
+
+    if (pageEndRef.current) {
+      io.observe(pageEndRef.current);
+    }
+
+    return () => {
+      io.disconnect();
+    };
+  }, [pageEndRef.current]);
 
   if (!firstData?.length)
     return (
@@ -128,6 +150,7 @@ function SearchResult() {
       <button onClick={getNextData}>클릭</button>
       <S.ResultTitle>{resultTitleText}</S.ResultTitle>
       <S.ConentsContainer>{Contents}</S.ConentsContainer>
+      <div className="InfinityScrollTrigger" ref={pageEndRef}></div>
     </S.ResultContatiner>
   );
 }
