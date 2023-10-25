@@ -87,7 +87,6 @@ function SearchResult() {
   };
 
   const getNextData = () => {
-    setStartPoint(startPoint);
     setIsAbled(true);
   };
 
@@ -97,9 +96,8 @@ function SearchResult() {
   useEffect(() => {
     if (firstData) {
       const firstEndPoint = firstData.at(-1)!.title as string;
-      setStartPoint(firstEndPoint);
       setShowedData([...firstData]);
-      setIsAbled(true);
+      setStartPoint(firstEndPoint);
     }
   }, [firstData]);
 
@@ -110,23 +108,20 @@ function SearchResult() {
       setStartPoint(nextEndPoint);
       setIsAbled(false);
     }
-  }, [nextData, startPoint]);
+  }, [nextData]);
 
   useEffect(() => {
     if (!pageEndRef.current) return;
     const io = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
         if (entries[0].isIntersecting) {
-          console.log('돌았음');
           getNextData();
         }
       },
       { threshold: 1 },
     );
 
-    if (pageEndRef.current) {
-      io.observe(pageEndRef.current);
-    }
+    pageEndRef.current && io.observe(pageEndRef.current);
 
     return () => {
       io.disconnect();
@@ -134,6 +129,7 @@ function SearchResult() {
   }, [pageEndRef.current]);
 
   if (!firstData?.length)
+    // 로딩 시에도 이게 나옴. 처리해줘야 함
     return (
       <S.ResultContatiner>
         <NoResult />
