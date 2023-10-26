@@ -19,28 +19,46 @@ import { useEffect, useRef, useState } from 'react';
 
 function SearchResult() {
   const param = useParams().searchParam;
+  const [contentsCount, setContentCount] = useState<number>(0);
+  const pageContentCount = 30;
   const searchInfo = param ? param : '';
   const [startPoint, setStartPoint] = useState<string>();
   const [isAbled, setIsAbled] = useState<boolean>(false);
   const [showedData, setShowedData] = useState<PosterDataType[]>([]);
   const pageEndRef = useRef<HTMLDivElement>(null);
+
   const getFirstResultData = async () => {
     const resultsRef = collection(db, 'poster');
     const snap =
       searchInfo === ''
-        ? await getDocs(query(resultsRef, orderBy('title'), limit(30)))
+        ? await getDocs(
+            query(resultsRef, orderBy('title'), limit(pageContentCount)),
+          )
         : await getDocs(
             query(
               resultsRef,
               where('title', '>=', searchInfo),
               where('title', '<=', searchInfo + '\uf8ff'),
               orderBy('title'),
-              limit(30),
+              limit(pageContentCount),
             ),
           );
+    const countContent =
+      searchInfo === ''
+        ? (await getDocs(query(resultsRef, orderBy('title')))).size
+        : (
+            await getDocs(
+              query(
+                resultsRef,
+                where('title', '>=', searchInfo),
+                where('title', '<=', searchInfo + '\uf8ff'),
+                orderBy('title'),
+              ),
+            )
+          ).size;
     const resultData: PosterDataType[] = [];
     snap?.forEach((data: DocumentData) => resultData.push(data.data()));
-    return resultData;
+    return { resultData, countContent };
   };
 
   const getNextResultData = async (lastContent: string) => {
@@ -95,9 +113,10 @@ function SearchResult() {
 
   useEffect(() => {
     if (firstData) {
-      const firstEndPoint = firstData.at(-1)!.title as string;
-      setShowedData([...firstData]);
+      const firstEndPoint = firstData.resultData.at(-1)!.title as string;
+      setShowedData([...firstData.resultData]);
       setStartPoint(firstEndPoint);
+      setContentCount(firstData.countContent);
     }
   }, [firstData]);
 
@@ -114,7 +133,7 @@ function SearchResult() {
     if (!pageEndRef.current) return;
     const io = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && contentsCount > showedData.length) {
           getNextData();
         }
       },
@@ -128,7 +147,7 @@ function SearchResult() {
     };
   }, [pageEndRef.current]);
 
-  if (!firstData?.length)
+  if (!firstData?.resultData.length)
     // 로딩 시에도 이게 나옴. 처리해줘야 함
     return (
       <S.ResultContatiner>
@@ -139,11 +158,10 @@ function SearchResult() {
     <Poster key={content.title} title={content.title} src={content.poster} />
   ));
   const resultTitleText: string = searchInfo
-    ? `${searchInfo} 검색 결과`
+    ? `"${searchInfo}" 검색 결과`
     : 'FINDA에서 제공하는 영화들';
   return (
     <S.ResultContatiner>
-      <button onClick={getNextData}>클릭</button>
       <S.ResultTitle>{resultTitleText}</S.ResultTitle>
       <S.ConentsContainer>{Contents}</S.ConentsContainer>
       <div className="InfinityScrollTrigger" ref={pageEndRef}></div>
