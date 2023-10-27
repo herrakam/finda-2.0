@@ -14,9 +14,13 @@ function SearchBar() {
     navigate(`/result/${searchValue}`);
   };
 
+  const onPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') gotoSearch();
+  };
+
   return (
     <S.SearchBarWrap>
-      <S.SearchInput onChange={getInutValue} />
+      <S.SearchInput onChange={getInutValue} onKeyUp={onPressEnter} />
       <S.SearchBtn onClick={gotoSearch}>
         <MdSearch size="35" />
       </S.SearchBtn>
