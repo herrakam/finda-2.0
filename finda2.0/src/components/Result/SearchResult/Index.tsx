@@ -157,7 +157,7 @@ function SearchResult() {
   if (!firstData?.resultData.length)
     return (
       <S.ResultContatiner>
-        <NoResult />
+        <NoResult searchInfo={searchInfo} />
       </S.ResultContatiner>
     );
   const Contents = showedData.map((content: PosterDataType) => (
