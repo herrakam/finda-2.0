@@ -108,11 +108,15 @@ function SearchResult() {
     setIsAbled(true);
   };
 
-  const firstData = getResultInfo().data;
-  const nextData = getNextResultInfo().data;
+  const {
+    data: firstData,
+    isLoading: firstDataLoading,
+    error: firstDataError,
+  } = getResultInfo();
+  const { data: nextData, isLoading: secondDataLoading } = getNextResultInfo();
 
   useEffect(() => {
-    if (firstData) {
+    if (firstData && firstData.resultData.length) {
       const firstEndPoint = firstData.resultData.at(-1)!.title as string;
       setShowedData([...firstData.resultData]);
       setStartPoint(firstEndPoint);
@@ -147,8 +151,10 @@ function SearchResult() {
     };
   }, [pageEndRef.current]);
 
+  if (firstDataLoading) {
+    return <>로딩중</>;
+  }
   if (!firstData?.resultData.length)
-    // 로딩 시에도 이게 나옴. 처리해줘야 함
     return (
       <S.ResultContatiner>
         <NoResult />
