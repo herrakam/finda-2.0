@@ -1,3 +1,4 @@
+import { debouncing } from '@/utils/util';
 import * as S from '@components/Main/SearchBar/Index.style';
 import { useState } from 'react';
 import { MdSearch } from 'react-icons/md';
@@ -6,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function SearchBar() {
   const [searchValue, setSearchValue] = useState<string>('');
   const navigate = useNavigate();
-  const getInutValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const getInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
@@ -20,7 +21,13 @@ function SearchBar() {
 
   return (
     <S.SearchBarWrap>
-      <S.SearchInput onChange={getInutValue} onKeyUp={onPressEnter} />
+      <S.SearchInput
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const debounce = debouncing({ callback: () => getInputValue(e) });
+          debounce(e);
+        }}
+        onKeyUp={onPressEnter}
+      />
       <S.SearchBtn onClick={gotoSearch}>
         <MdSearch size="35" />
       </S.SearchBtn>
