@@ -1,7 +1,7 @@
 import { GENREINFO } from '@/assets/static';
 import * as S from '@components/Movie/ContentInfo/Index.style';
 import { GenreType, NormalizedDetailType } from '@/utils/type';
-import Offer from '@components/Offer/Index';
+import Offer from '@components/Movie/Offer/Index';
 
 function ContentInfo({
   backdropImgUrl,

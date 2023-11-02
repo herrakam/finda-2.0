@@ -12,7 +12,7 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore';
-import NoResult from '@components/NoResult/Index';
+import NoResult from '@components/Result/NoResult/Index';
 import { useParams } from 'react-router-dom';
 import { PosterDataType } from '@/utils/type';
 import { useEffect, useRef, useState } from 'react';

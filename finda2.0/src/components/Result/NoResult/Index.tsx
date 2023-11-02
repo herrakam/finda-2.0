@@ -1,4 +1,4 @@
-import * as S from '@/components/NoResult/Index.style';
+import * as S from '@components/Result/NoResult/Index.style';
 import SorryImgSrc from '@/assets/b3fcnnrbp4iaf7epl48ef93vvo-4002569fd195ed02c1467425bb108063.png';
 import { NoResultType } from './type';
 

@@ -1,6 +1,6 @@
 import { NormalizedOfferType, OfferType } from '@/utils/type';
 import { OfferInfoType } from './type';
-import * as S from '@components/Offer/Index.style';
+import * as S from '@components/Movie/Offer/Index.style';
 
 const translateOffer = (offer: OfferType) =>
   offer === 'buy' ? '구매' : offer === 'flatrate' ? '스트리밍' : '대여';

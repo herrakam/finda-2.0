@@ -1,5 +1,5 @@
 import * as S from '@components/Main/MainTop/Index.style';
-import SearchBar from '@components/Main/SearchBar/Index';
+import SearchBar from '@components/Main/MainTop/SearchBar/Index';
 
 function MainTop() {
   return (
