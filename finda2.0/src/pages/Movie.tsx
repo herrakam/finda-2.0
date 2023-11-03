@@ -38,8 +38,8 @@ function Movie() {
       genreArr &&
       query(
         moviesRef,
-        where('genreArr', 'array-contains-any', genreArr),
-        limit(5),
+        where('genreArr', 'array-contains', genreArr[0]),
+        limit(100),
       );
     const similarSnap = await getDocs(similarMovieQuery);
     const similarData: NormalizedDetailType[] = [];
@@ -53,7 +53,27 @@ function Movie() {
   const getSimilarMoviesInfo = () => {
     return useQuery(
       ['getSimilarMoviesQuery', genreArr],
-      () => getSimilarMovies(genreArr),
+      () =>
+        getSimilarMovies(genreArr).then(
+          (firstFilteredData: NormalizedDetailType[]) => {
+            if (genreArr[1]) {
+              const secondFilteredData = firstFilteredData
+                .filter(
+                  (data: NormalizedDetailType) =>
+                    data.title !== contentTitle &&
+                    data.genreArr.includes(genreArr[1]),
+                )
+                .slice(0, 5);
+              return secondFilteredData;
+            } else {
+              return firstFilteredData
+                .filter(
+                  (data: NormalizedDetailType) => data.title !== contentTitle,
+                )
+                .slice(0, 5);
+            }
+          },
+        ),
       {
         enabled: isSuccess,
       },
