@@ -1,12 +1,13 @@
+import { useMove } from '@/hooks/useMove';
 import Dimmed from '@components/common/Dimmed/Index';
 import { DimmedType } from '@components/common/Dimmed/type';
 import * as S from '@components/common/Poster/Index.style';
 import { posterType } from '@components/common/Poster/type';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 function Poster({ title, src }: posterType) {
   const [isHover, setHover] = useState(false);
+  const gotoPage = useMove();
 
   function showDimmed() {
     setHover(true);
@@ -22,15 +23,16 @@ function Poster({ title, src }: posterType) {
     optional: dimmedEvent,
   };
 
-  const detailPageLink = `/movie/${title}`;
   return (
-    <S.PosterWrap>
-      <Link to={detailPageLink}>
-        <S.Posterimage src={src} />
-        <Dimmed {...dimmedProps}>
-          <S.PosterTitle isHover={isHover}>{title}</S.PosterTitle>
-        </Dimmed>
-      </Link>
+    <S.PosterWrap
+      onClick={() => {
+        gotoPage({ url: 'movie', detail: title });
+      }}
+    >
+      <S.Posterimage src={src} />
+      <Dimmed {...dimmedProps}>
+        <S.PosterTitle isHover={isHover}>{title}</S.PosterTitle>
+      </Dimmed>
     </S.PosterWrap>
   );
 }
