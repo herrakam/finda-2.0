@@ -1,6 +1,7 @@
 import * as S from '@components/Main/MainTop/Index.style';
 import SearchBar from '@components/Main/MainTop/SearchBar/Index';
 import { useState } from 'react';
+import RecommendSearchBar from './RecommendSearchBar/Index';
 
 function MainTop() {
   const [isGenre, setIsGenre] = useState<boolean>(false);
@@ -17,7 +18,7 @@ function MainTop() {
       <S.ChangeSearchBarBtn onClick={toggleGenre}>
         {buttonText}
       </S.ChangeSearchBarBtn>
-      <SearchBar></SearchBar>
+      {isGenre ? <RecommendSearchBar /> : <SearchBar />}
     </S.MaintopWrap>
   );
 }

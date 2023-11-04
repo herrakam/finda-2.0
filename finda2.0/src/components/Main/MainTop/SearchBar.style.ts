@@ -23,6 +23,17 @@ export const SearchInput = styled.input`
   ${({ theme }) => theme.typography.Regular}
 `;
 
+export const SearchStatus = styled.div`
+  width: 90%;
+  height: 100%;
+  border-radius: 10px 0 0 10px;
+  text-decoration: none;
+  border: none;
+  padding-left: 20px;
+  ${({ theme }) => theme.typography.Regular}
+  background:${({ theme }) => theme.pallete.white}
+`;
+
 export const SearchBtn = styled.button`
   width: 10%;
   height: 100%;
@@ -44,4 +55,8 @@ export const Result = styled.div<{ isLast?: boolean }>`
   border-bottom: ${({ isLast }) => (isLast ? 'none ' : `2px solid white`)};
   ${mixin.flexbox({ vertical: 'center' })};
   ${({ theme }) => theme.typography.Regular}
+`;
+export const SelectedGenre = styled.div`
+  ${({ theme }) => theme.typography.SemiTitle}
+  ${({ theme }) => theme.pallete.normalBtn}
 `;
