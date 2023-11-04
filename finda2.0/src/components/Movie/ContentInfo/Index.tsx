@@ -1,7 +1,7 @@
-import { GENREINFO } from '@/assets/static';
 import * as S from '@components/Movie/ContentInfo/Index.style';
-import { GenreType, NormalizedDetailType } from '@/utils/type';
+import { NormalizedDetailType } from '@/utils/type';
 import Offer from '@components/Movie/Offer/Index';
+import { getGenreText } from '@/utils/util';
 
 function ContentInfo({
   backdropImgUrl,
@@ -24,9 +24,7 @@ function ContentInfo({
         ));
 
   const genreContent = genreArr.map((genre: number) => (
-    <S.ItemConentInline key={genre}>
-      {GENREINFO.filter((info: GenreType) => info.id === genre)[0].translation}
-    </S.ItemConentInline>
+    <S.ItemConentInline key={genre}>{getGenreText(genre)}</S.ItemConentInline>
   ));
 
   return (
