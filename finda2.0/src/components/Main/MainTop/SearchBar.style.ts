@@ -30,8 +30,9 @@ export const SearchStatus = styled.div`
   text-decoration: none;
   border: none;
   padding-left: 20px;
-  ${({ theme }) => theme.typography.Regular}
-  background:${({ theme }) => theme.pallete.white}
+  ${({ theme }) => theme.typography.Regular};
+  background: ${({ theme }) => theme.pallete.white};
+  ${mixin.flexbox({ vertical: 'center' })};
 `;
 
 export const SearchBtn = styled.button`
@@ -49,6 +50,15 @@ export const ResultContainer = styled.div`
   background: rgba(255, 255, 255, 0.5);
   ${mixin.flexbox({ dir: 'column', vertical: 'center' })}
 `;
+
+export const GenreContainer = styled(ResultContainer)`
+  display: grid;
+  justify-content: space-around;
+  grid-gap: 5px;
+  padding: 10px;
+  grid-template-columns: repeat(5, 1fr);
+`;
+
 export const Result = styled.div<{ isLast?: boolean }>`
   width: 95%;
   height: 50px;
@@ -57,6 +67,16 @@ export const Result = styled.div<{ isLast?: boolean }>`
   ${({ theme }) => theme.typography.Regular}
 `;
 export const SelectedGenre = styled.div`
-  ${({ theme }) => theme.typography.SemiTitle}
-  ${({ theme }) => theme.pallete.normalBtn}
+  ${({ theme }) => theme.typography.SemiTitle};
+  ${({ theme }) => theme.pallete.normalBtn};
+  margin: 0 15px 0 0;
+`;
+
+export const Genre = styled.div`
+  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })};
+  color: ${({ theme }) => theme.pallete.normalFont};
+  ${({ theme }) => theme.typography.SemiTitle};
+  background: ${({ theme }) => theme.pallete.normalBtn};
+  border-radius: 10px;
+  padding: 10px 0;
 `;
