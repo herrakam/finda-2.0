@@ -49,7 +49,7 @@ function RecommendSearchBar() {
     );
   });
 
-  const genreUrlDetail = searchGenre.join(',');
+  const genreUrlDetail = 'genre/' + searchGenre.join(',');
   return (
     <S.SearchBarWrap>
       <S.SearchBar>
