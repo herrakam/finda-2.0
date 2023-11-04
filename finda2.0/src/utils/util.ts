@@ -10,3 +10,5 @@ export const debouncing = ({ callback, time = 500 }: debouncingType) => {
     timerId = setTimeout(() => callback(e), time);
   };
 };
+
+export const openInNewWindow = (url: string) => window.open(url, '_blank');
