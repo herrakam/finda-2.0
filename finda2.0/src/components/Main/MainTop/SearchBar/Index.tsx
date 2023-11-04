@@ -2,7 +2,7 @@ import { db } from '@/Firebase';
 import { useMove } from '@/hooks/useMove';
 import { PosterDataType } from '@/utils/type';
 import { debouncing } from '@/utils/util';
-import * as S from '@components/Main/MainTop/SearchBar/Index.style';
+import * as S from '@components/Main/MainTop/SearchBar.style';
 import { useQuery } from '@tanstack/react-query';
 import {
   DocumentData,
