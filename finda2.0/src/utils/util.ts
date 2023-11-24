@@ -4,8 +4,6 @@ import {
   NormalizedDetailType,
   NormalizedPosterDataType,
 } from './type';
-import { collection, query, where } from 'firebase/firestore';
-import { db } from '@/Firebase';
 
 interface debouncingType {
   callback: (e: React.ChangeEvent<HTMLInputElement>) => void;
