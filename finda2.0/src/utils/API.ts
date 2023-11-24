@@ -1,16 +1,31 @@
 import { NormalizedPosterDataType } from './type';
-import { DocumentData, getDocs } from 'firebase/firestore';
-import { getFullFilteredInfo, getGenreQuery } from './util';
+import {
+  DocumentData,
+  collection,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
+import { getFullFilteredInfo } from './util';
+import { db } from '@/Firebase';
 
 export const getSimilarMovies = async (genreArr: number[]) => {
-  const similarMovieQuery = getGenreQuery(genreArr);
+  const moviesRef = collection(db, 'poster');
+  const similarMovieQuery = query(
+    moviesRef,
+    where('genreArr', 'array-contains', genreArr[0]),
+  );
   const similarSnap = await getDocs(similarMovieQuery);
   const firstFilteredData: NormalizedPosterDataType[] = [];
   similarSnap?.forEach((data: DocumentData) =>
     firstFilteredData.push(data.data()),
   );
-  const fullFilteredData = getFullFilteredInfo(genreArr, firstFilteredData);
-  const countContent = fullFilteredData.length;
+  let countContent: number = similarSnap.size;
+  if (genreArr.length >= 2) {
+    const fullFilteredData = getFullFilteredInfo(genreArr, firstFilteredData);
+    countContent = fullFilteredData.length;
+    return { resultData: fullFilteredData, countContent };
+  }
 
-  return { similrData: fullFilteredData, countContent };
+  return { resultData: firstFilteredData, countContent };
 };

@@ -39,26 +39,6 @@ export const getPosterDataFromDetail = (
   });
 };
 
-export const getGenreQuery = (genreArr: number[]) => {
-  const moviesRef = collection(db, 'poster');
-  switch (genreArr.length) {
-    case 2:
-      return query(
-        moviesRef,
-        where('genreArr.0', '==', genreArr[0]),
-        where('genreArr.1', '==', genreArr[1]),
-      );
-    case 3:
-      return query(
-        moviesRef,
-        where('genreArr.0', '==', genreArr[0]),
-        where('genreArr.1', '==', genreArr[1]),
-        where('genreArr.1', '==', genreArr[2]),
-      );
-  }
-  return query(moviesRef, where('genreArr.0', '==', genreArr[0]));
-};
-
 export const sliceGenreArr = (genreArr: number[]) => {
   if (genreArr.length >= 3) {
     return genreArr.slice(0, 2);
