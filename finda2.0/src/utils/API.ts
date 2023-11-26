@@ -3,17 +3,20 @@ import {
   DocumentData,
   collection,
   getDocs,
+  orderBy,
   query,
   where,
 } from 'firebase/firestore';
 import { getFullFilteredInfo } from './util';
 import { db } from '@/Firebase';
+import { PAGECONTENTCOUNT } from '@/assets/static';
 
 export const getSimilarMovies = async (genreArr: number[]) => {
   const moviesRef = collection(db, 'poster');
   const similarMovieQuery = query(
     moviesRef,
     where('genreArr', 'array-contains', genreArr[0]),
+    orderBy('title'),
   );
   const similarSnap = await getDocs(similarMovieQuery);
   const firstFilteredData: NormalizedPosterDataType[] = [];
@@ -24,8 +27,14 @@ export const getSimilarMovies = async (genreArr: number[]) => {
   if (genreArr.length >= 2) {
     const fullFilteredData = getFullFilteredInfo(genreArr, firstFilteredData);
     countContent = fullFilteredData.length;
-    return { resultData: fullFilteredData, countContent };
+    return fullFilteredData.length > PAGECONTENTCOUNT
+      ? {
+          resultData: fullFilteredData.slice(0, PAGECONTENTCOUNT),
+          countContent,
+        }
+      : { resultData: fullFilteredData, countContent };
   }
-
-  return { resultData: firstFilteredData, countContent };
+  return firstFilteredData.length > PAGECONTENTCOUNT
+    ? { resultData: firstFilteredData.slice(0, PAGECONTENTCOUNT), countContent }
+    : { resultData: firstFilteredData, countContent };
 };
