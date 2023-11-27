@@ -9,7 +9,6 @@ import {
 } from 'firebase/firestore';
 import { getFullFilteredInfo } from './util';
 import { db } from '@/Firebase';
-import { PAGECONTENTCOUNT } from '@/assets/static';
 
 export const getSimilarMovies = async (genreArr: number[]) => {
   const moviesRef = collection(db, 'poster');
@@ -27,14 +26,13 @@ export const getSimilarMovies = async (genreArr: number[]) => {
   if (genreArr.length >= 2) {
     const fullFilteredData = getFullFilteredInfo(genreArr, firstFilteredData);
     countContent = fullFilteredData.length;
-    return fullFilteredData.length > PAGECONTENTCOUNT
-      ? {
-          resultData: fullFilteredData.slice(0, PAGECONTENTCOUNT),
-          countContent,
-        }
-      : { resultData: fullFilteredData, countContent };
+    return {
+      resultData: fullFilteredData,
+      countContent,
+    };
   }
-  return firstFilteredData.length > PAGECONTENTCOUNT
-    ? { resultData: firstFilteredData.slice(0, PAGECONTENTCOUNT), countContent }
-    : { resultData: firstFilteredData, countContent };
+  return {
+    resultData: firstFilteredData,
+    countContent,
+  };
 };
