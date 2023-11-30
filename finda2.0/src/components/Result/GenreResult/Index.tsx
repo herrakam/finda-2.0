@@ -1,6 +1,6 @@
 import { getSimilarMovies } from '@/utils/API';
 import { useEffect, useState } from 'react';
-import * as S from '@components/Result/SearchResult/Index.style';
+import * as S from '@components/Result/TitleResult/Index.style';
 import { useQuery } from '@tanstack/react-query';
 import { GenreResultPropsType } from './type';
 import { PAGECONTENTCOUNT } from '@/assets/static';
