@@ -76,3 +76,14 @@ export interface OriginOfferType {
   presentation_type: string;
   country: string;
 }
+
+export interface SearchResultPropsType {
+  setShowedData: React.Dispatch<
+    React.SetStateAction<NormalizedPosterDataType[]>
+  >;
+  searchInfo: string;
+  setContentCount: React.Dispatch<React.SetStateAction<number>>;
+  showedData: NormalizedPosterDataType[];
+  isAbled: boolean;
+  setIsAbled: React.Dispatch<React.SetStateAction<boolean>>;
+}
