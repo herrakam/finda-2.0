@@ -24,10 +24,10 @@ function GenreResult({
   };
 
   const getNextDataWithGenre = () => {
-    if (data?.resultData && isAbled) {
+    if (isAbled) {
       const cur = curPage * PAGECONTENTCOUNT;
       const next = (curPage + 1) * PAGECONTENTCOUNT;
-      setShowedData([...showedData, ...data.resultData.slice(cur, next)]);
+      setShowedData([...showedData, ...data!.resultData.slice(cur, next)]);
       setCurPage(curPage + 1);
       setIsAbled(false);
     }
@@ -36,13 +36,14 @@ function GenreResult({
   const { data, isLoading, error } = getFirstGenreResultInfo(genreNumArr);
   if (isLoading) <>로딩중</>;
   if (error) <>에러발생!!!</>;
-
   useEffect(() => {
     if (data) {
       setShowedData([...data.resultData.slice(0, PAGECONTENTCOUNT)]);
       setContentCount(data.countContent);
+      setIsAbled(false);
     }
   }, [data]);
+
   useEffect(() => {
     if (data) {
       getNextDataWithGenre();
