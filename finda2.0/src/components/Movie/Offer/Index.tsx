@@ -1,11 +1,10 @@
 import { NormalizedOfferType, OfferType } from '@/utils/type';
 import { OfferInfoType } from './type';
-import * as S from '@components/Offer/Index.style';
+import * as S from '@components/Movie/Offer/Index.style';
+import { openInNewWindow } from '@/utils/util';
 
 const translateOffer = (offer: OfferType) =>
   offer === 'buy' ? '구매' : offer === 'flatrate' ? '스트리밍' : '대여';
-
-const goToOfferPage = (url: string) => window.open(url, '_blank');
 
 function Offer({ offer }: OfferInfoType) {
   const offerTypeArr: OfferType[] = [
@@ -25,7 +24,7 @@ function Offer({ offer }: OfferInfoType) {
           <S.PlatromfIcon
             src={info.iconSrc}
             onClick={() => {
-              goToOfferPage(info.url);
+              openInNewWindow(info.url);
             }}
           />
           <S.Price>스트리밍</S.Price>
@@ -35,7 +34,7 @@ function Offer({ offer }: OfferInfoType) {
           <S.PlatromfIcon
             src={info.iconSrc}
             onClick={() => {
-              goToOfferPage(info.url);
+              openInNewWindow(info.url);
             }}
           />
           <S.Price>{info.price?.toLocaleString()}\</S.Price>

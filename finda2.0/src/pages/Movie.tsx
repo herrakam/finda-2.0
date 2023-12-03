@@ -1,23 +1,20 @@
 import { db } from '@/Firebase';
-import { NormalizedDetailType, RankInfoType } from '@/utils/type';
+import {
+  NormalizedDetailType,
+  NormalizedPosterDataType,
+  RankInfoType,
+} from '@/utils/type';
 import ContentInfo from '@components/Movie/ContentInfo/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import Rank from '@components/common/Rank';
 import { RankType } from '@components/common/Rank/type';
 import { useQuery } from '@tanstack/react-query';
-import {
-  DocumentData,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  query,
-  where,
-} from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
 import { useEffect, useState } from 'react';
+import { getSimilarMovies } from '@/utils/API';
+import { sliceGenreArr } from '@/utils/util';
 
 function Movie() {
   const contentTitle = useParams().contentTitle as string;
@@ -32,28 +29,20 @@ function Movie() {
 
   const updateSimilarInfo = (info: RankInfoType[]) => setSimilarInfo([...info]);
 
-  const getSimilarMovies = async (genreArr: number[]) => {
-    const moviesRef = collection(db, 'movies');
-    const similarMovieQuery =
-      genreArr &&
-      query(
-        moviesRef,
-        where('genreArr', 'array-contains-any', genreArr),
-        limit(5),
-      );
-    const similarSnap = await getDocs(similarMovieQuery);
-    const similarData: NormalizedDetailType[] = [];
-    similarSnap?.forEach((data: DocumentData) => similarData.push(data.data()));
-    return similarData;
-  };
   const getMovieInfo = () => {
     return useQuery(['getMovieInfoQueryKey'], getMovieData);
+  };
+
+  const sliceFilteredData = (data: NormalizedPosterDataType[]) => {
+    return data
+      .filter((data: NormalizedPosterDataType) => data.title !== contentTitle)
+      .slice(0, 5);
   };
 
   const getSimilarMoviesInfo = () => {
     return useQuery(
       ['getSimilarMoviesQuery', genreArr],
-      () => getSimilarMovies(genreArr),
+      () => getSimilarMovies(sliceGenreArr(genreArr)),
       {
         enabled: isSuccess,
       },
@@ -62,7 +51,7 @@ function Movie() {
 
   const detailData = getMovieInfo().data as NormalizedDetailType;
 
-  const similarData = getSimilarMoviesInfo().data;
+  const similarData = getSimilarMoviesInfo().data?.resultData;
 
   const similarMoviesData: RankType = {
     subject: `${contentTitle}과 비슷한 영화`,
@@ -78,8 +67,9 @@ function Movie() {
 
   useEffect(() => {
     if (similarData) {
-      const normalizedSimilarData = similarData.map(
-        (data: NormalizedDetailType) => {
+      console.log(similarData);
+      const normalizedSimilarData = sliceFilteredData(similarData).map(
+        (data: NormalizedPosterDataType) => {
           return {
             title: data.title,
             imgSrc: data.poster,

@@ -3,6 +3,7 @@ export interface NormalizedPosterDataType {
   title: string;
   poster: string;
   objectType: string;
+  genreArr: number[];
 }
 
 export interface GenreType {
@@ -52,4 +53,37 @@ export interface PosterDataType {
   title: string;
   poster: string;
   object_type: string;
+}
+
+export interface OriginOfferType {
+  jw_entity_id: string;
+  monetization_type: 'buy' | 'rent' | 'flatrate';
+  provider_id: number;
+  package_short_name: string;
+  retail_price?: number;
+  last_change_retail_price?: number;
+  last_change_difference?: number;
+  last_change_percent?: number;
+  last_change_date?: number;
+  last_change_date_provider_id?: string;
+  currency: string;
+  urls: {
+    standard_web: string;
+    [key: string]: string;
+  };
+  available_from: string;
+  available_to: string;
+  presentation_type: string;
+  country: string;
+}
+
+export interface SearchResultPropsType {
+  setShowedData: React.Dispatch<
+    React.SetStateAction<NormalizedPosterDataType[]>
+  >;
+  searchInfo: string;
+  setContentCount: React.Dispatch<React.SetStateAction<number>>;
+  showedData: NormalizedPosterDataType[];
+  isAbled: boolean;
+  setIsAbled: React.Dispatch<React.SetStateAction<boolean>>;
 }

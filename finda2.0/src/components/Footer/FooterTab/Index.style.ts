@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
-export const FooterTab = styled(Link)`
+export const FooterTab = styled.div`
   color: ${({ theme }) => theme.pallete.white};
 `;
