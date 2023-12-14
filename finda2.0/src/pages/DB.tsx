@@ -20,7 +20,7 @@ interface posterGenreDataType {
   genreArr: number[];
 }
 
-function Scrap() {
+function DB() {
   const [posterGenreData, setPosterGenreData] = useState<posterGenreDataType[]>(
     [],
   );
@@ -115,7 +115,7 @@ function Scrap() {
   );
 }
 
-export default Scrap;
+export default DB;
 
 const Wrap = styled.div`
   min-height: 100vh;
