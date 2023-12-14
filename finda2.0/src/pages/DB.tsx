@@ -1,6 +1,5 @@
 import { db } from '@/Firebase';
 import { mixin } from '@/globalStyles/GlobalStyle';
-import { NormalizedPosterDataType } from '@/utils/type';
 import { useQuery } from '@tanstack/react-query';
 import {
   DocumentData,
@@ -10,52 +9,52 @@ import {
   orderBy,
   query,
   setDoc,
-  updateDoc,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-interface posterGenreDataType {
+interface CommentType {
+  comment: string;
   title: string;
-  genreArr: number[];
+  nickname: string;
+  createdTime: Date;
 }
 
 function DB() {
-  const [posterGenreData, setPosterGenreData] = useState<posterGenreDataType[]>(
-    [],
-  );
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  const postposterData = async (posterData: posterGenreDataType) => {
-    await setDoc(
-      doc(db, 'poster', posterData.title),
-      { genreArr: posterData.genreArr },
-      {
-        merge: true,
-      },
-    );
-  };
 
-  const updatePosterData = async (posterData: posterGenreDataType) => {
-    await updateDoc(doc(db, 'poster', posterData.title), {
-      genreArr: posterData.genreArr,
+  const [titles, setTitles] = useState<string[]>([]);
+
+  const createComments = async (movieTitle: string) => {
+    const sampleComment: CommentType = {
+      comment: '',
+      title: movieTitle,
+      nickname: 'admin',
+      createdTime: new Date(),
+    };
+    const commentsRef = doc(collection(db, 'movies', movieTitle, 'comments'));
+    await setDoc(commentsRef, sampleComment, {
+      merge: true,
     });
   };
 
-  const postDBData = async () => {
-    Promise.all(
-      posterGenreData.map((result: posterGenreDataType) => {
-        // postposterData(result);
-        updatePosterData(result);
-      }),
-    );
-  };
+  //   Promise.all(
+  //     posterGenreData.map((result: posterGenreDataType) => {
+  //       // postposterData(result);
+  //       updatePosterData(result);
+  //     }),
+  //   );
+  // };
 
   const getAllData = async () => {
-    const posterRef = collection(db, 'poster');
-    const posterSnap = await getDocs(query(posterRef, orderBy('title')));
-    const posterData: NormalizedPosterDataType[] = [];
-    posterSnap?.forEach((data: DocumentData) => posterData.push(data.data()));
-    return { posterData };
+    const movieRef = collection(db, 'movies');
+    const movieSnap = await getDocs(query(movieRef, orderBy('title')));
+    const movieData: string[] = [];
+    movieSnap?.forEach((data: DocumentData) =>
+      movieData.push(data.data().title),
+    );
+    console.log(movieData);
+    return { movieData };
   };
 
   const getAllInfo = () =>
@@ -69,26 +68,10 @@ function DB() {
   }
   useEffect(() => {
     if (data) {
-      const { posterData: posterInfo } = data;
-      const newPosterData: posterGenreDataType[] = posterInfo
-        .map((data: NormalizedPosterDataType): posterGenreDataType => {
-          const genreInfo = data.genreArr.sort((a, b) => a - b);
-          return { title: data.title, genreArr: genreInfo };
-        })
-        .filter((data: posterGenreDataType) => data.genreArr !== undefined);
-      console.log(newPosterData);
-      setPosterGenreData([...posterGenreData, ...newPosterData]);
+      const { movieData } = data;
+      setTitles(movieData);
     }
   }, [data]);
-
-  const showposterData = posterGenreData.map((data: posterGenreDataType) => (
-    <div key={data.title}>
-      <>{data.title}</>
-      {data.genreArr.map((genre: number) => {
-        return <div key={genre}>{genre}</div>;
-      })}
-    </div>
-  ));
 
   return (
     <>
@@ -102,15 +85,12 @@ function DB() {
         </GetDataBtn>
         <PostDataBtn
           onClick={() => {
-            postDBData();
+            titles.forEach((title: string) => createComments(title));
           }}
         >
           데이터 보내기
         </PostDataBtn>
       </Wrap>
-      <ShowDataContainer>
-        {data && <ShowResult>{showposterData}</ShowResult>}
-      </ShowDataContainer>
     </>
   );
 }
@@ -122,12 +102,12 @@ const Wrap = styled.div`
   ${mixin.flexbox({ vertical: 'center', horizontal: 'center' })}
   gap: 40px;
 `;
-const ShowResult = styled.div``;
+// const ShowResult = styled.div``;
 const GetDataBtn = styled.button`
   width: 100px;
   height: 50px;
 `;
 const PostDataBtn = styled(GetDataBtn)``;
-const ShowDataContainer = styled.div`
-  ${mixin.flexbox({ horizontal: 'space-evenly' })}
-`;
+// const ShowDataContainer = styled.div`
+//   ${mixin.flexbox({ horizontal: 'space-evenly' })}
+// `;

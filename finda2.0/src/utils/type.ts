@@ -87,3 +87,11 @@ export interface SearchResultPropsType {
   isAbled: boolean;
   setIsAbled: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface commentDataType {
+  title: string;
+  id: string;
+  comment: string;
+  createdTime: Date;
+  nickname: string;
+}
