@@ -1,20 +1,21 @@
 import * as S from '@/components/Movie/Comments/Index.style';
-import { CommentType } from './type';
+import { commentDataType } from '@/utils/type';
+import { CommentsType } from './type';
 
-function Comments() {
-  const mockComments: CommentType[] = [
-    { id: '123', comment: '재밌었음' },
-    { id: '5123', comment: '노잼' },
-  ];
-
-  const commentContent = mockComments.map((Comment: CommentType) => {
-    return (
-      <S.Comment key={Comment.comment}>
-        <S.CommentId>{Comment.id}</S.CommentId>
-        <S.CommentContent>{Comment.comment}</S.CommentContent>
-      </S.Comment>
+function Comments({ commentsData }: CommentsType) {
+  const commentContent =
+    commentsData.length === 0 ? (
+      <>첫 댓글을 입력해주세요</>
+    ) : (
+      commentsData.map((comment: commentDataType) => {
+        return (
+          <S.Comment key={comment.comment}>
+            <S.CommentId>{comment.nickname}</S.CommentId>
+            <S.CommentContent>{comment.comment}</S.CommentContent>
+          </S.Comment>
+        );
+      })
     );
-  });
   return (
     <S.Container>
       <S.CommentTitle>한줄리뷰</S.CommentTitle>

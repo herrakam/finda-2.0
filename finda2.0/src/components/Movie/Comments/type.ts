@@ -1,4 +1,5 @@
-export interface CommentType {
-  id: string;
-  comment: string;
+import { commentDataType } from '@/utils/type';
+
+export interface CommentsType {
+  commentsData: commentDataType[];
 }

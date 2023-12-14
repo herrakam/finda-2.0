@@ -1,4 +1,4 @@
-import { NormalizedPosterDataType } from './type';
+import { NormalizedPosterDataType, commentDataType } from './type';
 import {
   DocumentData,
   collection,
@@ -106,4 +106,15 @@ export const getFirstResultData = async () => {
   const resultData: NormalizedPosterDataType[] = [];
   snap?.forEach((data: DocumentData) => resultData.push(data.data()));
   return { resultData, countContent };
+};
+
+export const getCommentsData = async (title: string) => {
+  const commentsRef = collection(db, 'movies', title, 'comments');
+  const commentsSnap = await getDocs(
+    query(commentsRef, orderBy('createdTime', 'desc')),
+  );
+  const comments: commentDataType[] = [];
+  commentsSnap!.forEach((data: DocumentData) => comments.push(data.data()));
+  comments.splice(0, 1);
+  return { comments };
 };

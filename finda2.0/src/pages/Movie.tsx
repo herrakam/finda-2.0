@@ -13,7 +13,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
 import { useEffect, useState } from 'react';
-import { getSimilarMovies } from '@/utils/API';
+import { getCommentsData, getSimilarMovies } from '@/utils/API';
 import { sliceGenreArr } from '@/utils/util';
 
 function Movie() {
@@ -33,6 +33,12 @@ function Movie() {
     return useQuery(['getMovieInfoQueryKey'], getMovieData);
   };
 
+  const getCommentInfo = () => {
+    return useQuery(['getCommentsQueryKey', contentTitle], () => {
+      return getCommentsData(contentTitle);
+    });
+  };
+
   const sliceFilteredData = (data: NormalizedPosterDataType[]) => {
     return data
       .filter((data: NormalizedPosterDataType) => data.title !== contentTitle)
@@ -50,7 +56,7 @@ function Movie() {
   };
 
   const detailData = getMovieInfo().data as NormalizedDetailType;
-
+  const commentsData = getCommentInfo().data?.comments;
   const similarData = getSimilarMoviesInfo().data?.resultData;
 
   const similarMoviesData: RankType = {
@@ -67,7 +73,6 @@ function Movie() {
 
   useEffect(() => {
     if (similarData) {
-      console.log(similarData);
       const normalizedSimilarData = sliceFilteredData(similarData).map(
         (data: NormalizedPosterDataType) => {
           return {
@@ -84,7 +89,7 @@ function Movie() {
     <PageContainer>
       {detailData && <ContentInfo {...detailData} />}
       {similarData && <Rank {...similarMoviesData} />}
-      <Comments />
+      {commentsData && <Comments commentsData={commentsData} />}
     </PageContainer>
   );
 }

@@ -90,7 +90,6 @@ export interface SearchResultPropsType {
 
 export interface commentDataType {
   title: string;
-  id: string;
   comment: string;
   createdTime: Date;
   nickname: string;
