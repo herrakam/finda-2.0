@@ -1,11 +1,18 @@
-import { NormalizedPosterDataType, commentDataType } from './type';
+import {
+  NormalizedPosterDataType,
+  commentDataOutType,
+  commentDataType,
+} from './type';
 import {
   DocumentData,
   collection,
+  doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
+  setDoc,
   startAfter,
   where,
 } from 'firebase/firestore';
@@ -113,8 +120,26 @@ export const getCommentsData = async (title: string) => {
   const commentsSnap = await getDocs(
     query(commentsRef, orderBy('createdTime', 'desc')),
   );
-  const comments: commentDataType[] = [];
+  const comments: commentDataOutType[] = [];
   commentsSnap!.forEach((data: DocumentData) => comments.push(data.data()));
-  comments.splice(0, 1);
+  comments.pop();
   return { comments };
+};
+
+export const getMovieData = async (title: string) => {
+  const snap = await getDoc(doc(db, 'movies', title));
+  return snap?.data();
+};
+
+export const postComments = async (movieTitle: string, comment: string) => {
+  const sampleComment: commentDataType = {
+    comment: comment,
+    title: movieTitle,
+    nickname: 'admin',
+    createdTime: new Date(),
+  };
+  const commentsRef = doc(collection(db, 'movies', movieTitle, 'comments'));
+  await setDoc(commentsRef, sampleComment, {
+    merge: true,
+  });
 };

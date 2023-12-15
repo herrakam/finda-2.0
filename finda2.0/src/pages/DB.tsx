@@ -1,5 +1,6 @@
 import { db } from '@/Firebase';
 import { mixin } from '@/globalStyles/GlobalStyle';
+import { commentDataType } from '@/utils/type';
 import { useQuery } from '@tanstack/react-query';
 import {
   DocumentData,
@@ -13,20 +14,13 @@ import {
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-interface CommentType {
-  comment: string;
-  title: string;
-  nickname: string;
-  createdTime: Date;
-}
-
 function DB() {
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
   const [titles, setTitles] = useState<string[]>([]);
 
   const createComments = async (movieTitle: string) => {
-    const sampleComment: CommentType = {
+    const sampleComment: commentDataType = {
       comment: '',
       title: movieTitle,
       nickname: 'admin',
