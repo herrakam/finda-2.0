@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface NormalizedPosterDataType {
   id: number;
   title: string;
@@ -92,5 +94,12 @@ export interface commentDataType {
   title: string;
   comment: string;
   createdTime: Date;
+  nickname: string;
+}
+
+export interface commentDataOutType {
+  title: string;
+  comment: string;
+  createdTime: Timestamp;
   nickname: string;
 }

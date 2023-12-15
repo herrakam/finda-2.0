@@ -19,20 +19,42 @@ export const Content = styled.div`
 `;
 
 export const Comment = styled.div`
-  ${mixin.flexbox({ vertical: 'center' })};
+  ${mixin.flexbox({ vertical: 'center', horizontal: 'space-between' })};
   width: 100%;
+  height: 2rem;
 `;
 
 export const CommentId = styled.span`
   ${({ theme }) => theme.typography.Regular};
   color: ${({ theme }) => theme.pallete.normalFont};
-  margin-right: 30px;
-  width: 50px;
+  margin-right: 10px;
+  width: 5%;
 `;
 
 export const CommentContent = styled.span`
   ${({ theme }) => theme.typography.Light};
   color: ${({ theme }) => theme.pallete.normalFont};
-  line-height: 2rem;
+  height: 2rem;
   border-bottom: 2px dotted ${({ theme }) => theme.pallete.normalFont};
+  width: 90%;
+  margin: 0 10px;
+`;
+
+export const CommentCreatedTime = styled.span`
+  ${({ theme }) => theme.typography.Regular};
+  color: ${({ theme }) => theme.pallete.normalFont};
+  ${mixin.flexbox({ horizontal: 'flex-end', vertical: 'center' })}
+  width: 5%;
+  float: right;
+`;
+
+export const InputContainer = styled.div`
+  ${mixin.flexbox({ horizontal: 'space-between' })};
+  height: 3rem;
+`;
+export const CommentInput = styled.input`
+  width: 95%;
+`;
+export const CommentPostBtn = styled.button`
+  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })}
 `;

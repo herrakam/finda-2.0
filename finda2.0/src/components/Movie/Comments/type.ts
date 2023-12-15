@@ -1,5 +1,5 @@
-import { commentDataType } from '@/utils/type';
+import { commentDataOutType } from '@/utils/type';
 
 export interface CommentsType {
-  commentsData: commentDataType[];
+  commentsData: commentDataOutType[];
 }
