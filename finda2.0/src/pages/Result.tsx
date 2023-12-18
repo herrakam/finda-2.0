@@ -79,13 +79,8 @@ function Result() {
     setIsAbled: setIsAbled,
   };
   const genreResultProps: GenreResultPropsType = {
-    setContentCount: setContentCount,
-    searchInfo: searchInfo,
-    setShowedData: setShowedData,
-    showedData: showedData,
+    ...titleResultProps,
     genreNumArr: genreNumArr,
-    isAbled: isAbled,
-    setIsAbled: setIsAbled,
   };
   const ResultContent = isGenre ? (
     <GenreResult {...genreResultProps} />

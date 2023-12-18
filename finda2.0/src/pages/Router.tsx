@@ -2,8 +2,8 @@ import Layout from '@/pages/Layout';
 import Main from '@/pages/Main';
 import Result from '@/pages/Result';
 import { createBrowserRouter } from 'react-router-dom';
-import Scrap from './Scrap';
 import Movie from '@/pages/Movie';
+import DB from '@pages/DB';
 
 type RouterInfoType = {
   path: string;
@@ -38,8 +38,8 @@ const RouterInfo: RouterInfoType[] = [
     withAuthorization: true,
   },
   {
-    path: '/scrap',
-    element: <Scrap />,
+    path: '/DB',
+    element: <DB />,
     withAuthorization: false,
   },
 ];

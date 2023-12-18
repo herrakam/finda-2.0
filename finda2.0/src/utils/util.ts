@@ -58,3 +58,10 @@ export const getFullFilteredInfo = (
         ),
       data,
     );
+
+export const extractMonthAndDay = (date: Date) => {
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줌
+  const day = date.getDate();
+
+  return `${month}-${day}`;
+};

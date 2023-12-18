@@ -1,4 +1,3 @@
-import { db } from '@/Firebase';
 import {
   NormalizedDetailType,
   NormalizedPosterDataType,
@@ -8,35 +7,44 @@ import ContentInfo from '@components/Movie/ContentInfo/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import Rank from '@components/common/Rank';
 import { RankType } from '@components/common/Rank/type';
-import { useQuery } from '@tanstack/react-query';
-import { doc, getDoc } from 'firebase/firestore';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
 import { useEffect, useState } from 'react';
-import { getSimilarMovies } from '@/utils/API';
+import {
+  getCommentsData,
+  getMovieData,
+  getSimilarMovies,
+  postComments,
+} from '@/utils/API';
 import { sliceGenreArr } from '@/utils/util';
 
 function Movie() {
   const contentTitle = useParams().contentTitle as string;
   const [isSuccess, setIsSuccess] = useState(false);
   const [genreArr, setGenreArr] = useState<number[]>([]);
+  const [comment, setComment] = useState<string>('');
   const [similarInfo, setSimilarInfo] = useState<RankInfoType[]>([]);
 
-  const getMovieData = async () => {
-    const snap = await getDoc(doc(db, 'movies', contentTitle));
-    return snap?.data();
-  };
-
   const updateSimilarInfo = (info: RankInfoType[]) => setSimilarInfo([...info]);
-
-  const getMovieInfo = () => {
-    return useQuery(['getMovieInfoQueryKey'], getMovieData);
-  };
+  const updateComment = (comment: string) => setComment(comment);
 
   const sliceFilteredData = (data: NormalizedPosterDataType[]) => {
     return data
       .filter((data: NormalizedPosterDataType) => data.title !== contentTitle)
       .slice(0, 5);
+  };
+
+  const getMovieInfo = () => {
+    return useQuery(['getMovieInfoQueryKey'], () => {
+      return getMovieData(contentTitle);
+    });
+  };
+
+  const getCommentInfo = () => {
+    return useQuery(['getCommentsQueryKey', contentTitle], () => {
+      return getCommentsData(contentTitle);
+    });
   };
 
   const getSimilarMoviesInfo = () => {
@@ -49,9 +57,18 @@ function Movie() {
     );
   };
 
-  const detailData = getMovieInfo().data as NormalizedDetailType;
+  const postComment = () => {
+    return useMutation(() => postComments(contentTitle, comment));
+  };
 
+  const detailData = getMovieInfo().data as NormalizedDetailType;
+  const commentsData = getCommentInfo().data?.comments;
   const similarData = getSimilarMoviesInfo().data?.resultData;
+  const {
+    mutate,
+    isSuccess: commentSuccess,
+    isError: commentError,
+  } = postComment();
 
   const similarMoviesData: RankType = {
     subject: `${contentTitle}과 비슷한 영화`,
@@ -67,7 +84,6 @@ function Movie() {
 
   useEffect(() => {
     if (similarData) {
-      console.log(similarData);
       const normalizedSimilarData = sliceFilteredData(similarData).map(
         (data: NormalizedPosterDataType) => {
           return {
@@ -79,12 +95,22 @@ function Movie() {
       updateSimilarInfo(normalizedSimilarData);
     }
   }, [similarData]);
+  useEffect(() => {
+    if (commentSuccess) window.alert('댓글이 등록되었습니다');
+    else if (commentError) window.alert('댓글 등록 실패');
+  }, [commentSuccess, commentError]);
+
+  const commentProps = commentsData! && {
+    commentsData,
+    updateComment,
+    mutate,
+  };
 
   return (
     <PageContainer>
       {detailData && <ContentInfo {...detailData} />}
       {similarData && <Rank {...similarMoviesData} />}
-      <Comments />
+      {commentsData && <Comments {...commentProps} />}
     </PageContainer>
   );
 }

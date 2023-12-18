@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface NormalizedPosterDataType {
   id: number;
   title: string;
@@ -86,4 +88,18 @@ export interface SearchResultPropsType {
   showedData: NormalizedPosterDataType[];
   isAbled: boolean;
   setIsAbled: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface commentDataType {
+  title: string;
+  comment: string;
+  createdTime: Date;
+  nickname: string;
+}
+
+export interface commentDataOutType {
+  title: string;
+  comment: string;
+  createdTime: Timestamp;
+  nickname: string;
 }
