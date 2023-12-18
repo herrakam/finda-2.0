@@ -95,6 +95,10 @@ function Movie() {
       updateSimilarInfo(normalizedSimilarData);
     }
   }, [similarData]);
+  useEffect(() => {
+    if (commentSuccess) window.alert('댓글이 등록되었습니다');
+    else if (commentError) window.alert('댓글 등록 실패');
+  }, [commentSuccess, commentError]);
 
   const commentProps = commentsData! && {
     commentsData,
