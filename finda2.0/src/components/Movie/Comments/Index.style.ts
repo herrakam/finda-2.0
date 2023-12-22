@@ -58,3 +58,7 @@ export const CommentInput = styled.input`
 export const CommentPostBtn = styled.button`
   ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })}
 `;
+export const NoComment = styled.span`
+  ${({ theme }) => theme.typography.Bold}
+  color:${({ theme }) => theme.pallete.normalFont}
+`;

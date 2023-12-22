@@ -6,7 +6,7 @@ import { debouncing, extractMonthAndDay } from '@/utils/util';
 function Comments({ commentsData, mutate, updateComment }: CommentsType) {
   const commentContent =
     commentsData.length === 0 ? (
-      <>첫 댓글을 입력해주세요</>
+      <S.NoComment>첫 리뷰를 남겨보세요!!</S.NoComment>
     ) : (
       commentsData.map((comment: commentDataOutType) => {
         const date = extractMonthAndDay(comment.createdTime.toDate());
