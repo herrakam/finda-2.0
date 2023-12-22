@@ -1,8 +1,4 @@
-import {
-  NormalizedDetailType,
-  NormalizedPosterDataType,
-  RankInfoType,
-} from '@/utils/type';
+import { NormalizedPosterDataType, RankInfoType } from '@/utils/type';
 import ContentInfo from '@components/Movie/ContentInfo/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import Rank from '@components/common/Rank';
@@ -36,7 +32,7 @@ function Movie() {
   };
 
   const getMovieInfo = () => {
-    return useQuery(['getMovieInfoQueryKey'], () => {
+    return useQuery(['getMovieInfoQueryKey', contentTitle], () => {
       return getMovieData(contentTitle);
     });
   };
@@ -61,7 +57,7 @@ function Movie() {
     return useMutation(() => postComments(contentTitle, comment));
   };
 
-  const detailData = getMovieInfo().data as NormalizedDetailType;
+  const detailData = getMovieInfo().data;
   const commentsData = getCommentInfo().data?.comments;
   const similarData = getSimilarMoviesInfo().data?.resultData;
   const {
@@ -70,7 +66,7 @@ function Movie() {
     isError: commentError,
   } = postComment();
 
-  const similarMoviesData: RankType = {
+  const similarMoviesProps: RankType = {
     subject: `${contentTitle}과 비슷한 영화`,
     rankInfo: similarInfo,
   };
@@ -100,6 +96,10 @@ function Movie() {
     else if (commentError) window.alert('댓글 등록 실패');
   }, [commentSuccess, commentError]);
 
+  const detailProps = detailData! && {
+    ...detailData,
+  };
+
   const commentProps = commentsData! && {
     commentsData,
     updateComment,
@@ -108,8 +108,8 @@ function Movie() {
 
   return (
     <PageContainer>
-      {detailData && <ContentInfo {...detailData} />}
-      {similarData && <Rank {...similarMoviesData} />}
+      {detailData && <ContentInfo {...detailProps} />}
+      {similarData && <Rank {...similarMoviesProps} />}
       {commentsData && <Comments {...commentProps} />}
     </PageContainer>
   );

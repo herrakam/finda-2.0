@@ -1,4 +1,5 @@
 import {
+  NormalizedDetailType,
   NormalizedPosterDataType,
   commentDataOutType,
   commentDataType,
@@ -128,7 +129,7 @@ export const getCommentsData = async (title: string) => {
 
 export const getMovieData = async (title: string) => {
   const snap = await getDoc(doc(db, 'movies', title));
-  return snap?.data();
+  return snap?.data() as NormalizedDetailType;
 };
 
 export const postComments = async (movieTitle: string, comment: string) => {
