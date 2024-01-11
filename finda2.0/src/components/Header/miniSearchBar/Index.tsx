@@ -24,8 +24,7 @@ function MiniSearchBar() {
         placeholder="Type to search"
         className="SearchText"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const debounce = debouncing({ callback: () => getInputValue(e) });
-          debounce(e);
+          getInputValue(e);
         }}
         onKeyUp={onPressEnter}
       />

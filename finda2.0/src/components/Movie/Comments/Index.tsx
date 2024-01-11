@@ -1,9 +1,23 @@
 import * as S from '@/components/Movie/Comments/Index.style';
 import { commentDataOutType } from '@/utils/type';
 import { CommentsType } from './type';
-import { debouncing, extractMonthAndDay } from '@/utils/util';
+import { extractMonthAndDay } from '@/utils/util';
 
-function Comments({ commentsData, mutate, updateComment }: CommentsType) {
+function Comments({
+  commentsData,
+  mutate,
+  updateComment,
+  commentInput,
+}: CommentsType) {
+  const onPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') validateAndMutate();
+  };
+
+  const validateAndMutate = () => {
+    if (commentInput !== '') mutate();
+    else window.alert('리뷰를 입력한 뒤 등록해주세요');
+  };
+
   const commentContent =
     commentsData.length === 0 ? (
       <S.NoComment>첫 리뷰를 남겨보세요!!</S.NoComment>
@@ -19,24 +33,22 @@ function Comments({ commentsData, mutate, updateComment }: CommentsType) {
         );
       })
     );
+
   return (
     <S.Container>
       <S.CommentTitle>한줄리뷰</S.CommentTitle>
       <S.InputContainer>
         <S.CommentInput
           placeholder="한줄 리뷰를 남겨보세요"
+          value={commentInput}
+          onKeyUp={onPressEnter}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const debounce = debouncing({
-              callback: () => {
-                updateComment(e.target.value);
-              },
-            });
-            debounce(e);
+            updateComment(e.target.value);
           }}
         />
         <S.CommentPostBtn
           onClick={() => {
-            mutate();
+            validateAndMutate();
           }}
         >
           등록

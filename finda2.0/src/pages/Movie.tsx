@@ -3,7 +3,7 @@ import ContentInfo from '@components/Movie/ContentInfo/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import Rank from '@components/common/Rank';
 import { RankType } from '@components/common/Rank/type';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
 import { useEffect, useState } from 'react';
@@ -19,18 +19,24 @@ function Movie() {
   const contentTitle = useParams().contentTitle as string;
   const [isSuccess, setIsSuccess] = useState(false);
   const [genreArr, setGenreArr] = useState<number[]>([]);
-  const [comment, setComment] = useState<string>('');
+  const [commentInput, setCommentInput] = useState<string>('');
   const [similarInfo, setSimilarInfo] = useState<RankInfoType[]>([]);
 
-  const updateSimilarInfo = (info: RankInfoType[]) => setSimilarInfo([...info]);
-  const updateComment = (comment: string) => setComment(comment);
-
+  const updateSimilarInfo = (info: RankInfoType[]) => {
+    setSimilarInfo([...info]);
+  };
+  const updateComment = (comment: string) => {
+    setCommentInput(comment);
+  };
+  const queryClient = useQueryClient();
   const sliceFilteredData = (data: NormalizedPosterDataType[]) => {
     return data
       .filter((data: NormalizedPosterDataType) => data.title !== contentTitle)
       .slice(0, 5);
   };
-
+  const resetComment = () => {
+    setCommentInput('');
+  };
   const getMovieInfo = () => {
     return useQuery(['getMovieInfoQueryKey', contentTitle], () => {
       return getMovieData(contentTitle);
@@ -54,7 +60,7 @@ function Movie() {
   };
 
   const postComment = () => {
-    return useMutation(() => postComments(contentTitle, comment));
+    return useMutation(() => postComments(contentTitle, commentInput));
   };
 
   const detailData = getMovieInfo().data;
@@ -92,8 +98,11 @@ function Movie() {
     }
   }, [similarData]);
   useEffect(() => {
-    if (commentSuccess) window.alert('댓글이 등록되었습니다');
-    else if (commentError) window.alert('댓글 등록 실패');
+    if (commentSuccess) {
+      resetComment();
+      window.alert('댓글이 등록되었습니다');
+      queryClient.invalidateQueries({ queryKey: ['getCommentsQueryKey'] });
+    } else if (commentError) window.alert('댓글 등록 실패');
   }, [commentSuccess, commentError]);
 
   const detailProps = detailData! && {
@@ -104,6 +113,7 @@ function Movie() {
     commentsData,
     updateComment,
     mutate,
+    commentInput,
   };
 
   return (

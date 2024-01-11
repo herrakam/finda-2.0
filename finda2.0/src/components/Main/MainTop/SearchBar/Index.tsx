@@ -1,4 +1,5 @@
 import { db } from '@/Firebase';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useMove } from '@/hooks/useMove';
 import { PosterDataType } from '@/utils/type';
 import { debouncing } from '@/utils/util';
@@ -18,6 +19,7 @@ import { MdSearch } from 'react-icons/md';
 
 function SearchBar() {
   const [searchValue, setSearchValue] = useState<string>('');
+  const debouncedSearchValue = useDebounce(searchValue);
   const getInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
@@ -45,12 +47,12 @@ function SearchBar() {
 
   const getResultInfo = () => {
     return useQuery(
-      ['getResultQuery', searchValue],
+      ['getResultQuery', debouncedSearchValue],
       () => {
-        return getResultData(searchValue);
+        return getResultData(debouncedSearchValue);
       },
       {
-        enabled: searchValue ? true : false,
+        enabled: debouncedSearchValue ? true : false,
       },
     );
   };
@@ -79,8 +81,7 @@ function SearchBar() {
       <S.SearchBar>
         <S.SearchInput
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const debounce = debouncing({ callback: () => getInputValue(e) });
-            debounce(e);
+            getInputValue(e);
           }}
           onKeyUp={onPressEnter}
         />
