@@ -2,7 +2,6 @@ import { MdSearch } from 'react-icons/md';
 import * as S from '@components/Header/miniSearchBar/Index.style';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { debouncing } from '@/utils/util';
 
 function MiniSearchBar() {
   const [searchValue, setSearchValue] = useState<string>('');
