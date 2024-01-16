@@ -10,6 +10,7 @@ export const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       useErrorBoundary: true,
+      refetchOnMount: false,
     },
     mutations: {
       useErrorBoundary: true,
