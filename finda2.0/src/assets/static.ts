@@ -444,3 +444,5 @@ export const PLATFORMINFO = [
 export const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/popular?body=%7B%22fields%22:[%22id%22,%22title%22,%22full_path%22,%22poster%22,%22object_type%22],%22content_types%22:[%22movie%22],%22monetization_types%22:[%22ads%22,%22buy%22,%22flatrate%22,%22rent%22,%22free%22],%22page%22:40,%22page_size%22:40,%22matching_offers_only%22:false%7D`;
 
 export const PAGECONTENTCOUNT = 30;
+
+export const EVERYCONTENTSCOUNT = 963;

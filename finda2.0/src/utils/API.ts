@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore';
 import { getFullFilteredInfo } from './util';
 import { db } from '@/Firebase';
-import { PAGECONTENTCOUNT } from '@/assets/static';
+import { EVERYCONTENTSCOUNT, PAGECONTENTCOUNT } from '@/assets/static';
 
 export const getSimilarMovies = async (genreArr: number[]) => {
   const moviesRef = collection(db, 'poster');
@@ -109,8 +109,7 @@ export const getFirstResultData = async () => {
   const snap = await getDocs(
     query(resultsRef, orderBy('title'), limit(PAGECONTENTCOUNT)),
   );
-  const countContent = (await getDocs(query(resultsRef, orderBy('title'))))
-    .size;
+  const countContent = EVERYCONTENTSCOUNT;
   const resultData: NormalizedPosterDataType[] = [];
   snap?.forEach((data: DocumentData) => resultData.push(data.data()));
   return { resultData, countContent };
