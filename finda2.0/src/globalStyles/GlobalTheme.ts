@@ -1,15 +1,15 @@
 import { DefaultTheme } from 'styled-components';
 
 const typographyContent = {
-  Title: { fontWeight: 900, fontSize: '40px' },
+  Title: { fontWeight: 900, fontSize: '4rem' },
   SemiTitle: {
     fontWeight: 800,
-    fontSize: '30px',
+    fontSize: '3rem',
   },
-  Bold: { fontWeight: 700, fontSize: '20px' },
-  Regular: { fontWeight: 500, fontSize: '16px' },
-  Light: { fontWeight: 300, fontSize: '13px' },
-  Thin: { fontWeight: 100, fontSize: '10px' },
+  Bold: { fontWeight: 700, fontSize: '2rem' },
+  Regular: { fontWeight: 500, fontSize: '1.6rem' },
+  Light: { fontWeight: 300, fontSize: '1.3rem' },
+  Thin: { fontWeight: 100, fontSize: '1rem' },
 };
 const globalTheme: DefaultTheme = {
   pallete: {

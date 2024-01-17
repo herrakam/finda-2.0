@@ -5,4 +5,5 @@ export interface CommentsType {
   commentsData: commentDataOutType[];
   updateComment: (comment: string) => void;
   mutate: UseMutateFunction<void, unknown, void, unknown>;
+  commentInput: string;
 }

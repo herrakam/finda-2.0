@@ -8,8 +8,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // suspense: true,
+      refetchOnWindowFocus: false,
       useErrorBoundary: true,
+      refetchOnMount: false,
     },
     mutations: {
       useErrorBoundary: true,
