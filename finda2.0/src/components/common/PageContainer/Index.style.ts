@@ -14,7 +14,7 @@ export const Containter = styled.section`
 
 export const InnerContainer = styled.div`
   width: 80%;
-  min-width: 360px;
+  min-width: 300px;
   ${mixin.flexbox({
     dir: 'column',
     vertical: 'center',

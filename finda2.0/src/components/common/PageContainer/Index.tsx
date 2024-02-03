@@ -5,7 +5,11 @@ interface PageContainerType {
 }
 
 function PageContainer({ children }: PageContainerType) {
-  return <S.Containter>{children}</S.Containter>;
+  return (
+    <S.Containter>
+      <S.InnerContainer>{children}</S.InnerContainer>
+    </S.Containter>
+  );
 }
 
 export default PageContainer;
