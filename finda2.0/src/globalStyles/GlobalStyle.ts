@@ -76,3 +76,14 @@ body {
     cursor: pointer;
 	}
 `;
+
+const size = {
+  mobile: '480px',
+  // tablet:'768px'
+  web: '1240px',
+};
+
+export const viewSize = {
+  mobile: `(max-width:${size.mobile})`,
+  web: `(max-width:${size.web})`,
+};
