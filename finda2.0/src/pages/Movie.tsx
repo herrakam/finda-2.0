@@ -117,7 +117,7 @@ function Movie() {
   };
 
   return (
-    <PageContainer>
+    <PageContainer size="full">
       {detailData && <ContentInfo {...detailProps} />}
       {similarData && <Rank {...similarMoviesProps} />}
       {commentsData && <Comments {...commentProps} />}
