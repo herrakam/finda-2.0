@@ -14,6 +14,7 @@ export const Copy = styled.div`
   width: 80%;
   ${({ theme }) => theme.typography.Title};
   color: ${({ theme }) => theme.pallete.normalFont};
+  line-height: 1.3;
   @media screen and (${viewSize.mobile}) {
     ${({ theme }) => theme.typography.SemiTitle};
     min-width: 300px;
