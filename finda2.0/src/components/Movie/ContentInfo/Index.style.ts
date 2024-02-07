@@ -133,4 +133,7 @@ export const DiscContatiner = styled.div`
 `;
 export const DiscContent = styled(ItemContent)`
   line-height: 3rem;
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Light}
+  }
 `;
