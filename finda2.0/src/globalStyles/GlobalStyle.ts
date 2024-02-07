@@ -79,11 +79,12 @@ body {
 
 const size = {
   mobile: '480px',
-  // tablet:'768px'
-  web: '1240px',
+  tablet: '768px',
+  tabletHorizontal: '1240px',
 };
 
 export const viewSize = {
   mobile: `(max-width:${size.mobile})`,
-  web: `(max-width:${size.web})`,
+  tabletHorizontal: `(max-width:${size.tabletHorizontal})`,
+  tablet: `(max-width:${size.tablet})`,
 };
