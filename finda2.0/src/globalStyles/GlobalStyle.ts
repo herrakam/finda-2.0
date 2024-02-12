@@ -52,7 +52,7 @@ html{
     font-size:62.5%;
 }
 body {
-		width: 100vw;
+		max-width: 100%;
 		height: 100vh;
 		font-family: "Noto Sans KR", sans-serif;
 	}
