@@ -6,6 +6,7 @@ export const PosterWrap = styled.figure`
   height: 300px;
   border-radius: 5px;
   position: relative;
+  flex: 0 0 auto;
 `;
 export const Posterimage = styled.img`
   width: 100%;
