@@ -6,7 +6,7 @@ function Main() {
   return (
     <PageContainer>
       <MainTop />
-      <MainBottom />
+      {/* <MainBottom /> */}
     </PageContainer>
   );
 }

@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
 export const SearchBarWrap = styled.div`
@@ -9,9 +9,12 @@ export const SearchBarWrap = styled.div`
 export const SearchBar = styled.div`
   ${mixin.flexbox({ horizontal: 'space-between' })};
   ${mixin.checkLayout};
-  width: 80%;
+  width: 100%;
   height: 50px;
   border-radius: 10px;
+  @media screen and (${viewSize.mobile}) {
+    height: 30px;
+  }
 `;
 export const SearchInput = styled.input`
   width: 90%;
@@ -21,6 +24,9 @@ export const SearchInput = styled.input`
   border: none;
   padding-left: 20px;
   ${({ theme }) => theme.typography.Regular}
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Thin}
+  }
 `;
 
 export const SearchStatus = styled.div`
@@ -44,11 +50,14 @@ export const SearchBtn = styled.button`
 `;
 
 export const ResultContainer = styled.div`
-  width: 80%;
+  width: 100%;
   border-radius: 0 0 10px 10px;
   border: 1px solid ${({ theme }) => theme.pallete.grey3};
   background: rgba(255, 255, 255, 0.5);
   ${mixin.flexbox({ dir: 'column', vertical: 'center' })}
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Thin}
+  }
 `;
 
 export const GenreContainer = styled(ResultContainer)`
@@ -65,11 +74,19 @@ export const Result = styled.div<{ isLast?: boolean }>`
   border-bottom: ${({ isLast }) => (isLast ? 'none ' : `2px solid white`)};
   ${mixin.flexbox({ vertical: 'center' })};
   ${({ theme }) => theme.typography.Regular}
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Thin}
+    height: 30px;
+  }
 `;
 export const SelectedGenre = styled.div`
   ${({ theme }) => theme.typography.SemiTitle};
   ${({ theme }) => theme.pallete.normalBtn};
   margin: 0 15px 0 0;
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Light}
+    margin: 0 10px 0 0
+  }
 `;
 
 export const Genre = styled.div`
@@ -79,4 +96,7 @@ export const Genre = styled.div`
   background: ${({ theme }) => theme.pallete.normalBtn};
   border-radius: 10px;
   padding: 10px 0;
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Thin}
+  }
 `;

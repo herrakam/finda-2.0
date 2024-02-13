@@ -89,7 +89,7 @@ function Result() {
   );
 
   return (
-    <PageContainer>
+    <PageContainer size="full">
       <S.ResultContatiner>
         <S.ResultTitle>{resultTitleText}</S.ResultTitle>
         {ResultContent}

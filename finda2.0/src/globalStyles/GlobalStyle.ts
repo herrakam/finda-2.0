@@ -52,7 +52,7 @@ html{
     font-size:62.5%;
 }
 body {
-		width: 100vw;
+		max-width: 100%;
 		height: 100vh;
 		font-family: "Noto Sans KR", sans-serif;
 	}
@@ -76,3 +76,15 @@ body {
     cursor: pointer;
 	}
 `;
+
+const size = {
+  mobile: '480px',
+  tablet: '768px',
+  tabletHorizontal: '1240px',
+};
+
+export const viewSize = {
+  mobile: `(max-width:${size.mobile})`,
+  tabletHorizontal: `(max-width:${size.tabletHorizontal})`,
+  tablet: `(max-width:${size.tablet})`,
+};

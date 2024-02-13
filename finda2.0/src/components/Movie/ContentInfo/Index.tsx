@@ -43,7 +43,7 @@ function ContentInfo({
             <S.Title>{title}</S.Title>
             <S.ReleasedYear>({releasedYear})</S.ReleasedYear>
           </S.FlexContainer>
-          <S.RealTitle>{originTitle}</S.RealTitle>
+          <S.OriginTitle>{originTitle}</S.OriginTitle>
           <S.ItemTitle>director</S.ItemTitle>
           <S.ItemContent>{director.name}</S.ItemContent>
           <S.ItemTitle>actors</S.ItemTitle>

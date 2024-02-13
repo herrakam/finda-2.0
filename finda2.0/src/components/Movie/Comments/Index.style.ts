@@ -28,7 +28,7 @@ export const CommentId = styled.span`
   ${({ theme }) => theme.typography.Regular};
   color: ${({ theme }) => theme.pallete.normalFont};
   margin-right: 10px;
-  width: 5%;
+  width: fit-content;
 `;
 
 export const CommentContent = styled.span`
@@ -44,7 +44,7 @@ export const CommentCreatedTime = styled.span`
   ${({ theme }) => theme.typography.Regular};
   color: ${({ theme }) => theme.pallete.normalFont};
   ${mixin.flexbox({ horizontal: 'flex-end', vertical: 'center' })}
-  width: 5%;
+  white-space: nowrap;
   float: right;
 `;
 
@@ -56,7 +56,8 @@ export const CommentInput = styled.input`
   width: 95%;
 `;
 export const CommentPostBtn = styled.button`
-  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })}
+  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })};
+  white-space: nowrap;
 `;
 export const NoComment = styled.span`
   ${({ theme }) => theme.typography.Bold}

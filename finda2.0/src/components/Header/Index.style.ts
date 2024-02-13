@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -23,9 +23,15 @@ export const HeaderRight = styled(HeaderLeft)``;
 export const Title = styled(Link)`
   ${({ theme }) => theme.typography.Title}
   color: ${({ theme }) => theme.pallete.white};
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.SemiTitle}
+  }
 `;
 
 export const HeaderTab = styled(Link)`
   ${({ theme }) => theme.typography.Bold}
   color:${({ theme }) => theme.pallete.white};
+  @media screen and (${viewSize.mobile}) {
+    display: none;
+  }
 `;
