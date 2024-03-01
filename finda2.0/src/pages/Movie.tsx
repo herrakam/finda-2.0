@@ -102,7 +102,8 @@ function Movie() {
       resetComment();
       window.alert('댓글이 등록되었습니다');
       queryClient.invalidateQueries({ queryKey: ['getCommentsQueryKey'] });
-    } else if (commentError) window.alert('댓글 등록 실패');
+    } else if (commentError)
+      window.alert('댓글 달기 실패, 관리자에게 문의하세요');
   }, [commentSuccess, commentError]);
 
   const detailProps = detailData! && {
