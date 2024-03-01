@@ -7,11 +7,11 @@ interface PageContainerType {
 
 function PageContainer({ children, size = 'space' }: PageContainerType) {
   return size === 'space' ? (
-    <S.Containter>
+    <S.Container>
       <S.InnerContainer>{children}</S.InnerContainer>
-    </S.Containter>
+    </S.Container>
   ) : (
-    <S.Containter>{children}</S.Containter>
+    <S.Container>{children}</S.Container>
   );
 }
 
