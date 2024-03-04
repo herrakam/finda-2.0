@@ -6,7 +6,7 @@ import { RankType } from '@components/common/Rank/type';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import {
   getCommentsData,
   getMovieData,
@@ -14,6 +14,7 @@ import {
   postComments,
 } from '@/utils/API';
 import { sliceGenreArr } from '@/utils/util';
+import Loading from '@components/Loading/Index';
 
 function Movie() {
   const contentTitle = useParams().contentTitle as string;
@@ -119,9 +120,11 @@ function Movie() {
 
   return (
     <PageContainer size="full">
-      {detailData && <ContentInfo {...detailProps} />}
-      {similarData && <Rank {...similarMoviesProps} />}
-      {commentsData && <Comments {...commentProps} />}
+      <Suspense fallback={<Loading />}>
+        {detailData && <ContentInfo {...detailProps} />}
+        {similarData && <Rank {...similarMoviesProps} />}
+        {commentsData && <Comments {...commentProps} />}
+      </Suspense>
     </PageContainer>
   );
 }
