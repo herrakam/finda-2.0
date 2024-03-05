@@ -1,7 +1,7 @@
 import TitleResult from '@components/Result/TitleResult/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import { useParams } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import {
   GenreType,
   NormalizedPosterDataType,
@@ -11,6 +11,7 @@ import * as S from '@components/Result/TitleResult/Index.style';
 import GenreResult from '@components/Result/GenreResult/Index';
 import { GENREINFO } from '@/assets/static';
 import { GenreResultPropsType } from '@components/Result/GenreResult/type';
+import Loading from '@components/Loading/Index';
 
 const getGenreText = (genreArr: number[]) => {
   const genreStringArr = genreArr.map(
@@ -92,7 +93,7 @@ function Result() {
     <PageContainer size="full">
       <S.ResultContatiner>
         <S.ResultTitle>{resultTitleText}</S.ResultTitle>
-        {ResultContent}
+        <Suspense fallback={<Loading />}>{ResultContent}</Suspense>
         <div className="InfinityScrollTrigger" ref={pageEndRef}></div>
       </S.ResultContatiner>
     </PageContainer>

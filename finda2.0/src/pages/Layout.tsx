@@ -1,6 +1,8 @@
+import Error from '@components/Error/Index';
 import Footer from '@components/Footer/Index';
 import Header from '@components/Header/Index';
 import Panel from '@components/Panel/Index';
+import { ErrorBoundary } from 'react-error-boundary';
 
 type IndexType = {
   children: React.ReactNode;
@@ -8,12 +10,12 @@ type IndexType = {
 
 function Layout({ children }: IndexType) {
   return (
-    <div>
+    <ErrorBoundary FallbackComponent={Error}>
       <Header />
       {children}
       <Panel />
       <Footer />
-    </div>
+    </ErrorBoundary>
   );
 }
 

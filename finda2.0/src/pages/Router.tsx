@@ -4,6 +4,7 @@ import Result from '@/pages/Result';
 import { createBrowserRouter } from 'react-router-dom';
 import Movie from '@/pages/Movie';
 import DB from '@pages/DB';
+import RouterError from '@components/Error/RouterError/Index';
 
 type RouterInfoType = {
   path: string;
@@ -50,10 +51,20 @@ const reactRouterObject = createBrowserRouter(
       ? {
           path: routerinfo.path,
           element: <Layout>{routerinfo.element}</Layout>, // layout 컴포넌트에 로그인 정보 넘겨줄 예정
+          errorElement: (
+            <Layout>
+              <RouterError />
+            </Layout>
+          ),
         }
       : {
           path: routerinfo.path,
           element: <Layout>{routerinfo.element}</Layout>,
+          errorElement: (
+            <Layout>
+              <RouterError />
+            </Layout>
+          ),
         };
   }),
 );

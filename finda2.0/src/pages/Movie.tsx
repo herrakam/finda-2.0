@@ -6,7 +6,7 @@ import { RankType } from '@components/common/Rank/type';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import {
   getCommentsData,
   getMovieData,
@@ -14,6 +14,7 @@ import {
   postComments,
 } from '@/utils/API';
 import { sliceGenreArr } from '@/utils/util';
+import Loading from '@components/Loading/Index';
 
 function Movie() {
   const contentTitle = useParams().contentTitle as string;
@@ -102,7 +103,8 @@ function Movie() {
       resetComment();
       window.alert('댓글이 등록되었습니다');
       queryClient.invalidateQueries({ queryKey: ['getCommentsQueryKey'] });
-    } else if (commentError) window.alert('댓글 등록 실패');
+    } else if (commentError)
+      window.alert('댓글 달기 실패, 관리자에게 문의하세요');
   }, [commentSuccess, commentError]);
 
   const detailProps = detailData! && {
@@ -118,9 +120,11 @@ function Movie() {
 
   return (
     <PageContainer size="full">
-      {detailData && <ContentInfo {...detailProps} />}
-      {similarData && <Rank {...similarMoviesProps} />}
-      {commentsData && <Comments {...commentProps} />}
+      <Suspense fallback={<Loading />}>
+        {detailData && <ContentInfo {...detailProps} />}
+        {similarData && <Rank {...similarMoviesProps} />}
+        {commentsData && <Comments {...commentProps} />}
+      </Suspense>
     </PageContainer>
   );
 }

@@ -1,7 +1,7 @@
 import { mixin } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
-export const Containter = styled.section`
+export const Container = styled.section`
   min-height: 100vh;
   width: 100%;
   ${mixin.flexbox({
