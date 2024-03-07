@@ -8,7 +8,7 @@ export const RankWrap = styled.div`
     dir: 'column',
   })}
   padding: 10px;
-  width: 80%;
+  width: 100%;
   gap: 30px;
 `;
 
@@ -24,6 +24,10 @@ export const RankContents = styled.div`
   gap: 40px;
   width: 100%;
   overflow-x: scroll;
+  padding-left: 10px;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media screen and (${viewSize.mobile}) {
     flex-direction: column;
   }
