@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   ${mixin.flexbox({ dir: 'column' })}
   gap: 30px;
-  width: 80%;
+  width: 100%;
 `;
 
 export const CommentTitle = styled.span`

@@ -119,7 +119,7 @@ function Movie() {
   };
 
   return (
-    <PageContainer size="full">
+    <PageContainer size="space">
       <Suspense fallback={<Loading />}>
         {detailData && <ContentInfo {...detailProps} />}
         {similarData && <Rank {...similarMoviesProps} />}
