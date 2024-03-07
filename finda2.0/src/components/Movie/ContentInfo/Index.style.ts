@@ -2,7 +2,7 @@ import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 80%;
+  width: 100%;
   min-height: 100vh;
   background: ${({ theme }) => theme.pallete.normalBg};
 `;
@@ -16,7 +16,6 @@ export const BackDropImg = styled.img`
   min-height: 200px;
   @media screen and (${viewSize.mobile}) {
     height: 30vh;
-    /* min-height: 100px; */
   }
 `;
 
@@ -58,6 +57,7 @@ export const InfoRight = styled.div`
 export const Poster = styled.img`
   border-radius: 5px;
   max-width: 300px;
+  max-height: 450px;
 `;
 export const GenreContainer = styled.div`
   ${mixin.flexbox({})}
