@@ -48,7 +48,7 @@ const lightMode: DefaultTheme = {
     grey6: '#F5F5F7',
     black: '#010101',
     white: '#FFFFFF',
-    normalBg: '#ffffff',
+    normalBg: '#BDBDBD',
     normalBtn: '#f2f2f2',
     normalFont: '#010101',
   },
