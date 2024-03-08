@@ -3,8 +3,9 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   ${mixin.flexbox({ dir: 'column', vertical: 'center', horizontal: 'center' })}
-  width: 100%;
-  margin: 3rem;
+  width: 100vw;
+  height: 100vh;
+  background: ${({ theme }) => theme.pallete.normalBg};
   gap: 20px;
 `;
 
