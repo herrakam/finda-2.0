@@ -6,7 +6,7 @@ import { RankType } from '@components/common/Rank/type';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import Comments from '@components/Movie/Comments/Index';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getCommentsData,
   getMovieData,
@@ -14,7 +14,6 @@ import {
   postComments,
 } from '@/utils/API';
 import { sliceGenreArr } from '@/utils/util';
-import Loading from '@components/Loading/Index';
 
 function Movie() {
   const contentTitle = useParams().contentTitle as string;
@@ -29,15 +28,16 @@ function Movie() {
   const updateComment = (comment: string) => {
     setCommentInput(comment);
   };
+  const resetComment = () => {
+    setCommentInput('');
+  };
   const queryClient = useQueryClient();
   const sliceFilteredData = (data: NormalizedPosterDataType[]) => {
     return data
       .filter((data: NormalizedPosterDataType) => data.title !== contentTitle)
       .slice(0, 5);
   };
-  const resetComment = () => {
-    setCommentInput('');
-  };
+
   const getMovieInfo = () => {
     return useQuery(['getMovieInfoQueryKey', contentTitle], () => {
       return getMovieData(contentTitle);
@@ -120,11 +120,9 @@ function Movie() {
 
   return (
     <PageContainer size="space">
-      <Suspense fallback={<Loading />}>
-        {detailData && <ContentInfo {...detailProps} />}
-        {similarData && <Rank {...similarMoviesProps} />}
-        {commentsData && <Comments {...commentProps} />}
-      </Suspense>
+      {detailData && <ContentInfo {...detailProps} />}
+      {similarData && <Rank {...similarMoviesProps} />}
+      {commentsData && <Comments {...commentProps} />}
     </PageContainer>
   );
 }
