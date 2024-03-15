@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -9,6 +9,9 @@ export const Container = styled.div`
 export const Title = styled.span`
   ${({ theme }) => theme.typography.Title};
   color: ${({ theme }) => theme.pallete.normalFont};
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Regular}
+  }
 `;
 
 export const ImageContainer = styled.figure`
@@ -17,6 +20,10 @@ export const ImageContainer = styled.figure`
   margin-top: 100px;
 `;
 export const SorryImg = styled.img`
-  width: 30%;
-  height: 30%;
+  width: 40%;
+  height: 40%;
+  @media screen and (${viewSize.mobile}) {
+    width: 80%;
+    height: 80%;
+  }
 `;
