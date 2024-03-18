@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
 export const ResultContatiner = styled.div`
@@ -19,6 +19,9 @@ export const ResultTitle = styled.div`
   width:100%;
   color: ${({ theme }) => theme.pallete.normalFont};
   margin-bottom: 100px;
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.SemiTitle}
+  }
 `;
 
 export const ConentsContainer = styled.div`
