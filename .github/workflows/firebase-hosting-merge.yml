@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       working-directory: ./finda2.0
-      firebase-json-directory: ./finda2.0/src
     steps:
       - uses: actions/checkout@v3
       - run: npm ci && npm run build
@@ -22,4 +21,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FINDA_2 }}'
           channelId: live
           projectId: finda-2
-          entryPoint: ${{env.firebase-json-directory}}
+          entryPoint: ./finda2.0
