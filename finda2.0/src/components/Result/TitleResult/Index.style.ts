@@ -30,4 +30,7 @@ export const ConentsContainer = styled.div`
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   place-content: space-between center;
+  @media screen and (${viewSize.mobile}) {
+    place-items: center;
+  }
 `;
