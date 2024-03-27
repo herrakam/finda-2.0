@@ -18,7 +18,6 @@ export const ResultTitle = styled.div`
   ${({ theme }) => theme.typography.Title}
   width:100%;
   color: ${({ theme }) => theme.pallete.normalFont};
-  margin-bottom: 100px;
   @media screen and (${viewSize.mobile}) {
     ${({ theme }) => theme.typography.SemiTitle}
   }
