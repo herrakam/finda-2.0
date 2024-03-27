@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
 export const PanelWrap = styled.div`
@@ -12,4 +12,8 @@ export const PanelWrap = styled.div`
   background: ${({ theme }) => theme.pallete.normalBtn};
   border-radius: 999px;
   ${({ theme }) => theme.typography.Bold};
+
+  @media screen and (${viewSize.mobile}) {
+    display: none;
+  }
 `;
