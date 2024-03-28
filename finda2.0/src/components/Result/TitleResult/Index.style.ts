@@ -18,7 +18,6 @@ export const ResultTitle = styled.div`
   ${({ theme }) => theme.typography.Title}
   width:100%;
   color: ${({ theme }) => theme.pallete.normalFont};
-  margin-bottom: 100px;
   @media screen and (${viewSize.mobile}) {
     ${({ theme }) => theme.typography.SemiTitle}
   }
@@ -30,4 +29,7 @@ export const ConentsContainer = styled.div`
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   place-content: space-between center;
+  @media screen and (${viewSize.mobile}) {
+    place-items: center;
+  }
 `;

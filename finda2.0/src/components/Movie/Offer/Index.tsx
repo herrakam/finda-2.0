@@ -37,7 +37,7 @@ function Offer({ offer }: OfferInfoType) {
               openInNewWindow(info.url);
             }}
           />
-          <S.Price>{info.price?.toLocaleString()}\</S.Price>
+          <S.Price>{info.price?.toLocaleString()}&#x20A9;</S.Price>
         </S.Platform>
       ),
     );

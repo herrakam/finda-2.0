@@ -26,7 +26,7 @@ function Comments({
         const date = extractMonthAndDay(comment.createdTime.toDate());
         return (
           <S.Comment key={comment.comment}>
-            <S.CommentId>{comment.nickname}</S.CommentId>
+            {/* <S.CommentId>{comment.nickname}</S.CommentId> */}
             <S.CommentContent>{comment.comment}</S.CommentContent>
             <S.CommentCreatedTime>{date}</S.CommentCreatedTime>
           </S.Comment>
