@@ -23,6 +23,7 @@ function Footer() {
     <S.FooterWrap>
       Developed By SeungHyun Jung
       <S.LinkWrap>{tabs}</S.LinkWrap>
+      <S.FooterText>공부 목적으로 만들어진 웹사이트 입니다</S.FooterText>
     </S.FooterWrap>
   );
 }

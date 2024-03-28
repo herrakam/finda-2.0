@@ -17,7 +17,7 @@ function Header() {
       <S.HeaderLeft>
         <S.Title to="/">FINDA</S.Title>
         <S.HeaderTab to="/result">Movie</S.HeaderTab>
-        {PersonalTab}
+        {/* {PersonalTab} */}
       </S.HeaderLeft>
       <S.HeaderRight>
         <MiniSearchBar />

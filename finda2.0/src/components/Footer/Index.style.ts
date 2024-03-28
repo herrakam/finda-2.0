@@ -15,3 +15,7 @@ export const LinkWrap = styled.div`
   ${mixin.flexbox({})};
   gap: 50px;
 `;
+export const FooterText = styled.span`
+  ${({ theme }) => theme.typography.Thin};
+  color: ${({ theme }) => theme.pallete.grey3};
+`;
