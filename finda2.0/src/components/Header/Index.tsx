@@ -15,7 +15,7 @@ function Header() {
   return (
     <S.HeaderWrap>
       <S.HeaderLeft>
-        <S.Title to="/">FINDA2</S.Title>
+        <S.Title to="/">FINDA</S.Title>
         <S.HeaderTab to="/result">Movie</S.HeaderTab>
         {/* {PersonalTab} */}
       </S.HeaderLeft>
