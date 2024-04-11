@@ -13,6 +13,17 @@ jobs:
     env:
       working-directory: ./finda2.0
     steps:
+      - name: Set environment variables
+        run: |
+          echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> $GITHUB_ENV
+          echo "VITE_AUTH_DOMAIN=${{ secrets.VITE_AUTH_DOMAIN }}" >> $GITHUB_ENV
+          echo "VITE_MESSAGE_SENDER_ID=${{ secrets.VITE_MESSAGE_SENDER_ID }}" >> $GITHUB_ENV
+          echo "VITE_PROJECT_ID=${{ secrets.VITE_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "VITE_STORAGE_BUCKET=${{ secrets.VITE_STORAGE_BUCKET }}" >> $GITHUB_ENV
+          echo "VITE_APP_ID=${{ secrets.VITE_APP_ID }}" >> $GITHUB_ENV
+          echo "VITE_MEASUREMENT_ID=${{ secrets.VITE_MEASUREMENT_ID }}" >> $GITHUB_ENV
+          echo "VITE_MOVIES_ID=${{secrets.VITE_MOVIES_ID}}" >>$GITHUB_ENV
+
       - uses: actions/checkout@v3
       - run: npm ci && npm run build
         working-directory: ${{env.working-directory}}
