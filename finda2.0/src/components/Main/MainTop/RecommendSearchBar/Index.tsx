@@ -11,8 +11,18 @@ function RecommendSearchBar() {
   const gotoPage = useMove();
 
   const addGenre = (genre: number) => {
-    setSearchGenre([...searchGenre, genre]);
+    if (isGenreDuplicate(genre)) {
+      window.alert('이미 선택한 장르입니다!');
+      return;
+    } else {
+      setSearchGenre([...searchGenre, genre]);
+    }
   };
+
+  const isGenreDuplicate = (selectendGenre: number) =>
+    searchGenre.filter((genre: number) => genre === selectendGenre).length
+      ? true
+      : false;
 
   const removeGenre = (genre: number) => {
     const removedGenreArr = searchGenre.filter(
