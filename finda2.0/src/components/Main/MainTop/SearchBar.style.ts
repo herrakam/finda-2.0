@@ -96,6 +96,7 @@ export const Genre = styled.div`
   background: ${({ theme }) => theme.pallete.normalBtn};
   border-radius: 10px;
   padding: 10px 0;
+  text-align: center;
   @media screen and (${viewSize.mobile}) {
     ${({ theme }) => theme.typography.Thin}
   }
