@@ -1,3 +1,4 @@
+import { mixin } from '@/globalStyles/GlobalStyle';
 import { DimSizeType } from '@components/common/Dimmed/type';
 import styled from 'styled-components';
 
@@ -9,4 +10,5 @@ export const DimmedWrap = styled.section<{
   height: ${({ size }) => size.height};
   background: ${({ isHover }) => (isHover ? 'rgba(0, 0, 0, 0.5)' : 'none')};
   position: absolute;
+  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })}
 `;
