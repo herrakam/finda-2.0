@@ -8,6 +8,9 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { LoginBtnType, LoginClickEventType } from './type';
+import { BsGithub } from 'react-icons/bs';
+import { FcGoogle } from 'react-icons/fc';
+import { LOGINICONSIZE } from '@/assets/static';
 
 function Login() {
   const handleLogin: LoginClickEventType = loginType => {
@@ -30,12 +33,14 @@ function Login() {
       clickEvent: () => {
         handleLogin('google');
       },
+      icon: <FcGoogle size={LOGINICONSIZE} />,
     },
     {
       label: 'github',
       clickEvent: () => {
         handleLogin('github');
       },
+      icon: <BsGithub size={LOGINICONSIZE} />,
     },
   ];
 
@@ -46,7 +51,9 @@ function Login() {
       }}
       label={btnInfo.label}
       key={btnInfo.label}
-    />
+    >
+      {btnInfo.icon}
+    </S.LoginBtn>
   ));
 
   return (

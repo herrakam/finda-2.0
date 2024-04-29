@@ -10,7 +10,7 @@ export const LoginContainer = styled.div`
   color: ${({ theme }) => theme.pallete.normalFont};
   ${mixin.flexbox({
     vertical: 'center',
-    horizontal: 'center',
+    horizontal: 'space-around',
     dir: 'column',
   })};
   gap: 25%;

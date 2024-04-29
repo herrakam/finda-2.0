@@ -5,4 +5,5 @@ export type LoginClickEventType = (loginType: HandleLoginType) => void;
 export interface LoginBtnType {
   label: HandleLoginType;
   clickEvent: LoginClickEventType;
+  icon: JSX.Element;
 }

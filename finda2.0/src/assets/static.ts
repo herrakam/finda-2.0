@@ -446,3 +446,5 @@ export const POSTERTITLEURL = `https://apis.justwatch.com/content/titles/ko_KR/p
 export const PAGECONTENTCOUNT = 30;
 
 export const EVERYCONTENTSCOUNT = 963;
+
+export const LOGINICONSIZE = 30;
