@@ -7,19 +7,37 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
-import { LoginBtnType, LoginClickEventType } from './type';
+import { LoginBtnType, LoginClickEventType, ProviderType } from './type';
 import { BsGithub } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
+import { useSetAtom } from 'jotai';
+import { isLoginAtom, isLoginPopUp } from '@/atoms/IsLogin';
 
 function Login() {
+  const setIsLogin = useSetAtom(isLoginAtom);
+
+  const setLoginPopUp = useSetAtom(isLoginPopUp);
+
+  const closeLoginPopUp = () => setLoginPopUp(false);
+
   const handleLogin: LoginClickEventType = loginType => {
     if (loginType === 'google') {
       const googleProvider = new GoogleAuthProvider();
-      signInWithPopup(auth, googleProvider);
+      LoginWithPopUp(googleProvider);
     } else if (loginType === 'github') {
       const githubProvider = new GithubAuthProvider();
-      signInWithPopup(auth, githubProvider);
+      LoginWithPopUp(githubProvider);
+    }
+  };
+
+  const LoginWithPopUp = async (provider: ProviderType) => {
+    await signInWithPopup(auth, provider);
+    try {
+      setIsLogin(true);
+      closeLoginPopUp();
+    } catch (err) {
+      console.error(err);
     }
   };
 
