@@ -1,17 +1,23 @@
-import { isLoginAtom } from '@/atoms/IsLogin';
+import { isLoginAtom, isLoginPopUp } from '@/atoms/IsLogin';
 import * as S from '@components/Header/Index.style';
 import MiniSearchBar from '@components/Header/miniSearchBar/Index';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 function Header() {
   const isLogin = useAtomValue(isLoginAtom);
+  const setLoginPopUp = useSetAtom(isLoginPopUp);
+
+  const popUpLoginPage = () => {
+    setLoginPopUp(true);
+  };
+
   const PersonalTab = isLogin ? (
     <>
       <S.HeaderTab to="/myPick">MY Pick</S.HeaderTab>
-      <S.HeaderTab to="Logout">LogOut</S.HeaderTab>
+      <S.LogInOutTab>LogOut</S.LogInOutTab>
     </>
   ) : (
-    <S.HeaderTab to="/logIn">Login</S.HeaderTab>
+    <S.LogInOutTab onClick={popUpLoginPage}>Login</S.LogInOutTab>
   );
 
   return (

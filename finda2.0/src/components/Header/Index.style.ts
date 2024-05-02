@@ -35,3 +35,8 @@ export const HeaderTab = styled(Link)`
     display: none;
   }
 `;
+
+export const LogInOutTab = styled.span`
+  ${({ theme }) => theme.typography.Bold}
+  color:${({ theme }) => theme.pallete.white};
+`;
