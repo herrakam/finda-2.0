@@ -1,6 +1,4 @@
 import { auth } from '@/Firebase';
-import Dimmed from '@components/common/Dimmed/Index';
-import { DimmedType } from '@components/common/Dimmed/type';
 import * as S from '@components/Login/Index.style';
 import {
   GithubAuthProvider,
@@ -12,12 +10,12 @@ import { BsGithub } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
 import { useSetAtom } from 'jotai';
-import { isLoginAtom, isLoginPopUp } from '@/atoms/IsLogin';
+import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
 
 function Login() {
   const setIsLogin = useSetAtom(isLoginAtom);
 
-  const setLoginPopUp = useSetAtom(isLoginPopUp);
+  const setLoginPopUp = useSetAtom(modalPopUpAtom);
 
   const closeLoginPopUp = () => setLoginPopUp(false);
 
@@ -39,10 +37,6 @@ function Login() {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const dimmedProps: DimmedType = {
-    isHover: true,
   };
 
   const loginBtnInfo: LoginBtnType[] = [
@@ -75,12 +69,10 @@ function Login() {
   ));
 
   return (
-    <Dimmed {...dimmedProps}>
-      <S.LoginContainer>
-        <S.Title>로그인</S.Title>
-        <S.BtnsContainer>{loginBtns}</S.BtnsContainer>
-      </S.LoginContainer>
-    </Dimmed>
+    <S.LoginContainer>
+      <S.Title>로그인</S.Title>
+      <S.BtnsContainer>{loginBtns}</S.BtnsContainer>
+    </S.LoginContainer>
   );
 }
 

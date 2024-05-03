@@ -1,11 +1,11 @@
-import { isLoginAtom, isLoginPopUp } from '@/atoms/IsLogin';
+import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
 import * as S from '@components/Header/Index.style';
 import MiniSearchBar from '@components/Header/miniSearchBar/Index';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 function Header() {
   const isLogin = useAtomValue(isLoginAtom);
-  const setLoginPopUp = useSetAtom(isLoginPopUp);
+  const setLoginPopUp = useSetAtom(modalPopUpAtom);
 
   const popUpLoginPage = () => {
     setLoginPopUp(true);
