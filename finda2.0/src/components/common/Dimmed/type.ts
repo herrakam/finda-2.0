@@ -3,11 +3,12 @@ export type DimSizeType = {
   height: '100vh' | '300px';
 };
 export type DimmedType = {
-  isHover: boolean;
+  isHover?: boolean;
   size?: 'full' | 'poster';
   optional?: {
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
+    onClick?: () => void;
   };
 };
 
