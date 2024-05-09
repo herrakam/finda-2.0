@@ -5,6 +5,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Movie from '@/pages/Movie';
 import DB from '@pages/DB';
 import RouterError from '@components/Error/RouterError/Index';
+import SignIn from './SignIn';
 
 type RouterInfoType = {
   path: string;
@@ -41,6 +42,11 @@ const RouterInfo: RouterInfoType[] = [
   {
     path: '/DB',
     element: <DB />,
+    withAuthorization: false,
+  },
+  {
+    path: '/signin',
+    element: <SignIn />,
     withAuthorization: false,
   },
 ];
