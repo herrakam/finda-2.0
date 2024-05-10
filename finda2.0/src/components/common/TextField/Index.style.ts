@@ -7,7 +7,7 @@ export const styledInput = styled.input<{
 }>`
   width: ${({ width }) => (width ? width : `inherit`)};
   text-decoration: none;
-  ${({ theme, fontSize }) => `${theme}.typography.${fontSize}`};
+  ${({ theme, fontSize }) => theme.typography[fontSize]};
   padding: 5px;
   border-radius: 5px;
   border-style: solid;
