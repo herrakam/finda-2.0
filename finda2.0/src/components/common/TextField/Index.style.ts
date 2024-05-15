@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { FontSizeType } from './type';
+import { viewSize } from '@/globalStyles/GlobalStyle';
 
 export const styledInput = styled.input<{
   width?: string;
@@ -15,5 +16,8 @@ export const styledInput = styled.input<{
     outline: none;
     border-color: ${({ theme }) => theme.pallete.focus};
     background: ${({ theme }) => theme.pallete.grey6};
+  }
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Light};
   }
 `;

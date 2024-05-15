@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 
 export const FormContainer = styled.div`
@@ -14,6 +14,9 @@ export const FormTitle = styled.span`
 export const InputTitle = styled.span`
   ${({ theme }) => theme.typography.Bold};
   color: ${({ theme }) => theme.pallete.normalFont};
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Regular};
+  }
 `;
 export const InputContainer = styled.div`
   ${mixin.flexbox({
