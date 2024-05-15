@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const FormContainer = styled.div`
   ${mixin.flexbox({ dir: 'column', vertical: 'center' })};
   gap: 20px;
-  margin-top: 35vh;
+  margin-top: 20vh;
   width: 40%;
 `;
 export const FormTitle = styled.span`
@@ -23,4 +23,9 @@ export const InputContainer = styled.div`
   })};
   gap: 10px;
   width: 100%;
+`;
+export const BtnContainer = styled.div`
+  ${mixin.flexbox({ dir: 'column', vertical: 'center' })};
+  margin-top: 40px;
+  margin-bottom: 20vh;
 `;

@@ -1,6 +1,7 @@
 import TextField from '@components/common/TextField/Index';
 import * as S from '@components/Signin/Form/Index.style';
 import { FormInfo } from './type';
+import Btn from '@components/common/Button/Index';
 
 function SignInForm() {
   const formInfos: FormInfo[] = [
@@ -33,10 +34,15 @@ function SignInForm() {
     </S.InputContainer>
   ));
 
+  const mockBtnEvent = () => window.alert('버튼 클릭됨');
+
   return (
     <S.FormContainer>
-      <S.FormTitle>회원 가입</S.FormTitle>
+      <S.FormTitle>SIGN IN</S.FormTitle>
       {inputs}
+      <S.BtnContainer>
+        <Btn text="회원가입" clickEvent={mockBtnEvent} />
+      </S.BtnContainer>
     </S.FormContainer>
   );
 }
