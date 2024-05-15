@@ -6,6 +6,9 @@ export const FormContainer = styled.div`
   gap: 20px;
   margin-top: 20vh;
   width: 40%;
+  @media screen and (${viewSize.mobile}) {
+    width: 60%;
+  }
 `;
 export const FormTitle = styled.span`
   ${({ theme }) => theme.typography.SemiTitle};

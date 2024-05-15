@@ -18,6 +18,6 @@ export const styledInput = styled.input<{
     background: ${({ theme }) => theme.pallete.grey6};
   }
   @media screen and (${viewSize.mobile}) {
-    ${({ theme }) => theme.typography.Light};
+    ${({ theme }) => theme.typography.Thin};
   }
 `;
