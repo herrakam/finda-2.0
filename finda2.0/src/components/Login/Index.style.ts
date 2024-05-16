@@ -1,4 +1,4 @@
-import { mixin } from '@/globalStyles/GlobalStyle';
+import { mixin, viewSize } from '@/globalStyles/GlobalStyle';
 import styled from 'styled-components';
 import { HandleLoginType } from './type';
 
@@ -14,11 +14,17 @@ export const LoginContainer = styled.div`
     dir: 'column',
   })};
   gap: 25%;
+  @media screen and (${viewSize.mobile}) {
+    width: 90%;
+  }
 `;
 
 export const Title = styled.span`
   ${({ theme }) => theme.typography.Title};
   color: ${({ theme }) => theme.pallete.normalFont};
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.SemiTitle};
+  }
 `;
 
 export const BtnsContainer = styled.div`
