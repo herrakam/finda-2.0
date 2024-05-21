@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { TextFieldProps } from './type';
 import * as S from '@components/common/TextField/Index.style';
+import { useForm } from 'react-hook-form';
 
 function TextField({
   placeholder,
@@ -8,9 +9,11 @@ function TextField({
   onEnter,
   fontSize = 'Regular',
   width,
+  validation,
+  label,
 }: TextFieldProps) {
   const [value, setValue] = useState<string>('');
-
+  const { register } = useForm();
   const changeValue = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setValue(inputValue);
@@ -26,15 +29,14 @@ function TextField({
   return (
     <S.styledInput
       placeholder={placeholder || '텍스트를 입력해주세요'}
-      onChange={e => {
-        changeValue(e);
-      }}
       onKeyDown={e => {
         pressEnter(e);
       }}
       value={value}
       fontSize={fontSize}
       width={width}
+      {...register(`${label}`, { validate: validation })}
+      onChange={changeValue}
     />
   );
 }
