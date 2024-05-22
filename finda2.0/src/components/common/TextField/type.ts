@@ -1,3 +1,5 @@
+import { UseFormRegister, FieldValues } from 'react-hook-form';
+
 export interface TextFieldProps {
   label: string;
   placeholder?: string;
@@ -5,7 +7,7 @@ export interface TextFieldProps {
   onEnter?: (value: string) => void;
   fontSize: FontSizeType;
   width?: string;
-  validation?: (value: string) => boolean;
+  register?: UseFormRegister<FieldValues>;
 }
 
 export type FontSizeType =

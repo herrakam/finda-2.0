@@ -1,7 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { TextFieldProps } from './type';
 import * as S from '@components/common/TextField/Index.style';
-import { useForm } from 'react-hook-form';
 
 function TextField({
   placeholder,
@@ -9,11 +8,10 @@ function TextField({
   onEnter,
   fontSize = 'Regular',
   width,
-  validation,
   label,
+  register,
 }: TextFieldProps) {
   const [value, setValue] = useState<string>('');
-  const { register } = useForm();
   const changeValue = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setValue(inputValue);
@@ -35,7 +33,7 @@ function TextField({
       value={value}
       fontSize={fontSize}
       width={width}
-      {...register(`${label}`, { validate: validation })}
+      {...register}
       onChange={changeValue}
     />
   );
