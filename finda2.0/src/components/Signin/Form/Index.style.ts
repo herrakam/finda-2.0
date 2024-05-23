@@ -10,6 +10,12 @@ export const FormContainer = styled.div`
     width: 60%;
   }
 `;
+
+export const SignInForm = styled.form`
+  width: 100%;
+  ${mixin.flexbox({ dir: 'column' })}
+  gap: 30px;
+`;
 export const FormTitle = styled.span`
   ${({ theme }) => theme.typography.SemiTitle};
   color: ${({ theme }) => theme.pallete.normalFont};
