@@ -1,13 +1,10 @@
-import { UseFormRegister, FieldValues } from 'react-hook-form';
+import { FormInfo } from '@components/Signin/Form/type';
 
-export interface TextFieldProps {
-  label: string;
-  placeholder?: string;
+export interface TextFieldProps extends FormInfo {
   onChange?: (value: string) => void;
   onEnter?: (value: string) => void;
   fontSize: FontSizeType;
   width?: string;
-  register?: UseFormRegister<FieldValues>;
 }
 
 export type FontSizeType =
