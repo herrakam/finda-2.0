@@ -9,7 +9,7 @@ function TextField({
   fontSize = 'Regular',
   width,
   label,
-  register,
+  registerProps,
 }: TextFieldProps) {
   const [value, setValue] = useState<string>('');
   const changeValue = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +23,8 @@ function TextField({
       onEnter?.(value);
     }
   };
+
+  const register = { ...registerProps.register(label, registerProps.option) };
 
   return (
     <S.styledInput
