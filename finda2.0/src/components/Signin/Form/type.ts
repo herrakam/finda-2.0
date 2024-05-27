@@ -1,16 +1,15 @@
-import { UseFormRegister, FieldValues, RegisterOptions } from 'react-hook-form';
+import { TextFieldProps } from '@components/common/TextField/type';
+import { FieldErrors, FieldValues, Path } from 'react-hook-form';
 
-export interface FormInfo {
+export interface SignInFormInfo<T extends FieldValues>
+  extends TextFieldProps<T> {
+  label: Path<T>;
+  errors?: FieldErrors<T>;
   title: string;
-  placeholder: string;
-  label: string;
-  registerProps: {
-    register: UseFormRegister<FieldValues>;
-    option: RegisterOptions;
-  };
 }
 export interface FormInput {
-  email: string;
+  eMail: string;
   password: string;
+  rePassword: string;
   nickname: string;
 }

@@ -1,16 +1,25 @@
 import TextField from '@components/common/TextField/Index';
 import * as S from '@components/Signin/Form/Index.style';
-import { FormInfo } from './type';
+import { FormInput, SignInFormInfo } from './type';
 import Btn from '@components/common/Button/Index';
 import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 
 function SignInForm() {
-  const { handleSubmit, register } = useForm<FieldValues>();
+  const { handleSubmit, register } = useForm<FormInput>({
+    mode: 'onChange',
+    defaultValues: {
+      eMail: '',
+      password: '',
+      rePassword: '',
+      nickname: '',
+    },
+  });
 
-  ('^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'); // 이메일 validation
+  const emailPattern = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/; //계정@도메인.최상위도메인' 형식의 데이터
+  const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
 
   const onSubmit: SubmitHandler<FieldValues> = data => console.log(data);
-  const formInfos: FormInfo[] = [
+  const formInfos: SignInFormInfo<FormInput>[] = [
     {
       label: 'eMail',
       title: '이메일',
@@ -18,7 +27,11 @@ function SignInForm() {
       registerProps: {
         register: register,
         option: {
-          pattern: /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/,
+          required: true,
+          pattern: emailPattern,
+          validate: {
+            messages: v => !v && ['test', 'test2'],
+          },
         },
       },
     },
@@ -29,8 +42,15 @@ function SignInForm() {
       registerProps: {
         register: register,
         option: {
-          pattern:
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/,
+          required: true,
+          minLength: {
+            value: 8,
+            message: '8글자 이상 입력해주세요',
+          },
+          pattern: {
+            value: passwordPattern,
+            message: '가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자',
+          },
         },
       },
     },
@@ -41,8 +61,7 @@ function SignInForm() {
       registerProps: {
         register: register,
         option: {
-          pattern:
-            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/,
+          validate: {},
         },
       },
     },
@@ -53,6 +72,7 @@ function SignInForm() {
       registerProps: {
         register: register,
         option: {
+          required: true,
           pattern:
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/,
         },
@@ -60,7 +80,7 @@ function SignInForm() {
     },
   ];
 
-  const inputs = formInfos.map((info: FormInfo) => (
+  const inputs = formInfos.map((info: SignInFormInfo<FormInput>) => (
     <S.InputContainer key={info.label}>
       <S.InputTitle>{info.title}</S.InputTitle>
       <TextField fontSize="Regular" {...info} />
