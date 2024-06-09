@@ -41,3 +41,8 @@ export const BtnContainer = styled.div`
   margin-top: 40px;
   margin-bottom: 20vh;
 `;
+
+export const ErrorMessage = styled.span`
+  ${({ theme }) => theme.typography.Light};
+  color: ${({ theme }) => theme.pallete.warning};
+`;

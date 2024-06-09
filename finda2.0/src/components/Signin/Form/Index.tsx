@@ -101,7 +101,7 @@ function SignInForm() {
               value={value}
               onChange={onChange}
             />
-            <span>{error?.message}</span>
+            <S.ErrorMessage>{error?.message}</S.ErrorMessage>
           </>
         )}
       />
