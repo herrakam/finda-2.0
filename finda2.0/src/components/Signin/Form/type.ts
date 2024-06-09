@@ -1,11 +1,11 @@
-import { TextFieldProps } from '@components/common/TextField/type';
-import { FieldErrors, FieldValues, Path } from 'react-hook-form';
+import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
-export interface SignInFormInfo<T extends FieldValues>
-  extends TextFieldProps<T> {
+export interface SignInFormInfo<T extends FieldValues> {
   label: Path<T>;
-  errors?: FieldErrors<T>;
   title: string;
+  rules: RegisterOptions<T>;
+  placeholder: string;
+  type?: string;
 }
 export interface FormInput {
   eMail: string;

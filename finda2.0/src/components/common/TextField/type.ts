@@ -1,21 +1,15 @@
-import {
-  FieldValues,
-  Path,
-  RegisterOptions,
-  UseFormRegister,
-} from 'react-hook-form';
+import { RefCallBack } from 'react-hook-form';
 
-export interface TextFieldProps<T extends FieldValues> {
-  onChange?: (value: string) => void;
+export interface TextFieldProps {
+  onChange?: (...event: any[]) => void;
   onEnter?: (value: string) => void;
   fontSize?: FontSizeType;
   width?: string;
   placeholder?: string;
-  label: Path<T>;
-  registerProps: {
-    register: UseFormRegister<T>;
-    option: RegisterOptions;
-  };
+  label: string;
+  type?: string;
+  ref: RefCallBack;
+  value: string;
 }
 
 export type FontSizeType =
