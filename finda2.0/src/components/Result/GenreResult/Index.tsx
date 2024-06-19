@@ -6,6 +6,7 @@ import { GenreResultPropsType } from './type';
 import { PAGECONTENTCOUNT } from '@/assets/static';
 import Poster from '@components/common/Poster/Index';
 import { NormalizedPosterDataType } from '@/utils/type';
+import NoResult from '../NoResult/Index';
 
 function GenreResult({
   setShowedData,
@@ -14,6 +15,7 @@ function GenreResult({
   genreNumArr,
   isAbled,
   setIsAbled,
+  searchInfo,
 }: GenreResultPropsType) {
   const [curPage, setCurPage] = useState<number>(1);
 
@@ -41,6 +43,7 @@ function GenreResult({
       setShowedData([...data.resultData.slice(0, PAGECONTENTCOUNT)]);
       setContentCount(data.countContent);
       setIsAbled(false);
+      console.log(data.resultData.slice(0, PAGECONTENTCOUNT));
     }
   }, [data]);
 
@@ -53,6 +56,12 @@ function GenreResult({
   const Contents = showedData.map((content: NormalizedPosterDataType) => (
     <Poster key={content.title} title={content.title} src={content.poster} />
   ));
+  if (!showedData.length)
+    return (
+      <S.ResultContatiner>
+        <NoResult searchInfo={searchInfo} isGenre />
+      </S.ResultContatiner>
+    );
 
   return (
     <S.ResultContatiner>
