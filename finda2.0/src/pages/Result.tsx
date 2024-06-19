@@ -2,24 +2,12 @@ import TitleResult from '@components/Result/TitleResult/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 import { useParams } from 'react-router-dom';
 import { useState, useRef, useEffect, Suspense } from 'react';
-import {
-  GenreType,
-  NormalizedPosterDataType,
-  SearchResultPropsType,
-} from '@/utils/type';
+import { NormalizedPosterDataType, SearchResultPropsType } from '@/utils/type';
 import * as S from '@components/Result/TitleResult/Index.style';
 import GenreResult from '@components/Result/GenreResult/Index';
-import { GENREINFO } from '@/assets/static';
 import { GenreResultPropsType } from '@components/Result/GenreResult/type';
 import Loading from '@components/Loading/Index';
-
-const getGenreText = (genreArr: number[]) => {
-  const genreStringArr = genreArr.map(
-    (genreNum: number) =>
-      GENREINFO.find((info: GenreType) => info.id === genreNum)?.translation,
-  );
-  return genreStringArr.join(',');
-};
+import { getGenreTextFromArr } from '@/utils/util';
 
 function Result() {
   const param = useParams().searchParam;
@@ -34,7 +22,7 @@ function Result() {
       : true;
   const genreNumArr = isGenre ? param!.split(',').map(Number) : [];
   const resultTitleText: string = isGenre
-    ? `장르가 "${getGenreText(genreNumArr)}"인 영화`
+    ? `장르가 "${getGenreTextFromArr(genreNumArr)}"인 영화`
     : searchInfo
     ? `"${searchInfo}" 검색 결과`
     : 'FINDA에서 제공하는 영화들';
