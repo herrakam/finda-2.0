@@ -21,6 +21,7 @@ function Movie() {
   const [genreArr, setGenreArr] = useState<number[]>([]);
   const [commentInput, setCommentInput] = useState<string>('');
   const [similarInfo, setSimilarInfo] = useState<RankInfoType[]>([]);
+  const queryClient = useQueryClient();
 
   const updateSimilarInfo = (info: RankInfoType[]) => {
     setSimilarInfo([...info]);
@@ -31,7 +32,7 @@ function Movie() {
   const resetComment = () => {
     setCommentInput('');
   };
-  const queryClient = useQueryClient();
+
   const sliceFilteredData = (data: NormalizedPosterDataType[]) => {
     return data
       .filter((data: NormalizedPosterDataType) => data.title !== contentTitle)
