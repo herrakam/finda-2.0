@@ -35,15 +35,13 @@ function GenreResult({
     }
   };
 
-  const { data, isLoading, error } = getFirstGenreResultInfo(genreNumArr);
-  if (isLoading) <>로딩중</>;
-  if (error) <>에러발생!!!</>;
+  const { data } = getFirstGenreResultInfo(genreNumArr);
   useEffect(() => {
     if (data) {
+      console.log(data.resultData.slice(0, PAGECONTENTCOUNT));
       setShowedData([...data.resultData.slice(0, PAGECONTENTCOUNT)]);
       setContentCount(data.countContent);
       setIsAbled(false);
-      console.log(data.resultData.slice(0, PAGECONTENTCOUNT));
     }
   }, [data]);
 
@@ -52,6 +50,13 @@ function GenreResult({
       getNextDataWithGenre();
     }
   }, [isAbled]);
+
+  useEffect(() => {
+    if (data) {
+      setShowedData([...data.resultData.slice(0, PAGECONTENTCOUNT)]);
+      setContentCount(data.countContent);
+    }
+  }, []);
 
   const Contents = showedData.map((content: NormalizedPosterDataType) => (
     <Poster key={content.title} title={content.title} src={content.poster} />
