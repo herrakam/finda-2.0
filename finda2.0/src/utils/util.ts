@@ -52,3 +52,10 @@ export const extractMonthAndDay = (date: Date) => {
 
   return `${month}-${day}`;
 };
+export const getGenreTextFromArr = (genreArr: number[]) => {
+  const genreStringArr = genreArr.map(
+    (genreNum: number) =>
+      GENREINFO.find((info: GenreType) => info.id === genreNum)?.translation,
+  );
+  return genreStringArr.join(',');
+};
