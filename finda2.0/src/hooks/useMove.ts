@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface gotoPageProps {
   url?: 'result' | 'movie';
-  detail: string;
+  detail?: string;
 }
 
 export const useMove = () => {
