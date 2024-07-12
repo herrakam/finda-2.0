@@ -19,11 +19,10 @@ function GenreResult({
 }: GenreResultPropsType) {
   const [curPage, setCurPage] = useState<number>(1);
 
-  const getFirstGenreResultInfo = (genreNumArr: number[]) => {
-    return useQuery(['getResultQueryKey', genreNumArr], () => {
+  const getFirstGenreResultInfo = (genreNumArr: number[]) =>
+    useQuery(['getResultQueryKey', genreNumArr], () => {
       return genreNumArr && getSimilarMovies(genreNumArr);
     });
-  };
 
   const getNextDataWithGenre = () => {
     if (isAbled) {
