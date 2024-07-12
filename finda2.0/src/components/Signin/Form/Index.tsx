@@ -7,7 +7,11 @@ import {
   SubmitHandler,
   FieldValues,
   Controller,
+  SubmitErrorHandler,
 } from 'react-hook-form';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/Firebase';
+import { useMove } from '@/hooks/useMove';
 
 const emailPattern = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/; //계정@도메인.최상위도메인' 형식의 데이터
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
@@ -22,7 +26,7 @@ function SignInForm() {
       nickname: '',
     },
   });
-
+  const goToPage = useMove();
   const passwordRules = {
     required: true,
     pattern: {
@@ -51,7 +55,29 @@ function SignInForm() {
     },
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = data => console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = data => {
+    console.log(data);
+    // signUp(data.email, data.password);
+  };
+  const onSubmitError: SubmitErrorHandler<FieldValues> = error => {
+    const errorObject = error[Object.keys(error)[0]];
+    if (errorObject!.message === '') {
+      window.alert('입력칸을 전부 체워주세요');
+    } else {
+      window.alert(errorObject!.message);
+    }
+  };
+
+  const signUp = async (id: string, password: string) => {
+    await createUserWithEmailAndPassword(auth, id, password)
+      .then(() => {
+        window.alert('성공적으로 가입되었습니다!');
+        goToPage({});
+      })
+      .catch(e => {
+        throw new Error(e);
+      });
+  };
 
   const formInfos: SignInFormInfo<FormInput>[] = [
     {
@@ -89,15 +115,11 @@ function SignInForm() {
         name={info.label}
         control={control}
         rules={info.rules}
-        render={({
-          fieldState: { error },
-          field: { ref, value, onChange },
-        }) => (
+        render={({ fieldState: { error }, field: { value, onChange } }) => (
           <>
             <TextField
               fontSize="Regular"
               {...info}
-              ref={ref}
               value={value}
               onChange={onChange}
             />
@@ -108,15 +130,15 @@ function SignInForm() {
     </S.InputContainer>
   ));
 
-  const mockBtnEvent = () => window.alert('버튼 클릭됨');
-
   return (
     <S.FormContainer>
       <S.FormTitle>SIGN IN</S.FormTitle>
-      <S.SignInForm onSubmit={handleSubmit(onSubmit)}>{inputs}</S.SignInForm>
-      <S.BtnContainer>
-        <Btn text="회원가입" clickEvent={mockBtnEvent} />
-      </S.BtnContainer>
+      <S.SignInForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
+        {inputs}
+        <S.BtnContainer>
+          <Btn text="회원가입" type="submit" />
+        </S.BtnContainer>
+      </S.SignInForm>
     </S.FormContainer>
   );
 }
