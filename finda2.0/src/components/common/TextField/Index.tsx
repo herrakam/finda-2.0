@@ -9,7 +9,6 @@ function TextField({
   fontSize = 'Regular',
   width,
   type,
-  ref,
   value,
 }: TextFieldProps) {
   const pressEnter = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -29,7 +28,6 @@ function TextField({
       fontSize={fontSize}
       width={width}
       onChange={onChange}
-      ref={ref}
     />
   );
 }

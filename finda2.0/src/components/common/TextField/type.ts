@@ -1,5 +1,3 @@
-import { RefCallBack } from 'react-hook-form';
-
 export interface TextFieldProps {
   onChange?: (...event: any[]) => void;
   onEnter?: (value: string) => void;
@@ -8,7 +6,6 @@ export interface TextFieldProps {
   placeholder?: string;
   label: string;
   type?: string;
-  ref: RefCallBack;
   value: string;
 }
 
