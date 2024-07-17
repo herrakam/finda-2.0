@@ -12,12 +12,13 @@ import {
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/Firebase';
 import { useMove } from '@/hooks/useMove';
+import { useRef } from 'react';
 
 const emailPattern = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/; //계정@도메인.최상위도메인' 형식의 데이터
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
 
 function SignInForm() {
-  const { control, handleSubmit } = useForm<FormInput>({
+  const { control, handleSubmit, watch } = useForm<FormInput>({
     mode: 'onChange',
     defaultValues: {
       eMail: '',
@@ -27,6 +28,10 @@ function SignInForm() {
     },
   });
   const goToPage = useMove();
+
+  const passwordRef = useRef<string>('');
+  passwordRef.current = watch('password');
+
   const passwordRules = {
     required: true,
     pattern: {
@@ -45,7 +50,8 @@ function SignInForm() {
   };
   const rePasswordRules = {
     required: true,
-    min: { value: 8, message: '8 미만의 값을 입력할 수 없습니다' },
+    validate: (value: string) =>
+      value === passwordRef.current || '비밀번호가 일치하지 않습니다',
   };
   const nicknameRules = {
     required: true,
