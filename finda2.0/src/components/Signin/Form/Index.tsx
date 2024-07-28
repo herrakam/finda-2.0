@@ -9,10 +9,16 @@ import {
   Controller,
   SubmitErrorHandler,
 } from 'react-hook-form';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/Firebase';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { auth, db } from '@/Firebase';
 import { useMove } from '@/hooks/useMove';
 import { useRef } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { BtnsContainer, LoginBtn } from '@components/Login/Index.style';
+import { LoginBtnType } from '@components/Login/type';
+import { FcGoogle } from 'react-icons/fc';
+import { LOGINICONSIZE } from '@/assets/static';
+import { BsGithub } from 'react-icons/bs';
 
 const emailPattern = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/; //계정@도메인.최상위도메인' 형식의 데이터
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
@@ -63,18 +69,19 @@ function SignInForm() {
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
     console.log(data);
-    // signUp(data.email, data.password);
+    signUp(data.eMail, data.password);
   };
   const onSubmitError: SubmitErrorHandler<FieldValues> = error => {
     const errorObject = error[Object.keys(error)[0]];
     if (errorObject!.message === '') {
-      window.alert('입력칸을 전부 체워주세요');
+      window.alert('입력칸을 전부 채워주세요');
     } else {
       window.alert(errorObject!.message);
     }
   };
 
   const signUp = async (id: string, password: string) => {
+    console.log(id, password);
     await createUserWithEmailAndPassword(auth, id, password)
       .then(() => {
         window.alert('성공적으로 가입되었습니다!');
@@ -84,6 +91,39 @@ function SignInForm() {
         throw new Error(e);
       });
   };
+
+  const checkNickNameExists = async (nickname: string) => {
+    const nicknameSnap = await getDocs(
+      query(collection(db, 'users'), where('NickName', '==', nickname)),
+    );
+    return nicknameSnap.empty ? undefined : '이미 사용 중인 닉네임입니다';
+  };
+
+  const checkIdExists = async (id: string) => {
+    getAuth()
+      .getUserByEmail(id)
+      .then(userRecord => {
+        // See the UserRecord reference doc for the contents of userRecord.
+        console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
+      })
+      .catch(error => {
+        console.log(error);
+        window.alert('이미 사용중인 이메일입니다.');
+      });
+  };
+
+  const signInBtnInfo: LoginBtnType[] = [
+    {
+      label: 'google',
+      clickEvent: () => {},
+      icon: <FcGoogle size={LOGINICONSIZE} />,
+    },
+    {
+      label: 'github',
+      clickEvent: () => {},
+      icon: <BsGithub size={LOGINICONSIZE} />,
+    },
+  ];
 
   const formInfos: SignInFormInfo<FormInput>[] = [
     {
@@ -113,6 +153,18 @@ function SignInForm() {
       rules: nicknameRules,
     },
   ];
+
+  const EasySignInBtns = signInBtnInfo.map((btnInfo: LoginBtnType) => (
+    <LoginBtn
+      onClick={() => {
+        btnInfo.clickEvent(btnInfo.label);
+      }}
+      label={btnInfo.label}
+      key={btnInfo.label}
+    >
+      {btnInfo.icon}
+    </LoginBtn>
+  ));
 
   const inputs = formInfos.map((info: SignInFormInfo<FormInput>) => (
     <S.InputContainer key={info.label}>
@@ -145,6 +197,8 @@ function SignInForm() {
           <Btn text="회원가입" type="submit" />
         </S.BtnContainer>
       </S.SignInForm>
+      <S.AuthLoginTitle>간편 회원가입</S.AuthLoginTitle>
+      <BtnsContainer>{EasySignInBtns}</BtnsContainer>
     </S.FormContainer>
   );
 }

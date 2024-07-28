@@ -9,6 +9,7 @@ export const FormContainer = styled.div`
   @media screen and (${viewSize.mobile}) {
     width: 60%;
   }
+  margin-bottom: 20vh;
 `;
 
 export const SignInForm = styled.form`
@@ -39,10 +40,15 @@ export const InputContainer = styled.div`
 export const BtnContainer = styled.div`
   ${mixin.flexbox({ dir: 'column', vertical: 'center' })};
   margin-top: 40px;
-  margin-bottom: 20vh;
+  margin-bottom: 40px;
 `;
 
 export const ErrorMessage = styled.span`
   ${({ theme }) => theme.typography.Light};
   color: ${({ theme }) => theme.pallete.warning};
+`;
+
+export const AuthLoginTitle = styled.span`
+  ${({ theme }) => theme.typography.Regular}
+  color:${({ theme }) => theme.pallete.normalFont}
 `;
