@@ -1,6 +1,7 @@
 import {
   NormalizedDetailType,
   NormalizedPosterDataType,
+  UserInfoType,
   commentDataOutType,
   commentDataType,
 } from './type';
@@ -142,4 +143,9 @@ export const postComments = async (movieTitle: string, comment: string) => {
   await setDoc(commentsRef, sampleComment, {
     merge: true,
   });
+};
+
+export const SignInUser = async (userInfo: UserInfoType) => {
+  const userRef = doc(db, 'users', userInfo.uid);
+  await setDoc(userRef, { ...userInfo, MovieLog: [], MyMovie: [] });
 };

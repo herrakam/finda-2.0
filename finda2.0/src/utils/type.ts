@@ -103,3 +103,10 @@ export interface commentDataOutType {
   createdTime: Timestamp;
   nickname: string;
 }
+
+export interface UserInfoType {
+  uid: string;
+  eMail: string;
+  password: string;
+  nickName: string;
+}
