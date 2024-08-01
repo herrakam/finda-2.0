@@ -48,7 +48,19 @@ export const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.pallete.warning};
 `;
 
-export const AuthLoginTitle = styled.span`
-  ${({ theme }) => theme.typography.Regular}
-  color:${({ theme }) => theme.pallete.normalFont}
+export const EmailText = styled.div`
+  background: ${({ theme }) => theme.pallete.white};
+  padding: 8px;
+  border-radius: 5px;
+  border-style: solid;
+  :focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.pallete.focus};
+    background: ${({ theme }) => theme.pallete.grey6};
+  }
+  @media screen and (${viewSize.mobile}) {
+    ${({ theme }) => theme.typography.Thin};
+  }
+  ${({ theme }) => theme.typography.Regular};
+  margin-bottom: 10px;
 `;

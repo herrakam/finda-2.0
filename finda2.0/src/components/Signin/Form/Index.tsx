@@ -28,22 +28,15 @@ import { LOGINICONSIZE } from '@/assets/static';
 import { BsGithub } from 'react-icons/bs';
 import { SignInUser } from '@/utils/API';
 
-const emailPattern = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/; //계정@도메인.최상위도메인' 형식의 데이터
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
 
 function SignInForm() {
-  const { control, handleSubmit, watch, setValue } = useForm<FormInput>({
+  const { control, handleSubmit, watch } = useForm<FormInput>({
     mode: 'onChange',
-    defaultValues: {
-      eMail: '',
-      password: '',
-      rePassword: '',
-      nickname: '',
-    },
+    defaultValues: { password: '', rePassword: '', nickname: '' },
   });
   const goToPage = useMove();
   const [isAuthSuccess, setIsAuthSuccess] = useState<boolean>(false);
-
   const passwordRef = useRef<string>('');
   passwordRef.current = watch('password');
 
@@ -56,13 +49,6 @@ function SignInForm() {
     minLength: { value: 8, message: '8글자 이상이어야 합니다' },
   };
 
-  const eMailRules = {
-    required: true,
-    pattern: {
-      value: emailPattern,
-      message: '유효하지 않은 이메일 입니다',
-    },
-  };
   const rePasswordRules = {
     required: true,
     validate: (value: string) =>
@@ -70,10 +56,7 @@ function SignInForm() {
   };
   const nicknameRules = {
     required: true,
-    pattern: {
-      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,}$/,
-      message: '유효하지 않은 닉네임입니다.',
-    },
+    validate: (value: string) => checkNickNameExists(value),
   };
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
@@ -98,7 +81,7 @@ function SignInForm() {
     }
     const auth = getAuth();
     try {
-      const data = await signInWithPopup(auth, provider as AuthProvider);
+      await signInWithPopup(auth, provider as AuthProvider);
       setIsAuthSuccess(true);
     } catch (error) {}
   };
@@ -128,10 +111,10 @@ function SignInForm() {
     const nicknameSnap = await getDocs(
       query(collection(db, 'users'), where('NickName', '==', nickname)),
     );
-    return nicknameSnap.empty ? undefined : '이미 사용 중인 닉네임입니다';
+    return nicknameSnap.empty
+      ? '사용 가능한 닉네임입니다.'
+      : '이미 사용 중인 닉네임입니다';
   };
-
-  const checkIdExists = async (id: string) => {};
 
   const signInBtnInfo: LoginBtnType[] = [
     {
@@ -151,12 +134,6 @@ function SignInForm() {
   ];
 
   const formInfos: SignInFormInfo<FormInput>[] = [
-    {
-      label: 'eMail',
-      title: '이메일',
-      placeholder: '이메일을 입력해주세요',
-      rules: eMailRules,
-    },
     {
       label: 'password',
       title: '비밀번호',
@@ -218,8 +195,14 @@ function SignInForm() {
   return (
     <S.FormContainer>
       <S.FormTitle>SIGN IN</S.FormTitle>
-      <BtnsContainer>{EasySignInBtns}</BtnsContainer>
+      {!isAuthSuccess && <BtnsContainer>{EasySignInBtns}</BtnsContainer>}
       <S.SignInForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
+        {isAuthSuccess && (
+          <S.InputContainer>
+            <S.InputTitle>이메일</S.InputTitle>
+            <S.EmailText>{getAuth().currentUser?.email}</S.EmailText>
+          </S.InputContainer>
+        )}
         {inputs}
         <S.BtnContainer>
           <Btn text="회원가입" type="submit" />
