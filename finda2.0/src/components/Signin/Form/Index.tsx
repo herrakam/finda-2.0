@@ -9,22 +9,30 @@ import {
   Controller,
   SubmitErrorHandler,
 } from 'react-hook-form';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import {
+  AuthProvider,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithPopup,
+} from 'firebase/auth';
 import { auth, db } from '@/Firebase';
 import { useMove } from '@/hooks/useMove';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { BtnsContainer, LoginBtn } from '@components/Login/Index.style';
-import { LoginBtnType } from '@components/Login/type';
+import { LoginBtnType, LoginClickEventType } from '@components/Login/type';
 import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
 import { BsGithub } from 'react-icons/bs';
+import { SignInUser } from '@/utils/API';
 
 const emailPattern = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/; //계정@도메인.최상위도메인' 형식의 데이터
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
 
 function SignInForm() {
-  const { control, handleSubmit, watch } = useForm<FormInput>({
+  const { control, handleSubmit, watch, setValue } = useForm<FormInput>({
     mode: 'onChange',
     defaultValues: {
       eMail: '',
@@ -34,6 +42,7 @@ function SignInForm() {
     },
   });
   const goToPage = useMove();
+  const [isAuthSuccess, setIsAuthSuccess] = useState<boolean>(false);
 
   const passwordRef = useRef<string>('');
   passwordRef.current = watch('password');
@@ -69,7 +78,7 @@ function SignInForm() {
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
     console.log(data);
-    signUp(data.eMail, data.password);
+    signUp(data.eMail, data.password, data.nickname);
   };
   const onSubmitError: SubmitErrorHandler<FieldValues> = error => {
     const errorObject = error[Object.keys(error)[0]];
@@ -80,9 +89,32 @@ function SignInForm() {
     }
   };
 
-  const signUp = async (id: string, password: string) => {
-    console.log(id, password);
-    await createUserWithEmailAndPassword(auth, id, password)
+  const handleAuthSignIn: LoginClickEventType = async loginType => {
+    let provider;
+    if (loginType === 'google') {
+      provider = new GoogleAuthProvider();
+    } else if (loginType === 'github') {
+      provider = new GithubAuthProvider();
+    }
+    const auth = getAuth();
+    try {
+      const data = await signInWithPopup(auth, provider as AuthProvider);
+      setIsAuthSuccess(true);
+    } catch (error) {}
+  };
+
+  const signUp = async (eMail: string, password: string, nickname: string) => {
+    console.log(eMail, password);
+    await createUserWithEmailAndPassword(auth, eMail, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        SignInUser({
+          uid: user.uid,
+          eMail: eMail,
+          password: password,
+          nickName: nickname,
+        });
+      })
       .then(() => {
         window.alert('성공적으로 가입되었습니다!');
         goToPage({});
@@ -99,28 +131,21 @@ function SignInForm() {
     return nicknameSnap.empty ? undefined : '이미 사용 중인 닉네임입니다';
   };
 
-  const checkIdExists = async (id: string) => {
-    getAuth()
-      .getUserByEmail(id)
-      .then(userRecord => {
-        // See the UserRecord reference doc for the contents of userRecord.
-        console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
-      })
-      .catch(error => {
-        console.log(error);
-        window.alert('이미 사용중인 이메일입니다.');
-      });
-  };
+  const checkIdExists = async (id: string) => {};
 
   const signInBtnInfo: LoginBtnType[] = [
     {
       label: 'google',
-      clickEvent: () => {},
+      clickEvent: () => {
+        handleAuthSignIn('google');
+      },
       icon: <FcGoogle size={LOGINICONSIZE} />,
     },
     {
       label: 'github',
-      clickEvent: () => {},
+      clickEvent: () => {
+        handleAuthSignIn('github');
+      },
       icon: <BsGithub size={LOGINICONSIZE} />,
     },
   ];
@@ -166,39 +191,40 @@ function SignInForm() {
     </LoginBtn>
   ));
 
-  const inputs = formInfos.map((info: SignInFormInfo<FormInput>) => (
-    <S.InputContainer key={info.label}>
-      <S.InputTitle>{info.title}</S.InputTitle>
-      <Controller
-        name={info.label}
-        control={control}
-        rules={info.rules}
-        render={({ fieldState: { error }, field: { value, onChange } }) => (
-          <>
-            <TextField
-              fontSize="Regular"
-              {...info}
-              value={value}
-              onChange={onChange}
-            />
-            <S.ErrorMessage>{error?.message}</S.ErrorMessage>
-          </>
-        )}
-      />
-    </S.InputContainer>
-  ));
+  const inputs =
+    isAuthSuccess &&
+    formInfos.map((info: SignInFormInfo<FormInput>) => (
+      <S.InputContainer key={info.label}>
+        <S.InputTitle>{info.title}</S.InputTitle>
+        <Controller
+          name={info.label}
+          control={control}
+          rules={info.rules}
+          render={({ fieldState: { error }, field: { value, onChange } }) => (
+            <>
+              <TextField
+                fontSize="Regular"
+                {...info}
+                value={value}
+                onChange={onChange}
+              />
+              <S.ErrorMessage>{error?.message}</S.ErrorMessage>
+            </>
+          )}
+        />
+      </S.InputContainer>
+    ));
 
   return (
     <S.FormContainer>
       <S.FormTitle>SIGN IN</S.FormTitle>
+      <BtnsContainer>{EasySignInBtns}</BtnsContainer>
       <S.SignInForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
         {inputs}
         <S.BtnContainer>
           <Btn text="회원가입" type="submit" />
         </S.BtnContainer>
       </S.SignInForm>
-      <S.AuthLoginTitle>간편 회원가입</S.AuthLoginTitle>
-      <BtnsContainer>{EasySignInBtns}</BtnsContainer>
     </S.FormContainer>
   );
 }
