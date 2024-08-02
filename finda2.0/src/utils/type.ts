@@ -94,14 +94,14 @@ export interface commentDataType {
   title: string;
   comment: string;
   createdTime: Date;
-  nickname: string;
+  nickName: string;
 }
 
 export interface commentDataOutType {
   title: string;
   comment: string;
   createdTime: Timestamp;
-  nickname: string;
+  nickName: string;
 }
 
 export interface UserInfoType {

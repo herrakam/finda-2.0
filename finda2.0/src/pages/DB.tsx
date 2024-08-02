@@ -23,7 +23,7 @@ function DB() {
     const sampleComment: commentDataType = {
       comment: '',
       title: movieTitle,
-      nickname: 'admin',
+      nickName: 'admin',
       createdTime: new Date(),
     };
     const commentsRef = doc(collection(db, 'movies', movieTitle, 'comments'));

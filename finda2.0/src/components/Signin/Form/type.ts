@@ -11,5 +11,5 @@ export interface FormInput {
   eMail: string;
   password: string;
   rePassword: string;
-  nickname: string;
+  nickName: string;
 }
