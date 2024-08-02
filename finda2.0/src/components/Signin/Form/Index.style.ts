@@ -43,6 +43,11 @@ export const BtnContainer = styled.div`
   margin-bottom: 40px;
 `;
 
+export const BtnText = styled.span`
+  ${({ theme }) => theme.typography.Regular};
+  color: ${({ theme }) => theme.pallete.normalFont};
+`;
+
 export const ErrorMessage = styled.span`
   ${({ theme }) => theme.typography.Light};
   color: ${({ theme }) => theme.pallete.warning};

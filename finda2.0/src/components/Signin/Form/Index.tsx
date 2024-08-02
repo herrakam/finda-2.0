@@ -195,19 +195,24 @@ function SignInForm() {
   return (
     <S.FormContainer>
       <S.FormTitle>SIGN IN</S.FormTitle>
-      {!isAuthSuccess && <BtnsContainer>{EasySignInBtns}</BtnsContainer>}
-      <S.SignInForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
-        {isAuthSuccess && (
+      {!isAuthSuccess && (
+        <>
+          <S.BtnText>아이디로 사용할 이메일 계정을 선택해주세요</S.BtnText>
+          <BtnsContainer>{EasySignInBtns}</BtnsContainer>
+        </>
+      )}
+      {isAuthSuccess && (
+        <S.SignInForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
           <S.InputContainer>
             <S.InputTitle>이메일</S.InputTitle>
             <S.EmailText>{getAuth().currentUser?.email}</S.EmailText>
           </S.InputContainer>
-        )}
-        {inputs}
-        <S.BtnContainer>
-          <Btn text="회원가입" type="submit" />
-        </S.BtnContainer>
-      </S.SignInForm>
+          {inputs}
+          <S.BtnContainer>
+            <Btn text="회원가입" type="submit" />
+          </S.BtnContainer>
+        </S.SignInForm>
+      )}
     </S.FormContainer>
   );
 }
