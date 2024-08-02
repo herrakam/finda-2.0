@@ -9,7 +9,11 @@ export const useMove = () => {
   const navigate = useNavigate();
 
   const gotoPage = ({ url, detail }: gotoPageProps) => {
-    navigate(`/${url}/${detail}`);
+    if (url === undefined) {
+      navigate('/');
+    } else {
+      navigate(`/${url}/${detail}`);
+    }
   };
 
   return gotoPage;
