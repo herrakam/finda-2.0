@@ -13,11 +13,11 @@ import {
   AuthProvider,
   GithubAuthProvider,
   GoogleAuthProvider,
-  createUserWithEmailAndPassword,
+  UserInfo,
   getAuth,
   signInWithPopup,
 } from 'firebase/auth';
-import { auth, db } from '@/Firebase';
+import { db } from '@/Firebase';
 import { useMove } from '@/hooks/useMove';
 import { useRef, useState } from 'react';
 import { collection, getDocs, query, where } from 'firebase/firestore';
@@ -62,14 +62,17 @@ function SignInForm() {
       message:
         '2자 이상 16자 이하, 영어 또는 숫자 또는 한글만 가능합니다. 한글 초성, 모음은 불가능합니다.',
     },
-    validate: (value: string) => checkNickNameExists(value),
+    validate: (value: string) =>
+      checkNickNameExists(value) || '이미 있는 닉네임입니다.',
   };
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
-    console.log(data);
-    signUp(data.eMail, data.password, data.nickname);
+    const { email, uid } = getAuth().currentUser as UserInfo;
+    signUp(data.password, data.nickname, email as string, uid as string);
   };
+
   const onSubmitError: SubmitErrorHandler<FieldValues> = error => {
+    console.log(error);
     const errorObject = error[Object.keys(error)[0]];
     if (errorObject!.message === '') {
       window.alert('입력칸을 전부 채워주세요');
@@ -86,24 +89,27 @@ function SignInForm() {
       provider = new GithubAuthProvider();
     }
     const auth = getAuth();
-    try {
-      await signInWithPopup(auth, provider as AuthProvider);
-      setIsAuthSuccess(true);
-    } catch (error) {}
+    await signInWithPopup(auth, provider as AuthProvider)
+      .then(() => {
+        setIsAuthSuccess(true);
+      })
+      .catch(e => {
+        throw new Error(e);
+      });
   };
 
-  const signUp = async (eMail: string, password: string, nickname: string) => {
-    console.log(eMail, password);
-    await createUserWithEmailAndPassword(auth, eMail, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        SignInUser({
-          uid: user.uid,
-          eMail: eMail,
-          password: password,
-          nickName: nickname,
-        });
-      })
+  const signUp = async (
+    eMail: string,
+    password: string,
+    nickname: string,
+    uid: string,
+  ) => {
+    SignInUser({
+      uid: uid,
+      eMail: eMail,
+      password: password,
+      nickName: nickname,
+    })
       .then(() => {
         window.alert('성공적으로 가입되었습니다!');
         goToPage({});
@@ -117,7 +123,7 @@ function SignInForm() {
     const nicknameSnap = await getDocs(
       query(collection(db, 'users'), where('NickName', '==', nickname)),
     );
-    return nicknameSnap.empty ? '' : '이미 사용 중인 닉네임입니다';
+    return nicknameSnap.empty ? true : false;
   };
 
   const signInBtnInfo: LoginBtnType[] = [
