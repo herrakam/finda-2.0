@@ -29,6 +29,7 @@ import { BsGithub } from 'react-icons/bs';
 import { SignInUser } from '@/utils/API';
 
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
+const nickNamePattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
 
 function SignInForm() {
   const { control, handleSubmit, watch } = useForm<FormInput>({
@@ -56,6 +57,11 @@ function SignInForm() {
   };
   const nicknameRules = {
     required: true,
+    pattern: {
+      value: nickNamePattern,
+      message:
+        '2자 이상 16자 이하, 영어 또는 숫자 또는 한글만 가능합니다. 한글 초성, 모음은 불가능합니다.',
+    },
     validate: (value: string) => checkNickNameExists(value),
   };
 
@@ -111,9 +117,7 @@ function SignInForm() {
     const nicknameSnap = await getDocs(
       query(collection(db, 'users'), where('NickName', '==', nickname)),
     );
-    return nicknameSnap.empty
-      ? '사용 가능한 닉네임입니다.'
-      : '이미 사용 중인 닉네임입니다';
+    return nicknameSnap.empty ? '' : '이미 사용 중인 닉네임입니다';
   };
 
   const signInBtnInfo: LoginBtnType[] = [
