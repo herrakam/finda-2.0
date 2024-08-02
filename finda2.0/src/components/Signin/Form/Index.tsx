@@ -17,16 +17,15 @@ import {
   getAuth,
   signInWithPopup,
 } from 'firebase/auth';
-import { db } from '@/Firebase';
 import { useMove } from '@/hooks/useMove';
 import { useRef, useState } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { BtnsContainer, LoginBtn } from '@components/Login/Index.style';
 import { LoginBtnType, LoginClickEventType } from '@components/Login/type';
 import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
 import { BsGithub } from 'react-icons/bs';
-import { SignInUser } from '@/utils/API';
+import { SignInUser, checknickNameExists } from '@/utils/API';
+import { UserInfoType } from '@/utils/type';
 
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
 const nickNamePattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
@@ -34,7 +33,7 @@ const nickNamePattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
 function SignInForm() {
   const { control, handleSubmit, watch } = useForm<FormInput>({
     mode: 'onChange',
-    defaultValues: { password: '', rePassword: '', nickname: '' },
+    defaultValues: { password: '', rePassword: '', nickName: '' },
   });
   const goToPage = useMove();
   const [isAuthSuccess, setIsAuthSuccess] = useState<boolean>(false);
@@ -55,7 +54,8 @@ function SignInForm() {
     validate: (value: string) =>
       value === passwordRef.current || '비밀번호가 일치하지 않습니다',
   };
-  const nicknameRules = {
+
+  const nickNameRules = {
     required: true,
     pattern: {
       value: nickNamePattern,
@@ -63,12 +63,17 @@ function SignInForm() {
         '2자 이상 16자 이하, 영어 또는 숫자 또는 한글만 가능합니다. 한글 초성, 모음은 불가능합니다.',
     },
     validate: (value: string) =>
-      checkNickNameExists(value) || '이미 있는 닉네임입니다.',
+      checknickNameExists(value) || '이미 있는 닉네임입니다.',
   };
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
     const { email, uid } = getAuth().currentUser as UserInfo;
-    signUp(data.password, data.nickname, email as string, uid as string);
+    signUp({
+      eMail: email as string,
+      password: data.password,
+      nickName: data.nickName,
+      uid: uid as string,
+    });
   };
 
   const onSubmitError: SubmitErrorHandler<FieldValues> = error => {
@@ -98,18 +103,8 @@ function SignInForm() {
       });
   };
 
-  const signUp = async (
-    eMail: string,
-    password: string,
-    nickname: string,
-    uid: string,
-  ) => {
-    SignInUser({
-      uid: uid,
-      eMail: eMail,
-      password: password,
-      nickName: nickname,
-    })
+  const signUp = async (userInfo: UserInfoType) => {
+    SignInUser({ ...userInfo })
       .then(() => {
         window.alert('성공적으로 가입되었습니다!');
         goToPage({});
@@ -117,13 +112,6 @@ function SignInForm() {
       .catch(e => {
         throw new Error(e);
       });
-  };
-
-  const checkNickNameExists = async (nickname: string) => {
-    const nicknameSnap = await getDocs(
-      query(collection(db, 'users'), where('NickName', '==', nickname)),
-    );
-    return nicknameSnap.empty ? true : false;
   };
 
   const signInBtnInfo: LoginBtnType[] = [
@@ -159,10 +147,10 @@ function SignInForm() {
       rules: rePasswordRules,
     },
     {
-      label: 'nickname',
+      label: 'nickName',
       title: '닉네임',
       placeholder: '닉네임을 입력해주세요',
-      rules: nicknameRules,
+      rules: nickNameRules,
     },
   ];
 

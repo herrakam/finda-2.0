@@ -136,7 +136,7 @@ export const postComments = async (movieTitle: string, comment: string) => {
   const sampleComment: commentDataType = {
     comment: comment,
     title: movieTitle,
-    nickname: 'admin',
+    nickName: 'admin',
     createdTime: new Date(),
   };
   const commentsRef = doc(collection(db, 'movies', movieTitle, 'comments'));
@@ -148,4 +148,11 @@ export const postComments = async (movieTitle: string, comment: string) => {
 export const SignInUser = async (userInfo: UserInfoType) => {
   const userRef = doc(db, 'users', userInfo.uid);
   await setDoc(userRef, { ...userInfo, MovieLog: [], MyMovie: [] });
+};
+
+export const checknickNameExists = async (nickName: string) => {
+  const nickNameSnap = await getDocs(
+    query(collection(db, 'users'), where('NickName', '==', nickName)),
+  );
+  return nickNameSnap.empty ? true : false;
 };
