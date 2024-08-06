@@ -150,9 +150,12 @@ export const SignInUser = async (userInfo: UserInfoType) => {
   await setDoc(userRef, { ...userInfo, MovieLog: [], MyMovie: [] });
 };
 
-export const checknickNameExists = async (nickName: string) => {
-  const nickNameSnap = await getDocs(
-    query(collection(db, 'users'), where('NickName', '==', nickName)),
+export const checkUserInfoExists = async (
+  content: string,
+  contentType: 'eMail' | 'nickName',
+) => {
+  const contentSnap = await getDocs(
+    query(collection(db, 'users'), where(contentType, '==', content)),
   );
-  return nickNameSnap.empty ? true : false;
+  return contentSnap.empty ? true : false;
 };
