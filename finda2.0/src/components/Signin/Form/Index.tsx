@@ -24,7 +24,7 @@ import { LoginBtnType, LoginClickEventType } from '@components/Login/type';
 import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
 import { BsGithub } from 'react-icons/bs';
-import { SignInUser, checknickNameExists } from '@/utils/API';
+import { SignInUser, checkUserInfoExists } from '@/utils/API';
 import { UserInfoType } from '@/utils/type';
 
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
@@ -57,13 +57,14 @@ function SignInForm() {
 
   const nickNameRules = {
     required: true,
-    pattern: {
-      value: nickNamePattern,
-      message:
+    validate: {
+      heckExist: async (value: string) =>
+        (await checkUserInfoExists(value, 'nickName')) ||
+        '이미 있는 닉네임입니다.',
+      checkPattern: (value: string) =>
+        nickNamePattern.test(value) ||
         '2자 이상 16자 이하, 영어 또는 숫자 또는 한글만 가능합니다. 한글 초성, 모음은 불가능합니다.',
     },
-    validate: (value: string) =>
-      checknickNameExists(value) || '이미 있는 닉네임입니다.',
   };
 
   const onSubmit: SubmitHandler<FieldValues> = data => {
@@ -94,9 +95,16 @@ function SignInForm() {
       provider = new GithubAuthProvider();
     }
     const auth = getAuth();
+
     await signInWithPopup(auth, provider as AuthProvider)
-      .then(() => {
-        setIsAuthSuccess(true);
+      .then(async () => {
+        const eMail = auth.currentUser!.email;
+        if ((await checkUserInfoExists(eMail as string, 'eMail')) === false) {
+          window.alert('이미 가입된 계정입니다. 메인페이지로 돌아갑니다.');
+          goToPage({});
+        } else {
+          setIsAuthSuccess(true);
+        }
       })
       .catch(e => {
         throw new Error(e);
