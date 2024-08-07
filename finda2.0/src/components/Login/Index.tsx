@@ -47,13 +47,13 @@ function Login() {
       },
       icon: <FcGoogle size={LOGINICONSIZE} />,
     },
-    {
-      label: 'github',
-      clickEvent: () => {
-        handleLogin('github');
-      },
-      icon: <BsGithub size={LOGINICONSIZE} />,
-    },
+    // {
+    //   label: 'github',
+    //   clickEvent: () => {
+    //     handleLogin('github');
+    //   },
+    //   icon: <BsGithub size={LOGINICONSIZE} />,
+    // },
   ];
 
   const loginBtns = loginBtnInfo.map((btnInfo: LoginBtnType) => (

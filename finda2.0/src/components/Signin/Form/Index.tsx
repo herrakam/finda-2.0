@@ -130,13 +130,13 @@ function SignInForm() {
       },
       icon: <FcGoogle size={LOGINICONSIZE} />,
     },
-    {
-      label: 'github',
-      clickEvent: () => {
-        handleAuthSignIn('github');
-      },
-      icon: <BsGithub size={LOGINICONSIZE} />,
-    },
+    // {
+    //   label: 'github',
+    //   clickEvent: () => {
+    //     handleAuthSignIn('github');
+    //   },
+    //   icon: <BsGithub size={LOGINICONSIZE} />,
+    // },
   ];
 
   const formInfos: SignInFormInfo<FormInput>[] = [
