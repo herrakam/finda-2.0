@@ -21,6 +21,7 @@ import {
 import { getFullFilteredInfo } from './util';
 import { db } from '@/Firebase';
 import { EVERYCONTENTSCOUNT, PAGECONTENTCOUNT } from '@/assets/static';
+import { getAuth } from 'firebase/auth';
 
 export const getSimilarMovies = async (genreArr: number[]) => {
   const moviesRef = collection(db, 'poster');
@@ -158,4 +159,11 @@ export const checkUserInfoExists = async (
     query(collection(db, 'users'), where(contentType, '==', content)),
   );
   return contentSnap.empty ? true : false;
+};
+
+export const getUserInfo = async () => {
+  const auth = getAuth();
+  const uid = auth.currentUser?.uid as string;
+  const userSnap = await getDoc(doc(db, 'users', uid));
+  return userSnap?.data() as UserInfoType;
 };
