@@ -3,6 +3,7 @@ import * as S from '@components/Login/Index.style';
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
+  getAuth,
   signInWithPopup,
 } from 'firebase/auth';
 import { LoginBtnType, LoginClickEventType, ProviderType } from './type';
@@ -11,6 +12,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
 import { useSetAtom } from 'jotai';
 import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
+import { getUserInfo } from '@/utils/API';
 
 function Login() {
   const setIsLogin = useSetAtom(isLoginAtom);
@@ -19,24 +21,45 @@ function Login() {
 
   const closeLoginPopUp = () => setLoginPopUp(false);
 
-  const handleLogin: LoginClickEventType = loginType => {
+  const handleLogin: LoginClickEventType = async loginType => {
     if (loginType === 'google') {
       const googleProvider = new GoogleAuthProvider();
-      LoginWithPopUp(googleProvider);
+      await LoginWithPopUp(googleProvider)
+        .then(async result => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential?.accessToken as string;
+          const auth = getAuth();
+          const uid = auth.currentUser?.uid as string;
+          sessionStorage.setItem('uid', uid);
+          sessionStorage.setItem('token', token);
+          await getUserInfo();
+        })
+        .catch(e => {
+          throw new Error(e);
+        });
     } else if (loginType === 'github') {
       const githubProvider = new GithubAuthProvider();
-      LoginWithPopUp(githubProvider);
+      await LoginWithPopUp(githubProvider)
+        .then(() => {
+          getUserInfo();
+        })
+        .catch(e => {
+          throw new Error(e);
+        });
     }
   };
 
   const LoginWithPopUp = async (provider: ProviderType) => {
-    await signInWithPopup(auth, provider);
-    try {
-      setIsLogin(true);
-      closeLoginPopUp();
-    } catch (err) {
-      console.error(err);
-    }
+    return await signInWithPopup(auth, provider)
+      .then(result => {
+        setIsLogin(true);
+        closeLoginPopUp();
+        return result;
+      })
+      .catch(err => {
+        console.error(err);
+        throw err;
+      });
   };
 
   const loginBtnInfo: LoginBtnType[] = [
