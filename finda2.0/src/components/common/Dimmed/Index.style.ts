@@ -9,6 +9,7 @@ export const DimmedWrap = styled.section<{
   width: ${({ size }) => size.width};
   height: ${({ size }) => size.height};
   background: ${({ isHover }) => (isHover ? 'rgba(0, 0, 0, 0.5)' : 'none')};
-  position: absolute;
-  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })}
+  position: fixed;
+  z-index: 5;
+  ${mixin.flexbox({ horizontal: 'center', vertical: 'center' })};
 `;
