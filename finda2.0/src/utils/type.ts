@@ -95,6 +95,7 @@ export interface commentDataType {
   comment: string;
   createdTime: Date;
   nickName: string;
+  uid: string;
 }
 
 export interface commentDataOutType {

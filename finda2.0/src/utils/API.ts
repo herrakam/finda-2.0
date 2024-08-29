@@ -133,12 +133,17 @@ export const getMovieData = async (title: string) => {
   return snap?.data() as NormalizedDetailType;
 };
 
-export const postComments = async (movieTitle: string, comment: string) => {
+export const postComments = async (
+  movieTitle: string,
+  comment: string,
+  nickName: string,
+) => {
   const sampleComment: commentDataType = {
     comment: comment,
     title: movieTitle,
-    nickName: 'admin',
     createdTime: new Date(),
+    nickName: nickName,
+    uid: getAuth().currentUser?.uid as string,
   };
   const commentsRef = doc(collection(db, 'movies', movieTitle, 'comments'));
   await setDoc(commentsRef, sampleComment, {
