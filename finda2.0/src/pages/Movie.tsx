@@ -14,6 +14,8 @@ import {
   postComments,
 } from '@/utils/API';
 import { sliceGenreArr } from '@/utils/util';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/atoms/user';
 
 function Movie() {
   const contentTitle = useParams().contentTitle as string;
@@ -22,6 +24,7 @@ function Movie() {
   const [commentInput, setCommentInput] = useState<string>('');
   const [similarInfo, setSimilarInfo] = useState<RankInfoType[]>([]);
   const queryClient = useQueryClient();
+  const nickName = useAtomValue(userAtom).nickName;
 
   const updateSimilarInfo = (info: RankInfoType[]) => {
     setSimilarInfo([...info]);
@@ -62,7 +65,9 @@ function Movie() {
   };
 
   const postComment = () => {
-    return useMutation(() => postComments(contentTitle, commentInput));
+    return useMutation(() =>
+      postComments(contentTitle, commentInput, nickName),
+    );
   };
 
   const detailData = getMovieInfo().data;
@@ -117,6 +122,7 @@ function Movie() {
     updateComment,
     mutate,
     commentInput,
+    nickName,
   };
 
   return (
