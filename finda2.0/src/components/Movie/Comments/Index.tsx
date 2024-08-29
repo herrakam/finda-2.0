@@ -22,7 +22,6 @@ function Comments({
       window.alert('로그인한 유저만 댓글을 등록할 수 있습니다. 로그인해주세요');
   };
 
-  console.log(commentsData);
   const commentContent =
     commentsData.length === 0 ? (
       <S.NoComment>첫 리뷰를 남겨보세요!!</S.NoComment>
