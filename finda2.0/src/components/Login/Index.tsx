@@ -14,9 +14,12 @@ import { useSetAtom } from 'jotai';
 import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
 import { getUserInfo } from '@/utils/API';
 import { useCookies } from 'react-cookie';
+import { userAtom } from '@/atoms/user';
 
 function Login() {
   const setIsLogin = useSetAtom(isLoginAtom);
+
+  const setUserInfo = useSetAtom(userAtom);
 
   const setLoginPopUp = useSetAtom(modalPopUpAtom);
 
@@ -36,8 +39,12 @@ function Login() {
 
           sessionStorage.setItem('uid', uid);
           setCookie('token', token, { path: '/', maxAge: 21600 });
-          await getUserInfo();
+          await getUserInfo().then(data => {
+            const { nickName } = data;
+            setUserInfo({ nickName: nickName });
+          });
         })
+
         .catch(e => {
           throw new Error(e);
         });
