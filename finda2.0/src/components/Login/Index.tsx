@@ -13,11 +13,14 @@ import { LOGINICONSIZE } from '@/assets/static';
 import { useSetAtom } from 'jotai';
 import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
 import { getUserInfo } from '@/utils/API';
+import { useCookies } from 'react-cookie';
 
 function Login() {
   const setIsLogin = useSetAtom(isLoginAtom);
 
   const setLoginPopUp = useSetAtom(modalPopUpAtom);
+
+  const [_, setCookie] = useCookies(['token']);
 
   const closeLoginPopUp = () => setLoginPopUp(false);
 
@@ -30,8 +33,9 @@ function Login() {
           const token = credential?.accessToken as string;
           const auth = getAuth();
           const uid = auth.currentUser?.uid as string;
+
           sessionStorage.setItem('uid', uid);
-          sessionStorage.setItem('token', token);
+          setCookie('token', token, { path: '/', maxAge: 21600 });
           await getUserInfo();
         })
         .catch(e => {
