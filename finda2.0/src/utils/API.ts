@@ -172,3 +172,8 @@ export const getUserInfo = async () => {
   const userSnap = await getDoc(doc(db, 'users', uid));
   return userSnap?.data() as UserInfoType;
 };
+
+export const isAccountInUserData = async (uid: string) => {
+  const userSnap = await getDoc(doc(db, 'users', uid));
+  return userSnap.exists() ? true : false;
+};
