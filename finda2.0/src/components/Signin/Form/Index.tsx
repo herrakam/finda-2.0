@@ -1,6 +1,6 @@
 import TextField from '@components/common/TextField/Index';
 import * as S from '@components/Signin/Form/Index.style';
-import { FormInput, SignInFormInfo } from './type';
+import { FormInput, SignUpFormInfo } from './type';
 import Btn from '@components/common/Button/Index';
 import {
   useForm,
@@ -30,7 +30,7 @@ import { UserInfoType } from '@/utils/type';
 const passwordPattern = /^[A-za-z0-9가-힣]{3,10}$/; //'가능한 문자: 영문 대소문자, 글자 단위 한글, 숫자'
 const nickNamePattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
 
-function SignInForm() {
+function SignUpForm() {
   const { control, handleSubmit, watch } = useForm<FormInput>({
     mode: 'onChange',
     defaultValues: { password: '', rePassword: '', nickName: '' },
@@ -139,7 +139,7 @@ function SignInForm() {
     // },
   ];
 
-  const formInfos: SignInFormInfo<FormInput>[] = [
+  const formInfos: SignUpFormInfo<FormInput>[] = [
     {
       label: 'password',
       title: '비밀번호',
@@ -176,7 +176,7 @@ function SignInForm() {
 
   const inputs =
     isAuthSuccess &&
-    formInfos.map((info: SignInFormInfo<FormInput>) => (
+    formInfos.map((info: SignUpFormInfo<FormInput>) => (
       <S.InputContainer key={info.label}>
         <S.InputTitle>{info.title}</S.InputTitle>
         <Controller
@@ -200,7 +200,7 @@ function SignInForm() {
 
   return (
     <S.FormContainer>
-      <S.FormTitle>SIGN IN</S.FormTitle>
+      <S.FormTitle>SIGN UP</S.FormTitle>
       {!isAuthSuccess && (
         <>
           <S.BtnText>아이디로 사용할 이메일 계정을 선택해주세요</S.BtnText>
@@ -208,7 +208,7 @@ function SignInForm() {
         </>
       )}
       {isAuthSuccess && (
-        <S.SignInForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
+        <S.SignUpForm onSubmit={handleSubmit(onSubmit, onSubmitError)}>
           <S.InputContainer>
             <S.InputTitle>이메일</S.InputTitle>
             <S.EmailText>{getAuth().currentUser?.email}</S.EmailText>
@@ -217,10 +217,10 @@ function SignInForm() {
           <S.BtnContainer>
             <Btn text="회원가입" type="submit" />
           </S.BtnContainer>
-        </S.SignInForm>
+        </S.SignUpForm>
       )}
     </S.FormContainer>
   );
 }
 
-export default SignInForm;
+export default SignUpForm;

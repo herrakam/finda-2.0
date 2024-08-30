@@ -1,6 +1,6 @@
 import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
-export interface SignInFormInfo<T extends FieldValues> {
+export interface SignUpFormInfo<T extends FieldValues> {
   label: Path<T>;
   title: string;
   rules: RegisterOptions<T>;

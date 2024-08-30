@@ -12,7 +12,7 @@ export const FormContainer = styled.div`
   margin-bottom: 20vh;
 `;
 
-export const SignInForm = styled.form`
+export const SignUpForm = styled.form`
   width: 100%;
   ${mixin.flexbox({ dir: 'column' })}
   gap: 30px;

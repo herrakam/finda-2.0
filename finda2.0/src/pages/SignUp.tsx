@@ -1,12 +1,12 @@
-import SignInForm from '@components/Signin/Form/Index';
+import SignUpForm from '@components/Signin/Form/Index';
 import PageContainer from '@components/common/PageContainer/Index';
 
-function SignIn() {
+function SignUp() {
   return (
     <PageContainer size="space">
-      <SignInForm />
+      <SignUpForm />
     </PageContainer>
   );
 }
 
-export default SignIn;
+export default SignUp;
