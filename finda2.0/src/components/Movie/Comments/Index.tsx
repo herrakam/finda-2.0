@@ -2,8 +2,8 @@ import * as S from '@/components/Movie/Comments/Index.style';
 import { commentDataOutType } from '@/utils/type';
 import { CommentsType } from './type';
 import { extractMonthAndDay } from '@/utils/util';
-import { useAtomValue } from 'jotai';
-import { isLoginAtom } from '@/atoms/IsLogin';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
 
 function Comments({
   commentsData,
@@ -11,6 +11,7 @@ function Comments({
   updateComment,
   commentInput,
 }: CommentsType) {
+  const setLoginPopUp = useSetAtom(modalPopUpAtom);
   const onPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') validateAndMutate();
   };
@@ -18,8 +19,10 @@ function Comments({
   const validateAndMutate = () => {
     if (commentInput !== '' && isLogin) mutate();
     else if (commentInput === '') window.alert('리뷰를 입력한 뒤 등록해주세요');
-    else if (!isLogin)
+    else if (!isLogin) {
       window.alert('로그인한 유저만 댓글을 등록할 수 있습니다. 로그인해주세요');
+      setLoginPopUp(true);
+    }
   };
 
   const commentContent =
