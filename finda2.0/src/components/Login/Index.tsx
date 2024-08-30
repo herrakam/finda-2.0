@@ -12,9 +12,10 @@ import { FcGoogle } from 'react-icons/fc';
 import { LOGINICONSIZE } from '@/assets/static';
 import { useSetAtom } from 'jotai';
 import { isLoginAtom, modalPopUpAtom } from '@/atoms/IsLogin';
-import { getUserInfo } from '@/utils/API';
+import { getUserInfo, isAccountInUserData } from '@/utils/API';
 import { useCookies } from 'react-cookie';
 import { userAtom } from '@/atoms/user';
+import { useMove } from '@/hooks/useMove';
 
 function Login() {
   const setIsLogin = useSetAtom(isLoginAtom);
@@ -26,6 +27,8 @@ function Login() {
   const [_, setCookie] = useCookies(['token']);
 
   const closeLoginPopUp = () => setLoginPopUp(false);
+
+  const goToPage = useMove();
 
   const handleLogin: LoginClickEventType = async loginType => {
     if (loginType === 'google') {
@@ -62,10 +65,20 @@ function Login() {
 
   const LoginWithPopUp = async (provider: ProviderType) => {
     return await signInWithPopup(auth, provider)
-      .then(result => {
-        setIsLogin(true);
-        closeLoginPopUp();
-        return result;
+      .then(async result => {
+        const uid = result.user.uid as string;
+        const isAccountExists = await isAccountInUserData(uid);
+        if (isAccountExists) {
+          setIsLogin(true);
+          closeLoginPopUp();
+          return result;
+        } else {
+          window.alert(
+            '등록되지 않은 이메일입니다. 회원가입 페이지로 이동합니다.',
+          );
+          goToPage({ url: 'signUp' });
+          return result;
+        }
       })
       .catch(err => {
         console.error(err);
